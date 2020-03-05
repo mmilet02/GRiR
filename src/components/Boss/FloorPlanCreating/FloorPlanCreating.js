@@ -56,10 +56,44 @@ class FloorPlanCreating extends Component {
   //Covert the actual size of table to scale 1:25
   convertToMainScale = () => {
     let newSize = this.state.circleRadius * 25;
+    const dropTargetPosition = this.boss.current.getBoundingClientRect();
     this.setState({
       floorPlanList: this.state.floorPlanList.map(table => {
         if (table.id === this.state.tempId) {
           table.size.x = newSize;
+          table.position.x = this.state.xCoord - newSize / 2;
+          table.position.y = this.state.yCoord - newSize / 2;
+          console.log(table.position.y + newSize + dropTargetPosition.top);
+          console.log(dropTargetPosition.bottom);
+          if (0 > table.position.y) {
+            table.position.y = 0;
+            console.log(
+              table.position.y +
+                " " +
+                dropTargetPosition.top +
+                " " +
+                dropTargetPosition.height
+            );
+          }
+          if (0 > table.position.x) {
+            table.position.x = 0;
+          }
+          if (
+            dropTargetPosition.bottom <
+            table.position.y + newSize + dropTargetPosition.top
+          ) {
+            table.position.y =
+              dropTargetPosition.bottom - newSize - dropTargetPosition.top;
+          }
+          if (
+            dropTargetPosition.left +
+              window.scrollX +
+              dropTargetPosition.width <
+            table.position.x + newSize + dropTargetPosition.left
+          ) {
+            table.position.x =
+              dropTargetPosition.right - newSize - dropTargetPosition.left;
+          }
         }
         return table;
       })
@@ -112,6 +146,9 @@ class FloorPlanCreating extends Component {
       initialPosition
     );
 
+    let centerX = newXposition + 25;
+    let centerY = newYposition + 25;
+
     let temp = {
       id: uuid(),
       imageName,
@@ -120,13 +157,15 @@ class FloorPlanCreating extends Component {
         x: 0
       },
       position: {
-        x: newXposition,
-        y: newYposition
+        x: 0,
+        y: 0
       }
     };
     this.setState({
       floorPlanList: [...this.state.floorPlanList, temp],
-      tempId: temp.id
+      tempId: temp.id,
+      xCoord: centerX,
+      yCoord: centerY
     });
   };
   //Open and close grid
