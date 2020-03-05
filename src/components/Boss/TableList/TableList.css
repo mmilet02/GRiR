@@ -1,0 +1,16 @@
+.tablesList {
+  width: 150px;
+  height: 300px;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #333;
+  padding: 10px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+img {
+  height: 50px;
+  width: 50px;
+}

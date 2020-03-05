@@ -1,0 +1,16 @@
+.floorPlan {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("http://localhost:3000/images/transparent.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 1px solid #333;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}

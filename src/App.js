@@ -1,25 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import Header from "./components/Layout/Header/Header.js";
+import HomePage from "./components/HomePage/HomePage.js";
+import FloorPlanCreating from "./components/Boss/FloorPlanCreating/FloorPlanCreating.js";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { DndProvider } from "react-dnd";
+import Backend from "react-dnd-html5-backend";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <DndProvider backend={Backend}>
+        <div className="App">
+          <Header></Header>
+          <Switch>
+            <Route exact path="/">
+              <HomePage />
+            </Route>
+            <Route path="/fpc">
+              <FloorPlanCreating />
+            </Route>
+          </Switch>
+        </div>
+      </DndProvider>
+    </Router>
   );
 }
 
