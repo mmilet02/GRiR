@@ -1,4 +1,5 @@
 import React from 'react';
+import ResizeObserver from 'react-resize-observer';
 import './FloorPlan.css';
 import { useDrop } from 'react-dnd';
 import { ItemType } from '../../Constants/Constant.js';
@@ -54,6 +55,12 @@ function FloorPlan(props) {
       style={{ backgroundColor: isOver ? 'green' : 'white' }}
       className='floorPlan'
     >
+      <ResizeObserver
+        onResize={rect => {
+          props.handleFloorPlanResize(rect.width, rect.height);
+        }}
+        onPosition={rect => {}}
+      />
       {floorPlanList}
     </div>
   );

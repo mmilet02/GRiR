@@ -19,7 +19,11 @@ class FloorPlanCreating extends Component {
       tempId: '0',
       isGridOn: false,
       scale: 25,
-      tableExampleSize: 50
+      tableExampleSize: 50,
+      previusfloorPlanWidth: 1000,
+      previusfloorPlanHeight: 500,
+      currentfloorPlanWidth: 1000,
+      currentfloorPlanHeight: 500
     };
   }
   // Open pop up modal
@@ -141,20 +145,52 @@ class FloorPlanCreating extends Component {
       isGridOn: !this.state.isGridOn
     });
   };
+  handleFloorPlanResize = (width, height) => {
+    console.log(width + ' ' + height);
+    // this.setState({
+    //   currentFloorPlanHeight: height,
+    //   currentFloorPlanWidth: width
+    // });
+  };
 
   render() {
     let gridCells = [];
+    // let gridCellsHeight =
+    //   this.state.floorPlanHeight / Math.floor(this.state.floorPlanHeight / 25);
+    // let gridCellsWidth =
+    //   this.state.floorPlanWidth / Math.floor(this.state.floorPlanWidth / 25);
+    // let gridCellsNumber =
+    //   Math.floor(this.state.floorPlanHeight / gridCellsHeight) *
+    //   Math.floor(this.state.floorPlanWidth / gridCellsWidth);
+    // console.log(
+    //   Math.floor(this.state.floorPlanHeight / 25) +
+    //     ' ' +
+    //     Math.floor(this.state.floorPlanWidth / 25)
+    // );
+    // console.log(gridCellsNumber + ' ' + gridCellsHeight + ' ' + gridCellsWidth);
     for (let i = 0; i < 800; i++) {
       gridCells.push(
-        <GridTarget key={i} onDropImg={this.onDropImg}></GridTarget>
+        <GridTarget
+          key={i}
+          onDropImg={this.onDropImg}
+          // style={{ width: gridCellsWidth, height: gridCellsHeight }}
+        ></GridTarget>
       );
     }
     return (
       <div className='container'>
-        <div className='floorPlanContainer' ref={this.boss}>
+        <div
+          className='floorPlanContainer'
+          ref={this.boss}
+          // style={{
+          //   height: this.state.currentFloorPlanHeight + 'px',
+          //   width: this.state.currentFloorPlanWidth + 'px'
+          // }}
+        >
           <FloorPlan
             onDropImg={this.onDropImg}
             floorPlanList={this.state.floorPlanList}
+            handleFloorPlanResize={this.handleFloorPlanResize}
           />
 
           {this.state.isGridOn ? <div className='grid'>{gridCells}</div> : null}
