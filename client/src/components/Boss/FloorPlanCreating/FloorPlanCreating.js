@@ -1,98 +1,70 @@
-import React, { Component } from "react";
-import "./FloorPlanCreating.css";
-import TableList from "../TableList/TableList.js";
-import FloorPlan from "../FloorPlan/FloorPlan.js";
-import uuid from "react-uuid";
-import Popup from "reactjs-popup";
-import GridTarget from "../GridTarget/GridTarget.js";
+import React, { Component } from 'react';
+import './FloorPlanCreating.css';
+import TableList from '../TableList/TableList.js';
+import FloorPlan from '../FloorPlan/FloorPlan.js';
+import uuid from 'react-uuid';
+import Popup from 'reactjs-popup';
+import GridTarget from '../GridTarget/GridTarget.js';
 
 class FloorPlanCreating extends Component {
   constructor(props) {
     super(props);
     this.boss = React.createRef();
     this.state = {
-      tabelTypes: [
-        {
-          id: 1,
-          imageName: "circle.png",
-          type: "circle",
-          size: {
-            x: 50
-          },
-          position: {
-            x: 0,
-            y: 0
-          }
-        },
-        {
-          id: 2,
-          imageName: "square.png",
-          type: "square",
-          size: {
-            x: 50
-          },
-          position: {
-            x: 0,
-            y: 0
-          }
-        }
-      ],
       floorPlanList: [],
       isOpen: false,
       xCoord: 0,
       yCoord: 0,
       circleRadius: 0,
-      tempId: "0",
-      isGridOn: false
+      tempId: '0',
+      isGridOn: false,
+      scale: 25,
+      tableExampleSize: 50
     };
   }
   // Open pop up modal
   openModal = () => {
     this.setState({
       isOpen: true,
-      tempId: "0"
+      tempId: '0'
     });
   };
   //Covert the actual size of table to scale 1:25
   convertToMainScale = () => {
-    let newSize = this.state.circleRadius * 25;
+    let newSize = this.state.circleRadius * this.state.scale;
     const dropTargetPosition = this.boss.current.getBoundingClientRect();
     this.setState({
       floorPlanList: this.state.floorPlanList.map(table => {
-        if (table.id === this.state.tempId) {
-          table.size.x = newSize;
-          table.position.x = this.state.xCoord - newSize / 2;
-          table.position.y = this.state.yCoord - newSize / 2;
-          console.log(table.position.y + newSize + dropTargetPosition.top);
-          console.log(dropTargetPosition.bottom);
-          if (0 > table.position.y) {
-            table.position.y = 0;
-            console.log(
-              table.position.y +
-                " " +
-                dropTargetPosition.top +
-                " " +
-                dropTargetPosition.height
-            );
+        if (table._id === this.state.tempId) {
+          table.sizeX = newSize;
+          table.coordX = this.state.xCoord - newSize / 2;
+          table.coordY = this.state.yCoord - newSize / 2;
+          console.log(table.coordX + ' ' + table.coordY);
+          if (0 > table.coordY) {
+            table.coordY = 0;
+            console.log(table.coordX + ' ' + table.coordY);
           }
-          if (0 > table.position.x) {
-            table.position.x = 0;
+          if (0 > table.coordX) {
+            table.coordX = 0;
+            console.log(table.coordX + ' ' + table.coordY);
           }
           if (
             dropTargetPosition.bottom <
-            table.position.y + newSize + dropTargetPosition.top
+            table.coordY + newSize + dropTargetPosition.top
           ) {
-            table.position.y =
+            table.coordY =
               dropTargetPosition.bottom - newSize - dropTargetPosition.top;
+            console.log(table.coordX + ' ' + table.coordY);
           }
           if (
             dropTargetPosition.left +
               window.scrollX +
               dropTargetPosition.width <
-            table.position.x + newSize + dropTargetPosition.left
+            table.coordX + newSize + dropTargetPosition.left
           ) {
-            table.position.x =
+            table.coordX =
               dropTargetPosition.right - newSize - dropTargetPosition.left;
+            console.log(table.coordX + ' ' + table.coordY);
           }
         }
         return table;
@@ -106,7 +78,7 @@ class FloorPlanCreating extends Component {
   };
   //Handle input of table size
   handleSizeChange = e => {
-    if (e.target.name === "circleRadius") {
+    if (e.target.name === 'circleRadius') {
       this.setState({ [e.target.name]: e.target.value });
     }
   };
@@ -131,14 +103,12 @@ class FloorPlanCreating extends Component {
         ? initialX + (finalX - initialX) - dropTargetPosition.left
         : initialX - (initialX - finalX) - dropTargetPosition.left;
 
-    console.log(initialX + " " + initialY);
-    console.log(finalX + " " + finalY);
-    console.log(newXposition + " " + newYposition);
+    console.log(newXposition + ' ' + newYposition);
 
     return [newXposition, newYposition];
   };
   //Trigger on drop and crate the same table in floor plan
-  onDropImg = (tabelType, imageName, finalPosition, initialPosition) => {
+  onDropImg = (tableType, imageName, finalPosition, initialPosition) => {
     this.openModal();
 
     const [newXposition, newYposition] = this.calculateYX(
@@ -146,31 +116,27 @@ class FloorPlanCreating extends Component {
       initialPosition
     );
 
-    let centerX = newXposition + 25;
-    let centerY = newYposition + 25;
+    let centerX = newXposition + this.state.tableExampleSize / 2;
+    let centerY = newYposition + this.state.tableExampleSize / 2;
 
     let temp = {
-      id: uuid(),
+      _id: uuid(),
       imageName,
-      type: tabelType,
-      size: {
-        x: 0
-      },
-      position: {
-        x: 0,
-        y: 0
-      }
+      tableType,
+      sizeX: 0,
+      coordX: 0,
+      coordY: 0
     };
     this.setState({
       floorPlanList: [...this.state.floorPlanList, temp],
-      tempId: temp.id,
+      tempId: temp._id,
       xCoord: centerX,
       yCoord: centerY
     });
   };
   //Open and close grid
   handleGrid = e => {
-    console.log("Grid changed...");
+    console.log('Grid changed...');
     this.setState({
       isGridOn: !this.state.isGridOn
     });
@@ -184,14 +150,14 @@ class FloorPlanCreating extends Component {
       );
     }
     return (
-      <div className="container">
-        <div className="floorPlanContainer" ref={this.boss}>
+      <div className='container'>
+        <div className='floorPlanContainer' ref={this.boss}>
           <FloorPlan
             onDropImg={this.onDropImg}
             floorPlanList={this.state.floorPlanList}
           />
 
-          {this.state.isGridOn ? <div className="grid">{gridCells}</div> : null}
+          {this.state.isGridOn ? <div className='grid'>{gridCells}</div> : null}
         </div>
 
         <TableList tablesList={this.state.tabelTypes}></TableList>
@@ -200,14 +166,14 @@ class FloorPlanCreating extends Component {
           closeOnDocumentClick
           onClose={this.closeModal}
         >
-          <div className="modal">
-            <div className="close" onClick={this.closeModal}>
+          <div className='modal'>
+            <div className='close' onClick={this.closeModal}>
               +
             </div>
             <input
-              name="circleRadius"
-              type="text"
-              placeholder="Radius of table.."
+              name='circleRadius'
+              type='text'
+              placeholder='Radius of table..'
               onChange={this.handleSizeChange}
             />
             <button onClick={this.handleSubmit}>OK</button>

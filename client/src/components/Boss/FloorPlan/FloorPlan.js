@@ -1,8 +1,8 @@
-import React from "react";
-import "./FloorPlan.css";
-import { useDrop } from "react-dnd";
-import { ItemType } from "../../Constants/Constant.js";
-import DraggTableTypesSecond from "../DraggTableTypesSecond/DraggTableTypesSecond.js";
+import React from 'react';
+import './FloorPlan.css';
+import { useDrop } from 'react-dnd';
+import { ItemType } from '../../Constants/Constant.js';
+import DraggTableTypesSecond from '../DraggTableTypesSecond/DraggTableTypesSecond.js';
 
 function FloorPlan(props) {
   //define target component where we drop tables
@@ -21,27 +21,26 @@ function FloorPlan(props) {
   });
 
   const floorPlanList = props.floorPlanList.map(table => {
-    let tt;
-    if (table.type === "circle") {
+    let tt = <h1>noob</h1>;
+    if (table.tableType === 'circle') {
       tt = (
         <DraggTableTypesSecond
-          top={table.position.y}
-          left={table.position.x}
-          isDragg={false}
-          visina={table.size.x}
-          širina={table.size.x}
-          key={table.id}
+          top={table.coordY}
+          left={table.coordX}
+          visina={table.sizeX}
+          širina={table.sizeX}
+          key={table._id}
           table={table}
         ></DraggTableTypesSecond>
       );
-    } else if (table.type === "square") {
+    } else if (table.tableType === 'square') {
       tt = (
         <DraggTableTypesSecond
-          top={table.position.y}
-          left={table.position.x}
-          visina={table.size.x}
-          širina={table.size.x}
-          key={table.id}
+          top={table.coordY}
+          left={table.coordX}
+          visina={table.sizeX}
+          širina={table.sizeX}
+          key={table._id}
           table={table}
         ></DraggTableTypesSecond>
       );
@@ -52,8 +51,8 @@ function FloorPlan(props) {
   return (
     <div
       ref={drop}
-      style={{ backgroundColor: isOver ? "green" : "white" }}
-      className="floorPlan"
+      style={{ backgroundColor: isOver ? 'green' : 'white' }}
+      className='floorPlan'
     >
       {floorPlanList}
     </div>
