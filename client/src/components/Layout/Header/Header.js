@@ -1,18 +1,21 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import "./Header.css";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './Header.css';
+import PropTypes from 'prop-types';
 
 function Header() {
   return (
     <header>
-      <Link to="/">
-        <div className="navLink">Home</div>
+      <Link to='/'>
+        <div className='navLink'>Home</div>
       </Link>
-      <Link to="/fpc">
-        <div className="navLink">FCP</div>
+      <Link to='/fpc'>
+        <div className='navLink'>FCP</div>
       </Link>
     </header>
   );
 }
+
+Header.propTypes = {};
 
 export default Header;

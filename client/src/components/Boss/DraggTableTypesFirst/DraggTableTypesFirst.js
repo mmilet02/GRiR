@@ -1,7 +1,9 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 import { ItemType } from '../../Constants/Constant.js';
+import PropTypes from 'prop-types';
 
+//table in side of table list
 function DraggTableTypesFirst(props) {
   //define draggable (source) component
   const [{ isDraggable }, drag] = useDrag({
@@ -28,5 +30,9 @@ function DraggTableTypesFirst(props) {
     </div>
   );
 }
+
+DraggTableTypesFirst.propTypes = {
+  table: PropTypes.object.isRequired
+};
 
 export default DraggTableTypesFirst;

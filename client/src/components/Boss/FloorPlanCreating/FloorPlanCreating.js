@@ -5,6 +5,7 @@ import FloorPlan from '../FloorPlan/FloorPlan.js';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
 import GridTarget from '../GridTarget/GridTarget.js';
+import PropTypes from 'prop-types';
 
 class FloorPlanCreating extends Component {
   constructor(props) {
@@ -220,5 +221,7 @@ class FloorPlanCreating extends Component {
     );
   }
 }
+
+FloorPlanCreating.propTypes = {};
 
 export default FloorPlanCreating;

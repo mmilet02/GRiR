@@ -24,4 +24,5 @@ TableList.propTypes = {
   getTableTypes: PropTypes.func.isRequired,
   tables: PropTypes.array.isRequired
 };
+
 export default connect(mapStateToProps, { getTableTypes })(TableList);

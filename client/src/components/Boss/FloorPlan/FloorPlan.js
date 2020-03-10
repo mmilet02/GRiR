@@ -4,7 +4,9 @@ import './FloorPlan.css';
 import { useDrop } from 'react-dnd';
 import { ItemType } from '../../Constants/Constant.js';
 import DraggTableTypesSecond from '../DraggTableTypesSecond/DraggTableTypesSecond.js';
+import PropTypes from 'prop-types';
 
+//original 1:25 500x1000
 function FloorPlan(props) {
   //define target component where we drop tables
   const [{ isOver }, drop] = useDrop({
@@ -65,5 +67,11 @@ function FloorPlan(props) {
     </div>
   );
 }
+
+FloorPlan.propTypes = {
+  onDropImg: PropTypes.func.isRequired,
+  handleFloorPlanResize: PropTypes.func.isRequired,
+  floorPlanList: PropTypes.array.isRequired
+};
 
 export default FloorPlan;

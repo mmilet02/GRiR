@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 function HomePage() {
   return (
@@ -7,5 +8,7 @@ function HomePage() {
     </div>
   );
 }
+
+HomePage.propTypes = {};
 
 export default HomePage;
