@@ -1,11 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useDrag } from 'react-dnd';
+import { ItemType } from '../../Constants/Constant.js';
 
 //table in side of floor plan
 function DraggTableTypesSecond(props) {
+  //define draggable (source) component
+  const [{ isDraggable }, drag] = useDrag({
+    item: {
+      type: ItemType.TABLES,
+      table: props.table
+    },
+    collect: monitor => ({
+      isDraggable: !!monitor.isDragging()
+    })
+  });
   return (
     <div>
       <img
+        ref={drag}
         src={'http://localhost:3000/images/' + props.table.imageName}
         alt=''
         style={{
@@ -13,7 +26,8 @@ function DraggTableTypesSecond(props) {
           width: props.širina + 'px',
           position: 'absolute',
           top: props.top,
-          left: props.left
+          left: props.left,
+          opacity: isDraggable ? '0.5' : '1'
         }}
       />
     </div>

@@ -5,7 +5,8 @@ import FloorPlan from '../FloorPlan/FloorPlan.js';
 import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
 import GridTarget from '../GridTarget/GridTarget.js';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { saveFloorPlan } from '../../../actions/floorPlanAction.js';
 
 class FloorPlanCreating extends Component {
   constructor(props) {
@@ -21,10 +22,8 @@ class FloorPlanCreating extends Component {
       isGridOn: false,
       scale: 25,
       tableExampleSize: 50,
-      previusfloorPlanWidth: 1000,
-      previusfloorPlanHeight: 500,
-      currentfloorPlanWidth: 1000,
-      currentfloorPlanHeight: 500
+      currentFloorPlanWidth: 1000,
+      currentFloorPlanHeight: 500
     };
   }
   // Open pop up modal
@@ -108,73 +107,138 @@ class FloorPlanCreating extends Component {
         ? initialX + (finalX - initialX) - dropTargetPosition.left
         : initialX - (initialX - finalX) - dropTargetPosition.left;
 
-    console.log(newXposition + ' ' + newYposition);
-
     return [newXposition, newYposition];
   };
   //Trigger on drop and crate the same table in floor plan
-  onDropImg = (tableType, imageName, finalPosition, initialPosition) => {
+  onDropImg = (table, finalPosition, initialPosition) => {
+    console.log(initialPosition.x + ' ' + initialPosition.y);
     this.openModal();
+    if (this.state.floorPlanList.find(tab => tab._id === table._id)) {
+      const [newXposition, newYposition] = this.calculateYX(
+        finalPosition,
+        initialPosition
+      );
 
-    const [newXposition, newYposition] = this.calculateYX(
-      finalPosition,
-      initialPosition
-    );
+      let centerX = newXposition + table.sizeX / 2;
+      let centerY = newYposition + table.sizeX / 2;
 
-    let centerX = newXposition + this.state.tableExampleSize / 2;
-    let centerY = newYposition + this.state.tableExampleSize / 2;
+      this.setState({
+        tempId: table._id,
+        xCoord: centerX,
+        yCoord: centerY
+      });
+    } else {
+      const [newXposition, newYposition] = this.calculateYX(
+        finalPosition,
+        initialPosition
+      );
 
-    let temp = {
-      _id: uuid(),
-      imageName,
-      tableType,
-      sizeX: 0,
-      coordX: 0,
-      coordY: 0
-    };
-    this.setState({
-      floorPlanList: [...this.state.floorPlanList, temp],
-      tempId: temp._id,
-      xCoord: centerX,
-      yCoord: centerY
-    });
+      let centerX = newXposition + this.state.tableExampleSize / 2;
+      let centerY = newYposition + this.state.tableExampleSize / 2;
+
+      let temp = {
+        _id: uuid(),
+        imageName: table.imageName,
+        tableType: table.tableType,
+        sizeX: 0,
+        coordX: 0,
+        coordY: 0
+      };
+      this.setState({
+        floorPlanList: [...this.state.floorPlanList, temp],
+        tempId: temp._id,
+        xCoord: centerX,
+        yCoord: centerY
+      });
+    }
   };
   //Open and close grid
   handleGrid = e => {
-    console.log('Grid changed...');
     this.setState({
       isGridOn: !this.state.isGridOn
     });
   };
   handleFloorPlanResize = (width, height) => {
-    console.log(width + ' ' + height);
-    // this.setState({
-    //   currentFloorPlanHeight: height,
-    //   currentFloorPlanWidth: width
-    // });
+    // console.log(
+    //   this.state.currentFloorPlanWidth + ' ' + this.state.currentFloorPlanHeight
+    // );
+    // let tempFloorPlanHeight = 0;
+    // let tempFloorPlanWidth = 0;
+    // let razlikaUPostocima = 0;
+    // if (this.state.currentFloorPlanHeight === height) {
+    //   if (this.state.currentFloorPlanWidth > width) {
+    //     tempFloorPlanWidth = width;
+    //     razlikaUPostocima =
+    //       (this.state.currentFloorPlanWidth - width) /
+    //       this.state.currentFloorPlanWidth;
+    //     tempFloorPlanHeight =
+    //       this.state.currentFloorPlanHeight -
+    //       this.state.currentFloorPlanHeight * razlikaUPostocima;
+    //   } else {
+    //     tempFloorPlanWidth = width;
+    //     razlikaUPostocima =
+    //       (width - this.state.currentFloorPlanWidth) /
+    //       this.state.currentFloorPlanWidth;
+    //     tempFloorPlanHeight =
+    //       this.state.currentFloorPlanHeight +
+    //       this.state.currentFloorPlanHeight * razlikaUPostocima;
+    //   }
+    // } else if (this.state.currentFloorPlanWidth === width) {
+    //   tempFloorPlanHeight = height;
+    //   razlikaUPostocima =
+    //     (this.state.currentFloorPlanHeight - height) /
+    //     this.state.currentFloorPlanHeight;
+    //   tempFloorPlanWidth =
+    //     this.state.currentFloorPlanWidth -
+    //     this.state.currentFloorPlanWidth * razlikaUPostocima;
+    // } else if (
+    //   this.state.currentFloorPlanHeight !== height &&
+    //   this.state.currentFloorPlanWidth !== width
+    // ) {
+    //   if (
+    //     this.state.currentFloorPlanHeight - height >
+    //     this.state.currentFloorPlanWidth - width
+    //   ) {
+    //     tempFloorPlanHeight = height;
+    //     razlikaUPostocima =
+    //       (this.state.currentFloorPlanHeight - height) /
+    //       this.state.currentFloorPlanHeight;
+    //     tempFloorPlanWidth =
+    //       this.state.currentFloorPlanWidth -
+    //       this.state.currentFloorPlanWidth * razlikaUPostocima;
+    //   } else {
+    //     tempFloorPlanWidth = width;
+    //     razlikaUPostocima =
+    //       (this.state.currentFloorPlanWidth - width) /
+    //       this.state.currentFloorPlanWidth;
+    //     tempFloorPlanHeight =
+    //       this.state.currentFloorPlanHeight -
+    //       this.state.currentFloorPlanHeight * razlikaUPostocima;
+    //   }
+    // }
+    // console.log(tempFloorPlanWidth + ' ' + tempFloorPlanHeight);
+    // this.state &&
+    //   this.state.currentFloorPlanHeight &&
+    //   this.state.currentFloorPlanWidth &&
+    //   this.setState({
+    //     currentFloorPlanHeight: tempFloorPlanHeight,
+    //     currentFloorPlanWidth: tempFloorPlanWidth
+    //   });
   };
-
+  handleSaveFloorPLan = () => {
+    this.props.saveFloorPlan(this.state.floorPlanList);
+  };
   render() {
     let gridCells = [];
-    // let gridCellsHeight =
-    //   this.state.floorPlanHeight / Math.floor(this.state.floorPlanHeight / 25);
-    // let gridCellsWidth =
-    //   this.state.floorPlanWidth / Math.floor(this.state.floorPlanWidth / 25);
-    // let gridCellsNumber =
-    //   Math.floor(this.state.floorPlanHeight / gridCellsHeight) *
-    //   Math.floor(this.state.floorPlanWidth / gridCellsWidth);
-    // console.log(
-    //   Math.floor(this.state.floorPlanHeight / 25) +
-    //     ' ' +
-    //     Math.floor(this.state.floorPlanWidth / 25)
-    // );
-    // console.log(gridCellsNumber + ' ' + gridCellsHeight + ' ' + gridCellsWidth);
+    let gridCellsHeight = this.state.currentFloorPlanHeight / 800;
+    let gridCellsWidth = this.state.currentFloorPlanWidth / 800;
+
     for (let i = 0; i < 800; i++) {
       gridCells.push(
         <GridTarget
           key={i}
           onDropImg={this.onDropImg}
-          // style={{ width: gridCellsWidth, height: gridCellsHeight }}
+          style={{ width: gridCellsWidth, height: gridCellsHeight }}
         ></GridTarget>
       );
     }
@@ -217,11 +281,11 @@ class FloorPlanCreating extends Component {
           </div>
         </Popup>
         <button onClick={this.handleGrid}>Grid on/off</button>
+        <button onClick={this.handleSaveFloorPLan}>Save floor plan</button>
       </div>
     );
   }
 }
 
-FloorPlanCreating.propTypes = {};
-
-export default FloorPlanCreating;
+const mapStateToProps = state => ({});
+export default connect(mapStateToProps, { saveFloorPlan })(FloorPlanCreating);

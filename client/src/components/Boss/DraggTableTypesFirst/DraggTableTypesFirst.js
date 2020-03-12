@@ -8,9 +8,8 @@ function DraggTableTypesFirst(props) {
   //define draggable (source) component
   const [{ isDraggable }, drag] = useDrag({
     item: {
-      type: ItemType.ROUND_TABLE,
-      tableType: props.table.tableType,
-      imageName: props.table.imageName
+      type: ItemType.TABLES,
+      table: props.table
     },
     collect: monitor => ({
       isDraggable: !!monitor.isDragging()
@@ -20,9 +19,9 @@ function DraggTableTypesFirst(props) {
   return (
     <div>
       <img
+        ref={drag}
         src={'http://localhost:3000/images/' + props.table.imageName}
         alt=''
-        ref={drag}
         style={{
           opacity: isDraggable ? '0.5' : '1'
         }}

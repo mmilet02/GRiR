@@ -10,11 +10,10 @@ import PropTypes from 'prop-types';
 function FloorPlan(props) {
   //define target component where we drop tables
   const [{ isOver }, drop] = useDrop({
-    accept: ItemType.ROUND_TABLE,
+    accept: ItemType.TABLES,
     drop: (item, monitor) =>
       props.onDropImg(
-        item.tableType,
-        item.imageName,
+        item.table,
         monitor.getSourceClientOffset(),
         monitor.getInitialSourceClientOffset()
       ),

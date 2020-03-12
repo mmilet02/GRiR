@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 function GridTarget(props) {
   //define a drop target where we drop tables
   const [{ isOver }, drop] = useDrop({
-    accept: ItemType.ROUND_TABLE,
+    accept: ItemType.TABLES,
     drop: (item, monitor) =>
       props.onDropImg(
         item.tableType,

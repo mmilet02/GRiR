@@ -1,22 +1,21 @@
-import { GET_TABLE_TYPES, LOADING } from '../actions/types.js';
+import { SAVE_FLOOR_PLAN, GET_FLOOR_PLANS } from '../actions/types.js';
 
 const initialState = {
-  tableTypes: [],
-  loading: false
+  floorPlanList: []
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case GET_TABLE_TYPES:
+    case GET_FLOOR_PLANS:
       return {
         ...state,
-        tableTypes: action.payload,
+        floorPlanList: action.payload,
         loading: false
       };
-    case LOADING:
+    case SAVE_FLOOR_PLAN:
       return {
         ...state,
-        loading: true
+        floorPlanList: [...state.floorPlanList, action.payload]
       };
     default:
       return state;

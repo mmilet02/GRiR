@@ -1,4 +1,4 @@
-import { GET_TABLE_TYPES, TABLES_LOADING } from './types.js';
+import { GET_TABLE_TYPES, LOADING } from './types.js';
 import axios from 'axios';
 
 // Get all table types and set loading on false
@@ -18,6 +18,6 @@ export const getTableTypes = () => dispach => {
 //Sets loading on true
 export const setTablesLoading = () => dispach => {
   dispach({
-    type: TABLES_LOADING
+    type: LOADING
   });
 };
