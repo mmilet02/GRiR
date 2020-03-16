@@ -40,35 +40,35 @@ class FloorPlanCreating extends Component {
     this.setState({
       floorPlanList: this.state.floorPlanList.map(table => {
         if (table._id === this.state.tempId) {
-          table.sizeX = newSize;
-          table.coordX = this.state.xCoord - newSize / 2;
-          table.coordY = this.state.yCoord - newSize / 2;
-          console.log(table.coordX + ' ' + table.coordY);
-          if (0 > table.coordY) {
-            table.coordY = 0;
-            console.log(table.coordX + ' ' + table.coordY);
+          table.SizeX = newSize;
+          table.CoordX = this.state.xCoord - newSize / 2;
+          table.CoordY = this.state.yCoord - newSize / 2;
+          console.log(table.CoordX + ' ' + table.CoordY);
+          if (0 > table.CoordY) {
+            table.CoordY = 0;
+            console.log(table.CoordX + ' ' + table.CoordY);
           }
-          if (0 > table.coordX) {
-            table.coordX = 0;
-            console.log(table.coordX + ' ' + table.coordY);
+          if (0 > table.CoordX) {
+            table.CoordX = 0;
+            console.log(table.CoordX + ' ' + table.CoordY);
           }
           if (
             dropTargetPosition.bottom <
-            table.coordY + newSize + dropTargetPosition.top
+            table.CoordY + newSize + dropTargetPosition.top
           ) {
-            table.coordY =
+            table.CoordY =
               dropTargetPosition.bottom - newSize - dropTargetPosition.top;
-            console.log(table.coordX + ' ' + table.coordY);
+            console.log(table.CoordX + ' ' + table.CoordY);
           }
           if (
             dropTargetPosition.left +
               window.scrollX +
               dropTargetPosition.width <
-            table.coordX + newSize + dropTargetPosition.left
+            table.CoordX + newSize + dropTargetPosition.left
           ) {
-            table.coordX =
+            table.CoordX =
               dropTargetPosition.right - newSize - dropTargetPosition.left;
-            console.log(table.coordX + ' ' + table.coordY);
+            console.log(table.CoordX + ' ' + table.CoordY);
           }
         }
         return table;
@@ -119,8 +119,8 @@ class FloorPlanCreating extends Component {
         initialPosition
       );
 
-      let centerX = newXposition + table.sizeX / 2;
-      let centerY = newYposition + table.sizeX / 2;
+      let centerX = newXposition + table.SizeX / 2;
+      let centerY = newYposition + table.SizeX / 2;
 
       this.setState({
         tempId: table._id,
@@ -138,11 +138,11 @@ class FloorPlanCreating extends Component {
 
       let temp = {
         _id: uuid(),
-        imageName: table.imageName,
-        tableType: table.tableType,
-        sizeX: 0,
-        coordX: 0,
-        coordY: 0
+        ImageName: table.ImageName,
+        TableType: table.TableType,
+        SizeX: 0,
+        CoordX: 0,
+        CoordY: 0
       };
       this.setState({
         floorPlanList: [...this.state.floorPlanList, temp],

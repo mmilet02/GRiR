@@ -24,24 +24,24 @@ function FloorPlan(props) {
 
   const floorPlanList = props.floorPlanList.map(table => {
     let tt = <h1>noob</h1>;
-    if (table.tableType === 'circle') {
+    if (table.TableType === 'circle') {
       tt = (
         <DraggTableTypesSecond
-          top={table.coordY}
-          left={table.coordX}
-          visina={table.sizeX}
-          širina={table.sizeX}
+          top={table.CoordY}
+          left={table.CoordX}
+          visina={table.SizeX}
+          širina={table.SizeX}
           key={table._id}
           table={table}
         ></DraggTableTypesSecond>
       );
-    } else if (table.tableType === 'square') {
+    } else if (table.TableType === 'square') {
       tt = (
         <DraggTableTypesSecond
-          top={table.coordY}
-          left={table.coordX}
-          visina={table.sizeX}
-          širina={table.sizeX}
+          top={table.CoordY}
+          left={table.CoordX}
+          visina={table.SizeX}
+          širina={table.SizeX}
           key={table._id}
           table={table}
         ></DraggTableTypesSecond>

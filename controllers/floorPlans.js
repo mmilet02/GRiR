@@ -1,5 +1,4 @@
 const FloorPlans = require('../models/FloorPlans.js');
-const Tables = require('../models/Tables.js');
 
 const addTable = async temp => {
   return await Tables.create(temp);
@@ -10,11 +9,9 @@ const addTable = async temp => {
 exports.getFloorPlans = async (req, res, next) => {
   try {
     const floorPlan = await FloorPlans.find();
-    const tables = await Tables.find();
     return res.status(200).json({
       success: true,
       data: floorPlan,
-      data: tables,
       count: floorPlan.length
     });
   } catch (err) {
@@ -28,32 +25,14 @@ exports.getFloorPlans = async (req, res, next) => {
 // @route   POST /api/v1/floorPlans
 // @access  Public
 exports.addFloorPlan = async (req, res, next) => {
+  console.log('uslooo');
+
   try {
-    let temp = {
-      restaurantID: 2,
-      numbOfTables: req.body.tableList.length
-    };
-
-    const floorPlan = await FloorPlans.create(temp);
-    const tableListt = await Promise.all(
-      req.body.tableList.map(tab => {
-        let temp2 = {
-          floorID: floorPlan._id,
-          coordX: tab.coordX,
-          coordY: tab.coordY,
-          imageName: tab.imageName,
-          sizeX: tab.sizeX,
-          tableType: tab.tableType
-        };
-
-        return addTable(temp2);
-      })
-    );
+    const floorPlan = await FloorPlans.create(req.body);
 
     return res.status(201).json({
       success: true,
-      data: floorPlan,
-      data2: tableListt
+      data: floorPlan
     });
   } catch (err) {
     if (err.name === 'ValidationError') {

@@ -20,7 +20,7 @@ function DraggTableTypesFirst(props) {
     <div>
       <img
         ref={drag}
-        src={'http://localhost:3000/images/' + props.table.imageName}
+        src={'http://localhost:3000/images/' + props.table.ImageName}
         alt=''
         style={{
           opacity: isDraggable ? '0.5' : '1'

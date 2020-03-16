@@ -4,5 +4,5 @@ import floorPlanReducer from './floorPlanReducer';
 
 export default combineReducers({
   tableTypes: tableTypesReducer,
-  floorPLan: floorPlanReducer
+  floorPlan: floorPlanReducer
 });

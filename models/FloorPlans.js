@@ -1,12 +1,16 @@
 const mongoose = require('mongoose');
 
 const FloorPlansSchema = new mongoose.Schema({
-  restaurantID: {
+  RestaurantID: {
+    type: String,
+    required: true
+  },
+  NumbOfTables: {
     type: Number,
     required: true
   },
-  numbOfTables: {
-    type: Number,
+  TableList: {
+    type: [mongoose.Schema.Types.Mixed],
     required: true
   }
 });

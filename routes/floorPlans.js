@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { addFloorPlan } = require('../controllers/floorPlans.js');
+const { addFloorPlan, getFloorPlans } = require('../controllers/floorPlans.js');
 
-router.route('/').post(addFloorPlan);
+router
+  .route('/')
+  .post(addFloorPlan)
+  .get(getFloorPlans);
 module.exports = router;

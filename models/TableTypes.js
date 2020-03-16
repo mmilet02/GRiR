@@ -1,25 +1,17 @@
 const mongoose = require('mongoose');
 
 const TableTypesSchema = new mongoose.Schema({
-  imageName: {
+  ImageName: {
     type: String,
     trim: true,
     required: true
   },
-  tableType: {
+  TableType: {
     type: String,
     trim: true,
     required: true
   },
-  sizeX: {
-    type: Number,
-    required: true
-  },
-  coordX: {
-    type: Number,
-    required: true
-  },
-  coordY: {
+  NumberOfPeople: {
     type: Number,
     required: true
   }

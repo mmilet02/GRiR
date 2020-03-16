@@ -1,7 +1,8 @@
-import { SAVE_FLOOR_PLAN, GET_FLOOR_PLANS } from '../actions/types.js';
+import { SAVE_FLOOR_PLAN, GET_FLOOR_PLANS, LOADING } from '../actions/types.js';
 
 const initialState = {
-  floorPlanList: []
+  floorPlanList: [],
+  load: false
 };
 
 export default function(state = initialState, action) {
@@ -16,6 +17,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         floorPlanList: [...state.floorPlanList, action.payload]
+        // tables: [...state.tables, ...action.payload2]
+      };
+    case LOADING:
+      return {
+        ...state,
+        load: true
       };
     default:
       return state;

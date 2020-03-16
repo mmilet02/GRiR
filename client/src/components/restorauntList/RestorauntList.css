@@ -1,0 +1,21 @@
+.containerEx {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding-top: 30px;
+}
+.floorPlanContainerEx {
+  position: relative;
+  width: 1000px;
+  height: 500px;
+}
+.choise {
+  border: 1px solid #333;
+  padding: 10px 0px;
+  width: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}

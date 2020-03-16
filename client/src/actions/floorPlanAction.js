@@ -1,7 +1,8 @@
-import { SAVE_FLOOR_PLAN, GET_FLOOR_PLANS } from './types.js';
+import { SAVE_FLOOR_PLAN, GET_FLOOR_PLANS, LOADING } from './types.js';
 import axios from 'axios';
 
 export const getFloorPlans = () => dispach => {
+  dispach(setLoading());
   axios
     .get('/api/floorPlans')
     .then(res =>
@@ -14,38 +15,31 @@ export const getFloorPlans = () => dispach => {
 };
 
 export const saveFloorPlan = floorPlan => dispach => {
+  console.log('uslo....');
   const config = {
     headers: {
       'Content-Type': 'application/json'
     }
   };
-
-  let temp2 = floorPlan.map(plan => {
-    return {
-      tableId: plan._id,
-      coordX: plan.coordX,
-      coordY: plan.coordY,
-      imageName: plan.imageName,
-      sizeX: plan.sizeX,
-      tableType: plan.tableType
-    };
-  });
   let temp = {
-    restaurantID: 2,
-    numbOfTables: floorPlan.length,
-    tableList: temp2
+    RestaurantID: '2',
+    NumbOfTables: floorPlan.length,
+    TableList: floorPlan
   };
-  console.log(temp);
   axios
     .post('/api/floorPlans', temp, config)
     .then(res => {
-      let temp1 = res.data.data;
-      let temp2 = res.data.data2;
-      temp1.tableList = temp2;
       dispach({
         type: SAVE_FLOOR_PLAN,
-        payload: temp1
+        payload: res.data.data
+        // payload2: res.data.data2
       });
     })
     .catch(err => console.log('ERROR', err));
+};
+
+export const setLoading = () => dispach => {
+  dispach({
+    type: LOADING
+  });
 };
