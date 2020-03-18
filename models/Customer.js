@@ -11,7 +11,8 @@ const CustomerSchema = new mongoose.Schema({
   },
   Email: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   City: {
     type: String,

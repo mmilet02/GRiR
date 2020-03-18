@@ -23,7 +23,7 @@ exports.getFloorPlans = async (req, res, next) => {
 };
 // @desc    Add floor plan
 // @route   POST /api/v1/floorPlans
-// @access  Public
+// @access  Private
 exports.addFloorPlan = async (req, res, next) => {
   console.log('uslooo');
 
