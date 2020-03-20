@@ -69,6 +69,6 @@ exports.postRestoraunt = async (req, res, next) => {
       }
     });
   } catch (e) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ msg: e.message });
   }
 };

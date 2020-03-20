@@ -31,12 +31,18 @@ exports.loginRestoraunt = async (req, res, next) => {
       token,
       restoraunt: {
         _id: restoraunt._id,
-        name: restoraunt.Name,
-        email: restoraunt.Email
+        Name: restoraunt.Name,
+        Email: restoraunt.Email,
+        Description: restoraunt.Description,
+        WorkingHours: restoraunt.WorkingHours,
+        RestorauntPage: restoraunt.RestorauntPage,
+        Phone: restoraunt.Phone,
+        MaxNumbOfSeats: restoraunt.MaxNumbOfSeats,
+        MaxNumbOfTables: restoraunt.MaxNumbOfTables
       }
     });
   } catch (e) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ msg: e.message });
   }
 };
 
@@ -51,7 +57,7 @@ exports.restorauntData = async (req, res, next) => {
       '-Password'
     );
     if (!restoraunt) throw Error('Restoraunt Does not exist');
-    res.json(restoraunt);
+    res.json({ restoraunt });
   } catch (e) {
     res.status(400).json({ msg: e.message });
   }

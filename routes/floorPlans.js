@@ -8,5 +8,5 @@ router
   .all(auth)
   .post(addFloorPlan);
 
-router.route('/').get(getFloorPlans);
+router.route('/getFP').get(getFloorPlans);
 module.exports = router;

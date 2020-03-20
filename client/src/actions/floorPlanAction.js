@@ -1,45 +1,47 @@
 import { SAVE_FLOOR_PLAN, GET_FLOOR_PLANS, LOADING } from './types.js';
+import { returnErrors } from './errorActions';
+import { tokenConfig } from './authActions.js';
 import axios from 'axios';
 
-export const getFloorPlans = () => dispach => {
-  dispach(setLoading());
+export const getFloorPlans = () => dispatch => {
+  dispatch(setLoading());
   axios
-    .get('/api/floorPlans')
+    .get('/api/floorPlans/getFP')
     .then(res =>
-      dispach({
+      dispatch({
         type: GET_FLOOR_PLANS,
         payload: res.data.data
       })
     )
-    .catch(err => console.log('ERROR', err));
+    .catch(err => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
 };
 
-export const saveFloorPlan = floorPlan => dispach => {
+export const saveFloorPlan = floorPlan => (dispatch, getState) => {
   console.log('uslo....');
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
+
   let temp = {
     RestaurantID: '2',
     NumbOfTables: floorPlan.length,
     TableList: floorPlan
   };
   axios
-    .post('/api/floorPlans', temp, config)
+    .post('/api/floorPlans', temp, tokenConfig(getState))
     .then(res => {
-      dispach({
+      dispatch({
         type: SAVE_FLOOR_PLAN,
         payload: res.data.data
         // payload2: res.data.data2
       });
     })
-    .catch(err => console.log('ERROR', err));
+    .catch(err => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
 };
 
-export const setLoading = () => dispach => {
-  dispach({
+export const setLoading = () => dispatch => {
+  dispatch({
     type: LOADING
   });
 };
