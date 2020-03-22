@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './HomePage.css';
+import ResizeObserver from 'react-resize-observer';
 
 function HomePage() {
+  const [width, setWidth] = useState(0);
   return (
     <div className='homepage'>
       <div className='imgCont'>
@@ -18,13 +20,20 @@ function HomePage() {
             alt='security'
             className='fImg'
           />
+          <div className='textF'>
+            <p>100% security</p>
+          </div>
         </div>
         <div className='featureImgCon'>
           <img
             src='http://localhost:3000/images/service.svg'
-            alt='24/7 Support'
+            alt='24/7 support'
             className='fImg'
           />
+          <div className='textF'>
+            {' '}
+            <p>24/7 online support</p>
+          </div>
         </div>
         <div className='featureImgCon'>
           <img
@@ -32,12 +41,25 @@ function HomePage() {
             alt='safe'
             className='fImg'
           />
+          <div className='textF'>
+            {' '}
+            <p>Fast and easy</p>
+          </div>
         </div>
-        <div className='featureImgCon'>
+        <div className='featureImgCon' style={{ height: width }}>
           <img
             src='http://localhost:3000/images/order.svg'
             alt='every thing you need on one place'
             className='fImg'
+          />
+          <div className='textF'>
+            <p>All on place</p>
+          </div>
+
+          <ResizeObserver
+            onResize={rect => {
+              setWidth(rect.width);
+            }}
           />
         </div>
       </div>

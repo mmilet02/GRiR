@@ -22,12 +22,19 @@
 }
 
 .featureImgCon {
-  padding: 10px 0px;
   width: 20%;
   border: solid black 1px;
-  border-radius: 100%;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .fImg {
   width: 100%;
+}
+
+.textF {
+  width: 100%;
+  text-align: center;
 }
