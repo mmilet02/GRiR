@@ -10,6 +10,7 @@ function auth(req, res, next) {
   try {
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
     // Add restoraunt from payload
     req.restoraunt = decoded;
     next();

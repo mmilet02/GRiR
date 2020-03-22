@@ -1,0 +1,33 @@
+.homepage {
+  width: 100%;
+}
+
+.imgCont {
+  width: 100%;
+}
+
+.hpImg {
+  width: 100%;
+  height: 100%;
+}
+
+.feature {
+  max-width: 58em;
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0 auto;
+  padding: 100px 0px;
+}
+
+.featureImgCon {
+  padding: 10px 0px;
+  width: 20%;
+  border: solid black 1px;
+  border-radius: 100%;
+}
+
+.fImg {
+  width: 100%;
+}

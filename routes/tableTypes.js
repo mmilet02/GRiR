@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getTableTypes, addTableType } = require('../controllers/tableTypes.js');
+const { getTableTypes } = require('../controllers/tableTypes.js');
 const auth = require('../middleware/auth.js');
 
 router

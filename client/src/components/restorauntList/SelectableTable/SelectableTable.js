@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
 function SelectableTable(props) {
   const [selected, setSelected] = useState(false);
@@ -21,7 +20,5 @@ function SelectableTable(props) {
     </div>
   );
 }
-SelectableTable.propTypes = {
-  floorPlan: PropTypes.array.isRequired
-};
+SelectableTable.propTypes = {};
 export default SelectableTable;

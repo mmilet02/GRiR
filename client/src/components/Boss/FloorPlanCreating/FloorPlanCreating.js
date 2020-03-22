@@ -26,6 +26,7 @@ class FloorPlanCreating extends Component {
       currentFloorPlanHeight: 500
     };
   }
+
   // Open pop up modal
   openModal = () => {
     this.setState({
@@ -261,7 +262,7 @@ class FloorPlanCreating extends Component {
           {this.state.isGridOn ? <div className='grid'>{gridCells}</div> : null}
         </div>
 
-        <TableList tablesList={this.state.tabelTypes}></TableList>
+        <TableList></TableList>
         <Popup
           open={this.state.isOpen}
           closeOnDocumentClick

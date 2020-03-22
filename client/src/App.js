@@ -27,6 +27,7 @@ class App extends Component {
           <DndProvider backend={Backend}>
             <div className='App'>
               <Header></Header>
+
               <Switch>
                 <Route exact path='/'>
                   <HomePage />
