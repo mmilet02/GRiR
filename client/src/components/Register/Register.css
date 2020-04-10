@@ -1,19 +1,57 @@
-.form_wrapper {
+.reg_page {
+  /* background-image: url('http://localhost:3000/images/regImg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover; */
+  z-index: 1;
+}
+.form_wrapper_reg {
   width: 500px;
 }
 
-.login_form {
+.choiseUser {
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0.9;
+  padding: 2rem;
+  height: 400px;
+}
+
+.step1Heading {
+  color: #333;
+  width: 100%;
+  text-align: center;
+  padding: 4px 0px;
+}
+.choice {
+  margin-top: 30px;
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30%;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+.choice:hover {
+  background-color: rgba(219, 219, 219, 0.7);
+  cursor: pointer;
+}
+.choice p {
+  font-weight: 600;
+}
+.reg_form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /*   opacity: 0.9;
-   */
+  opacity: 0.9;
+
   padding: 2rem;
-  margin-top: 5%;
-  margin-bottom: 5%;
 }
 
+.reg_form h1 {
+  color: #333;
+}
 form {
   display: flex;
   flex-direction: column;
@@ -24,8 +62,8 @@ form {
   height: 40px;
   padding-left: 15px;
   margin-bottom: 10px;
-  /*   opacity: 0.9;
-   */
+  opacity: 0.9;
+
   box-sizing: border-box;
   color: black;
 }
@@ -33,18 +71,27 @@ form {
   margin-top: 50px;
 }
 
-.login_button {
+.reg_button {
   width: 100%;
   background: lightblue;
   cursor: pointer;
   padding: 10px;
-  margin-top: 60px;
 }
 
 .signup {
   margin-top: 25px;
   text-decoration: none;
   color: black;
+}
+
+.errBox {
+  width: 100%;
+  color: red;
+  padding: 3px 0px;
+  text-align: center;
+  background-color: rgba(255, 187, 187, 0.9);
+  border: 2px red solid;
+  font-weight: 600;
 }
 
 @media only screen and (max-width: 600px) {

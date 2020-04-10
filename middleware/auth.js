@@ -12,7 +12,7 @@ function auth(req, res, next) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Add restoraunt from payload
-    req.restoraunt = decoded;
+    req.user = decoded;
     next();
   } catch (e) {
     res.status(400).json({ msg: 'Token is not valid' });

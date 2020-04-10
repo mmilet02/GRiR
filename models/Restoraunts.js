@@ -14,6 +14,14 @@ const RestorauntSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  Type: {
+    type: String,
+    required: true
+  },
+  Location: {
+    type: String,
+    required: true
+  },
   WorkingHours: {
     type: String,
     required: true
@@ -26,12 +34,12 @@ const RestorauntSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  MaxNumbOfSeats: {
+  Viewes: {
     type: Number,
     required: true
   },
-  MaxNumbOfTables: {
-    type: Number,
+  ImgName: {
+    type: String,
     required: true
   },
   Password: {

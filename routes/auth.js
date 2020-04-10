@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { loginRestoraunt, restorauntData } = require('../controllers/auth.js');
+const { login, userData } = require('../controllers/auth.js');
 const auth = require('../middleware/auth.js');
 
-router.route('/restoraunts').post(loginRestoraunt);
+router.route('/').post(login);
 router
-  .route('/restoraunts')
+  .route('/')
   .all(auth)
-  .get(restorauntData);
+  .get(userData);
 
 module.exports = router;

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getFloorPlans } from '../../../actions/floorPlanAction.js';
 import equal from 'fast-deep-equal';
+import { withRouter } from 'react-router';
 
 class FloorPlanExample extends Component {
   constructor(props) {
@@ -28,19 +29,29 @@ class FloorPlanExample extends Component {
   }
   render() {
     let floorPlan = [];
-
-    for (let i = 0; i < this.state.floorPlans.length; i++) {
-      if (this.state.floorPlans[i].RestaurantID === '2') {
-        floorPlan = this.state.floorPlans[i].TableList;
+    if (this.props.match.params.id) {
+      for (let i = 0; i < this.state.floorPlans.length; i++) {
+        if (
+          this.state.floorPlans[i].RestaurantID === this.props.match.params.id
+        ) {
+          floorPlan = this.state.floorPlans[i].TableList;
+        }
       }
     }
-    console.log(floorPlan);
 
     floorPlan = floorPlan.map(table => (
       <SelectableTable key={table._id} table={table} />
     ));
 
-    return <div className='floorPlan'>{floorPlan}</div>;
+    return (
+      <div className='fpCon'>
+        <div style={{ width: '90%', margin: '0 auto' }}>
+          <div className='floorPlanCont'>
+            <div className='floorPlan'>{floorPlan}</div>
+          </div>
+        </div>
+      </div>
+    );
   }
 }
 
@@ -53,4 +64,6 @@ FloorPlanExample.propTypes = {
   list: PropTypes.array.isRequired
 };
 
-export default connect(mapStateToProps, { getFloorPlans })(FloorPlanExample);
+export default connect(mapStateToProps, { getFloorPlans })(
+  withRouter(FloorPlanExample)
+);

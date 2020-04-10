@@ -14,7 +14,10 @@ import Login from './components/Login/Login.js';
 import Register from './components/Register/Register.js';
 import Restoraunt from './components/Restoraunt/Restoraunt.js';
 import Profile from './components/UserProfile/UserProfile.js';
+import Footer from './components/Layout/Footer/Footer.js';
 import { loadRestoraunt } from './actions/authActions.js';
+import FloorPlanExample from './components/Restoraunt/FloorPlanExample/FloorPlanExample.js';
+import Customer from './components/Customer/Customer';
 
 class App extends Component {
   componentDidMount() {
@@ -35,7 +38,10 @@ class App extends Component {
                 <Route path='/fpc'>
                   <FloorPlanCreating />
                 </Route>
-                <Route path='/fpl'>
+                <Route path='/fpe/:id'>
+                  <FloorPlanExample />
+                </Route>
+                <Route path='/main'>
                   <RestorauntList />
                 </Route>
                 <Route path='/aboutus'>
@@ -47,13 +53,17 @@ class App extends Component {
                 <Route path='/reg'>
                   <Register />
                 </Route>
-                <Route path='/restoraunt'>
+                <Route path='/restoraunt/:id'>
                   <Restoraunt />
+                </Route>
+                <Route path='/customer/:id'>
+                  <Customer />
                 </Route>
                 <Route path='/profile'>
                   <Profile />
                 </Route>
               </Switch>
+              <Footer></Footer>
             </div>
           </DndProvider>
         </Router>

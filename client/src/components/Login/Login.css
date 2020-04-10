@@ -1,3 +1,10 @@
+.login_page {
+  padding: 100px 0px;
+  background-image: url('http://localhost:3000/images/loginImg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: 2;
+}
 .form_wrapper {
   width: 500px;
 }
@@ -7,10 +14,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  opacity: 0.75;
-  padding: 2rem;
-  margin-top: 5%;
-  margin-bottom: 5%;
+  /* opacity: 0.9; */
+  width: 50%;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 5%;
+}
+.login_form h1 {
+  color: #333;
 }
 
 form {
@@ -23,7 +34,7 @@ form {
   height: 40px;
   padding-left: 15px;
   margin-bottom: 10px;
-  opacity: 0.85;
+  /* opacity: 0.9; */
   box-sizing: border-box;
   color: black;
 }
@@ -32,17 +43,36 @@ form {
 }
 
 .login_button {
-  width: 100%;
-  background: lightblue;
-  cursor: pointer;
-  padding: 10px;
-  margin-top: 60px;
+  width: 30%;
+  margin: 0px auto;
+  border: 1px #5f5f5f solid;
+  padding: 15px 0px;
+  border-radius: 5%;
+  text-align: center;
+  color: #5f5f5f;
+  background-color: #d8d8d8;
 }
 
+.login_button:hover {
+  background-color: #525252;
+  color: white;
+  cursor: pointer;
+}
 .signup {
   margin-top: 25px;
   text-decoration: none;
-  color: black;
+}
+.signup a {
+  color: white;
+}
+
+.errBoxL {
+  width: 100%;
+  color: #d8000c;
+  padding: 3px 0px;
+  text-align: center;
+  background-color: #ffbaba;
+  border: 2px red solid;
 }
 
 @media only screen and (max-width: 600px) {

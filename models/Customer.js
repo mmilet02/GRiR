@@ -14,22 +14,6 @@ const CustomerSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  City: {
-    type: String,
-    required: true
-  },
-  State: {
-    type: String,
-    required: true
-  },
-  OIB: {
-    type: Number,
-    required: true
-  },
-  Nickname: {
-    type: String,
-    required: true
-  },
   Password: {
     type: String,
     required: true

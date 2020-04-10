@@ -1,47 +1,143 @@
-import { SAVE_FLOOR_PLAN, GET_FLOOR_PLANS, LOADING } from './types.js';
+import {
+  SAVE_FLOOR_PLAN,
+  GET_FLOOR_PLANS,
+  LOADING,
+  GET_RESTORAUNTS,
+  GET_CUSTOMERS,
+  GET_GRADES,
+  ADD_GRADE,
+} from './types.js';
 import { returnErrors } from './errorActions';
-import { tokenConfig } from './authActions.js';
 import axios from 'axios';
 
-export const getFloorPlans = () => dispatch => {
+export const getFloorPlans = () => (dispatch) => {
   dispatch(setLoading());
   axios
     .get('/api/floorPlans/getFP')
-    .then(res =>
+    .then((res) =>
       dispatch({
         type: GET_FLOOR_PLANS,
-        payload: res.data.data
+        payload: res.data.data,
       })
     )
-    .catch(err => {
+    .catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
 
-export const saveFloorPlan = floorPlan => (dispatch, getState) => {
+export const addGrade = (Grade, RestaurantID, CustomerID, token) => (
+  dispatch
+) => {
+  console.log(token);
+  let temp = {
+    RestaurantID,
+    CustomerID,
+    Grade,
+  };
+  axios
+    .post('/api/grades/addG', temp, tokenConfig(token))
+    .then((res) =>
+      dispatch({
+        type: ADD_GRADE,
+        payload: res.data.data,
+      })
+    )
+    .catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
+};
+
+export const getGrades = () => (dispatch) => {
+  dispatch(setLoading());
+  axios
+    .get('/api/grades/getG')
+    .then((res) =>
+      dispatch({
+        type: GET_GRADES,
+        payload: res.data.data,
+      })
+    )
+    .catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
+};
+
+export const saveFloorPlan = (floorPlan, id) => (dispatch) => {
   console.log('uslo....');
 
   let temp = {
-    RestaurantID: '2',
+    RestaurantID: id,
     NumbOfTables: floorPlan.length,
-    TableList: floorPlan
+    TableList: floorPlan,
+  };
+
+  const config = {
+    headers: {
+      'Content-type': 'application/json',
+    },
   };
   axios
-    .post('/api/floorPlans', temp, tokenConfig(getState))
-    .then(res => {
+    .post('/api/floorPlans', temp, config)
+    .then((res) => {
       dispatch({
         type: SAVE_FLOOR_PLAN,
-        payload: res.data.data
-        // payload2: res.data.data2
+        payload: res.data.data,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
 
-export const setLoading = () => dispatch => {
+export const setLoading = () => (dispatch) => {
   dispatch({
-    type: LOADING
+    type: LOADING,
   });
+};
+
+export const getRestoraunts = () => (dispatch) => {
+  dispatch(setLoading());
+  axios
+    .get('/api/restoraunts')
+    .then((res) =>
+      dispatch({
+        type: GET_RESTORAUNTS,
+        payload: res.data.data,
+      })
+    )
+    .catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
+};
+
+export const getCustomers = () => (dispatch) => {
+  dispatch(setLoading());
+  axios
+    .get('/api/customer')
+    .then((res) =>
+      dispatch({
+        type: GET_CUSTOMERS,
+        payload: res.data.data,
+      })
+    )
+    .catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
+};
+
+// Setup config/headers and token
+export const tokenConfig = (token) => {
+  // Headers
+  const config = {
+    headers: {
+      'Content-type': 'application/json',
+    },
+  };
+
+  // If token, add to headers
+  if (token) {
+    config.headers['x-auth-token'] = token;
+  }
+
+  return config;
 };

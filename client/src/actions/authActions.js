@@ -9,6 +9,7 @@ import {
   REGISTER_FAIL
 } from './types.js';
 import { returnErrors } from './errorActions';
+import { saveFloorPlan } from './floorPlanAction.js';
 import axios from 'axios';
 
 export const loadRestoraunt = () => (dispatch, getState) => {
@@ -16,7 +17,7 @@ export const loadRestoraunt = () => (dispatch, getState) => {
   dispatch({ type: RESTORAUNT_LOADING });
 
   axios
-    .get('/api/auth/restoraunts', tokenConfig(getState))
+    .get('/api/auth', tokenConfig(getState))
     .then(res =>
       dispatch({
         type: RESTORAUNT_LOADED,
@@ -31,18 +32,23 @@ export const loadRestoraunt = () => (dispatch, getState) => {
     });
 };
 
-// Register User
-export const register = ({
-  Name,
-  Email,
-  Description,
-  WorkingHours,
-  RestorauntPage,
-  Phone,
-  MaxNumbOfSeats,
-  MaxNumbOfTables,
-  Password
-}) => dispatch => {
+// Register restoraunt
+export const register = (
+  {
+    Name,
+    Email,
+    Description,
+    Type,
+    Location,
+    WorkingHours,
+    RestorauntPage,
+    Phone,
+    Viewes,
+    ImgName,
+    Password
+  },
+  floorPlanList
+) => dispatch => {
   // Headers
   const config = {
     headers: {
@@ -55,16 +61,55 @@ export const register = ({
     Name,
     Email,
     Description,
+    Type,
+    Location,
     WorkingHours,
     RestorauntPage,
     Phone,
-    MaxNumbOfSeats,
-    MaxNumbOfTables,
+    Viewes,
+    ImgName,
     Password
   });
 
   axios
     .post('/api/restoraunts', body, config)
+    .then(res => {
+      dispatch({
+        type: REGISTER_SUCCESS,
+        payload: res.data
+      });
+      console.log(res.data.restoraunt._id);
+      dispatch(saveFloorPlan(floorPlanList, res.data.restoraunt._id));
+    })
+    .catch(err => {
+      dispatch(
+        returnErrors(err.response.data, err.response.status, 'REGISTER_FAIL')
+      );
+      dispatch({
+        type: REGISTER_FAIL
+      });
+    });
+};
+
+// Register customer
+export const registerC = ({ Name, Email, Phone, Password }) => dispatch => {
+  // Headers
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  // Request body
+  const body = JSON.stringify({
+    Name,
+    Email,
+    Phone,
+    Password
+  });
+
+  axios
+    .post('/api/customer', body, config)
     .then(res =>
       dispatch({
         type: REGISTER_SUCCESS,
@@ -94,7 +139,7 @@ export const login = ({ Email, Password }) => dispatch => {
   const body = JSON.stringify({ Email, Password });
 
   axios
-    .post('/api/auth/restoraunts', body, config)
+    .post('/api/auth', body, config)
     .then(res =>
       dispatch({
         type: LOGIN_SUCCESS,

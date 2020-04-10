@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { login } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import './Login.css';
 
 class Login extends Component {
@@ -37,6 +37,10 @@ class Login extends Component {
         this.setState({ msg: null });
       }
     }
+
+    if (this.props.user) {
+      this.props.history.push('/');
+    }
   }
 
   formSubmit = e => {
@@ -54,7 +58,7 @@ class Login extends Component {
     return (
       <div className='login_page'>
         <div className='login_form'>
-          <h1>Login form:</h1>
+          <h1>LOGIN</h1>
           <div className='form_wrapper'>
             <form className='form' onSubmit={this.formSubmit}>
               <label>
@@ -79,9 +83,17 @@ class Login extends Component {
                 />
               </label>
               {this.state.msg ? (
-                <p style={{ color: 'red' }}>{this.state.msg}</p>
+                <div className='errBoxL'>
+                  <p style={{ color: 'red' }}>{this.state.msg}</p>
+                </div>
               ) : null}
-              <button className='login_button' onClick={this.formSubmit}>
+              <button
+                className='login_button'
+                onClick={this.formSubmit}
+                style={{
+                  marginTop: this.state.msg !== null ? '30px' : '60px'
+                }}
+              >
                 LOGIN
               </button>
               <div className='signup'>
@@ -98,6 +110,9 @@ class Login extends Component {
 }
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user,
   error: state.error
 });
-export default connect(mapStateToProps, { login, clearErrors })(Login);
+export default connect(mapStateToProps, { login, clearErrors })(
+  withRouter(Login)
+);

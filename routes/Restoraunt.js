@@ -1,7 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { postRestoraunt } = require('../controllers/restoraunts.js');
+const {
+  postRestoraunt,
+  getRestoraunts
+} = require('../controllers/restoraunts.js');
 
-router.route('/').post(postRestoraunt);
+router
+  .route('/')
+  .post(postRestoraunt)
+  .get(getRestoraunts);
 
 module.exports = router;

@@ -13,3 +13,7 @@ export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAIL = 'REGISTER_FAIL';
 export const GET_ERRORS = 'GET_ERRORS';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
+export const GET_RESTORAUNTS = 'GET_RESTORAUNTS';
+export const GET_CUSTOMERS = 'GET_CUSTOMERS';
+export const GET_GRADES = 'GET_GRADES';
+export const ADD_GRADE = 'ADD_GRADE';

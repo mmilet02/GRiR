@@ -17,6 +17,7 @@
     "@fortawesome/react-fontawesome": "^0.1.9",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
+    "cheeseburger-menu": "0.0.13",
     "colors": "^1.4.0",
     "config": "^3.3.0",
     "dotenv": "^8.2.0",
@@ -27,7 +28,9 @@
     "mongoose": "^5.9.3",
     "morgan": "^1.9.1",
     "passport": "^0.4.1",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "react-burger-menu": "^2.6.13",
+    "react-hamburger-menu": "^1.1.1"
   },
   "devDependencies": {
     "concurrently": "^5.1.0",

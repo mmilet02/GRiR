@@ -226,9 +226,9 @@ class FloorPlanCreating extends Component {
     //     currentFloorPlanWidth: tempFloorPlanWidth
     //   });
   };
-  handleSaveFloorPLan = () => {
-    this.props.saveFloorPlan(this.state.floorPlanList);
-  };
+  // handleSaveFloorPLan = () => {
+  //   this.props.saveFloorPlan(this.state.floorPlanList);
+  // };
   render() {
     let gridCells = [];
     let gridCellsHeight = this.state.currentFloorPlanHeight / 800;
@@ -239,30 +239,37 @@ class FloorPlanCreating extends Component {
         <GridTarget
           key={i}
           onDropImg={this.onDropImg}
-          style={{ width: gridCellsWidth, height: gridCellsHeight }}
+          style={{
+            width: gridCellsWidth,
+            height: gridCellsHeight,
+            zIndex: '2'
+          }}
         ></GridTarget>
       );
     }
     return (
       <div className='container'>
-        <div
-          className='floorPlanContainer'
-          ref={this.boss}
-          // style={{
-          //   height: this.state.currentFloorPlanHeight + 'px',
-          //   width: this.state.currentFloorPlanWidth + 'px'
-          // }}
-        >
-          <FloorPlan
-            onDropImg={this.onDropImg}
-            floorPlanList={this.state.floorPlanList}
-            handleFloorPlanResize={this.handleFloorPlanResize}
-          />
+        <div className='containerS'>
+          <div
+            className='floorPlanContainer'
+            ref={this.boss}
+            // style={{
+            //   height: this.state.currentFloorPlanHeight + 'px',
+            //   width: this.state.currentFloorPlanWidth + 'px'
+            // }}
+          >
+            <FloorPlan
+              onDropImg={this.onDropImg}
+              floorPlanList={this.state.floorPlanList}
+              handleFloorPlanResize={this.handleFloorPlanResize}
+            />
 
-          {this.state.isGridOn ? <div className='grid'>{gridCells}</div> : null}
+            {this.state.isGridOn ? (
+              <div className='grid'>{gridCells}</div>
+            ) : null}
+          </div>
+          <TableList></TableList>
         </div>
-
-        <TableList></TableList>
         <Popup
           open={this.state.isOpen}
           closeOnDocumentClick
@@ -281,8 +288,19 @@ class FloorPlanCreating extends Component {
             <button onClick={this.handleSubmit}>OK</button>
           </div>
         </Popup>
-        <button onClick={this.handleGrid}>Grid on/off</button>
-        <button onClick={this.handleSaveFloorPLan}>Save floor plan</button>
+        <div className='containerM'>
+          <button className='regBtn' onClick={this.handleGrid}>
+            Grid on/off
+          </button>
+          <button
+            className='regBtn'
+            onClick={() =>
+              this.props.handleSaveFloorPLan(this.state.floorPlanList)
+            }
+          >
+            Save floor plan
+          </button>
+        </div>
       </div>
     );
   }
