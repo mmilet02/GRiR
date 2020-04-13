@@ -36,6 +36,7 @@ exports.postCustomer = async (req, res, next) => {
       Name,
       Email,
       Phone,
+      Favorite: [],
       Password: hash,
     });
 
@@ -49,11 +50,39 @@ exports.postCustomer = async (req, res, next) => {
         _id: savedCustomer._id,
         Name: savedCustomer.Name,
         Email: savedCustomer.Email,
+        Favorite: savedCustomer.Favorite,
         Phone: savedCustomer.Phone,
       },
     });
   } catch (e) {
     res.status(400).json({ msg: e.message });
+  }
+};
+
+//@desc Update all customers
+//@route POST /api/customer/fav
+//access private
+exports.updateFavorite = async (req, res, next) => {
+  try {
+    const { _id, Favorite, token } = req.body;
+    const customer = await Customer.findOne({ _id });
+    customer.Favorite = Favorite;
+    customer.save();
+    return res.status(200).json({
+      token,
+      customer: {
+        _id: customer._id,
+        Name: customer.Name,
+        Email: customer.Email,
+        Favorite: customer.Favorite,
+        Phone: customer.Phone,
+      },
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      error: 'Server error',
+    });
   }
 };
 

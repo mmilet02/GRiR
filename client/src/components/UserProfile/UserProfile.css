@@ -104,7 +104,14 @@
   margin: 5px 0px;
 }
 
-.userProfileCustomerCon {
+.userProfileCustomerConn {
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.nesto {
   width: 50%;
   margin: 0 auto;
   display: flex;
@@ -112,6 +119,25 @@
   justify-content: space-evenly;
 }
 
+.userProfilaCustomerFavList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.favRestoCon {
+  width: 200px;
+  height: auto;
+  position: relative;
+  margin: 0px 10px;
+}
+
+.favRestoImg {
+  width: 100%;
+  height: auto;
+}
 .userProfileCustomerInfoCon {
   width: 55%;
   display: flex;
@@ -137,4 +163,17 @@
   width: 90%;
   margin: 0 autos;
   height: auto;
+}
+
+.halfStarR {
+  margin: 0px 0px 0px 0px;
+  color: black;
+  cursor: pointer;
+  transform: rotateY(-180deg);
+}
+
+.halfStarL {
+  margin: 0px 0px 0px 0px;
+  color: yellow;
+  cursor: pointer;
 }

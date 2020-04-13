@@ -330,6 +330,7 @@ RestorauntList.propTypes = {};
 const mapStateToProps = (state) => ({
   restoraunts: state.floorPlan.restoraunts,
 });
-export default connect(mapStateToProps, { getRestoraunts, getGrades })(
-  RestorauntList
-);
+export default connect(mapStateToProps, {
+  getRestoraunts,
+  getGrades,
+})(RestorauntList);

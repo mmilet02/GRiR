@@ -12,6 +12,22 @@
   padding: 5px 0px;
   color: #5f5f5f;
 }
+.favoriteHeart {
+  margin: 0px 5 px;
+  color: '333';
+  cursor: pointer;
+}
+.yesFav {
+  color: red;
+}
+.recenzija {
+  width: 90%;
+  margin: 0 auto;
+  padding: 5px 0px;
+  color: #5f5f5f;
+  display: flex;
+  justify-content: space-evenly;
+}
 
 .restourantText {
   display: flex;
@@ -108,4 +124,50 @@
   background-color: #525252;
   color: white;
   cursor: pointer;
+}
+
+.closeRestoraunt {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  font-size: 42px;
+  color: #333;
+  transform: rotate(45deg);
+  cursor: pointer;
+}
+
+.closeRestoraunt:hover {
+  color: #666;
+}
+
+.gradeInput {
+  width: 90%;
+  height: 40px;
+  margin: 0 auto;
+  padding-left: 15px;
+  margin-bottom: 10px;
+  opacity: 0.9;
+
+  box-sizing: border-box;
+  color: black;
+}
+
+.gcCon {
+  width: 90%;
+  overflow: auto;
+  height: 200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.gcEle {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0px;
+}
+
+.gcGrade {
+  margin-bottom: 4px;
 }

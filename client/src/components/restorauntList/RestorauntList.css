@@ -147,3 +147,12 @@
   align-items: center;
   width: 33%;
 }
+
+.favoriteHeart {
+  margin: 0px 5 px;
+  color: '333';
+  cursor: pointer;
+}
+.yesFav {
+  color: red;
+}

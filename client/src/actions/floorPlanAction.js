@@ -6,6 +6,7 @@ import {
   GET_CUSTOMERS,
   GET_GRADES,
   ADD_GRADE,
+  UPDATE_FAVORITE,
 } from './types.js';
 import { returnErrors } from './errorActions';
 import axios from 'axios';
@@ -25,7 +26,7 @@ export const getFloorPlans = () => (dispatch) => {
     });
 };
 
-export const addGrade = (Grade, RestaurantID, CustomerID, token) => (
+export const addGrade = (Grade, Comment, RestaurantID, CustomerID, token) => (
   dispatch
 ) => {
   console.log(token);
@@ -33,6 +34,7 @@ export const addGrade = (Grade, RestaurantID, CustomerID, token) => (
     RestaurantID,
     CustomerID,
     Grade,
+    Comment,
   };
   axios
     .post('/api/grades/addG', temp, tokenConfig(token))
@@ -125,6 +127,24 @@ export const getCustomers = () => (dispatch) => {
     });
 };
 
+export const updateFavorite = (_id, Favorite, token) => (dispatch) => {
+  let temp = {
+    _id,
+    Favorite,
+    token,
+  };
+  axios
+    .post('/api/customer/fav', temp, tokenConfig(token))
+    .then((res) =>
+      dispatch({
+        type: UPDATE_FAVORITE,
+        payload: res.data,
+      })
+    )
+    .catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
+};
 // Setup config/headers and token
 export const tokenConfig = (token) => {
   // Headers

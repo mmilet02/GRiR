@@ -13,6 +13,10 @@ const GradesSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  Comment: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('Grades', GradesSchema);

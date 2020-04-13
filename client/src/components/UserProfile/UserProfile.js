@@ -12,6 +12,7 @@ import {
   faEnvelope,
   faPhone,
   faStar,
+  faStarHalf,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -34,14 +35,42 @@ class UserProfile extends Component {
     );
     let gradeSum = 0;
     let n = 0;
-    for (let i = 0; i < filteredGrades.length; i++) {
-      gradeSum += filteredGrades[i].Grade;
-      n++;
+    let g = 0;
+    let jedan = 0;
+    let dva = 0;
+    let tri = 0;
+    let cetiri = 0;
+    let pet = 0;
+    if (0 < filteredGrades.length) {
+      for (let i = 0; i < filteredGrades.length; i++) {
+        if (filteredGrades[i].Grade === 1) {
+          jedan++;
+        } else if (filteredGrades[i].Grade === 2) {
+          dva++;
+        } else if (filteredGrades[i].Grade === 3) {
+          tri++;
+        } else if (filteredGrades[i].Grade === 4) {
+          cetiri++;
+        } else if (filteredGrades[i].Grade === 5) {
+          pet++;
+        }
+        gradeSum += filteredGrades[i].Grade;
+        n++;
+      }
+      g = gradeSum / n;
+      g = g.toFixed(2);
+    } else {
+      g = 'Sorry no grades';
     }
-    console.log(gradeSum);
-    console.log(n);
-    let g = gradeSum / n;
-    return g;
+    let temp = {
+      grade: g,
+      jedan,
+      dva,
+      tri,
+      cetiri,
+      pet,
+    };
+    return temp;
   };
   buildStars = (grade) => {
     let stars = [];
@@ -52,10 +81,20 @@ class UserProfile extends Component {
           <FontAwesomeIcon
             key={i}
             icon={faStar}
-            style={{ margin: '0px 5 px', color: 'yellow' }}
+            style={{ margin: '0px 5 px', color: 'yellow', cursor: 'pointer' }}
           />
         );
-      } else {
+      }
+      // else if (grade < 1 && grade > 0) {
+      //   grade--;
+      //   stars.push(
+      //     <FontAwesomeIcon key={i} icon={faStarHalf} className='halfStarL' />
+      //   );
+      //   stars.push(
+      //     <FontAwesomeIcon key={i} icon={faStarHalf} className='halfStarR' />
+      //   );
+      // }
+      else {
         stars.push(
           <FontAwesomeIcon
             key={i}
@@ -69,50 +108,76 @@ class UserProfile extends Component {
   };
 
   render() {
-    let grade = 0;
+    let gradesObj = 0;
     let filteredGrades = {};
     let numberOfGrades = 0;
     let stars = [];
     const { user } = this.props;
     let korisnik = '';
+    let favList = [];
+    let favo = {};
     if (user && user.customer) {
+      favList = user.customer.Favorite.map((fav) => {
+        for (let i = 0; i < this.props.restoraunts.length; i++) {
+          if (this.props.restoraunts[i]._id === fav)
+            favo = this.props.restoraunts[i];
+        }
+        return (
+          <div className='favRestoCon'>
+            <Link to={'/restoraunt/' + favo._id} style={{ width: '100%' }}>
+              <img
+                src={'http://localhost:3000/images/' + favo.ImgName}
+                alt=''
+                className='favRestoImg'
+              />
+            </Link>
+          </div>
+        );
+      });
       korisnik = (
-        <div className='userProfileCustomerCon'>
-          <div className='userProfileCustomerImgCon'>
-            <img
-              src='http://localhost:3000/images/tim.jpg'
-              alt=''
-              className='userProfileCustomerImg'
-            />
-          </div>
-          <div className='userProfileCustomerInfoCon'>
-            <div className='userProfileCustomerInfo'>
-              <FontAwesomeIcon
-                icon={faUserTie}
-                style={{ marginRight: '5px', marginTop: '2px' }}
+        <div className='userProfileCustomerConn'>
+          <div className='nesto'>
+            <div className='userProfileCustomerImgCon'>
+              <img
+                src='http://localhost:3000/images/tim.jpg'
+                alt=''
+                className='userProfileCustomerImg'
               />
-              <p>{user.customer.Name}</p>
             </div>
-            <div className='userProfileCustomerInfo'>
-              <FontAwesomeIcon
-                icon={faPhone}
-                style={{ marginRight: '5px', marginTop: '2px' }}
-              />
-              <p>{user.customer.Phone}</p>
-            </div>{' '}
-            <div className='userProfileCustomerInfo'>
-              <FontAwesomeIcon
-                icon={faEnvelope}
-                style={{ marginRight: '5px', marginTop: '2px' }}
-              />
-              <p>{user.customer.Email}</p>
+            <div className='userProfileCustomerInfoCon'>
+              <div className='userProfileCustomerInfo'>
+                <FontAwesomeIcon
+                  icon={faUserTie}
+                  style={{ marginRight: '5px', marginTop: '2px' }}
+                />
+                <p>{user.customer.Name}</p>
+              </div>
+              <div className='userProfileCustomerInfo'>
+                <FontAwesomeIcon
+                  icon={faPhone}
+                  style={{ marginRight: '5px', marginTop: '2px' }}
+                />
+                <p>{user.customer.Phone}</p>
+              </div>{' '}
+              <div className='userProfileCustomerInfo'>
+                <FontAwesomeIcon
+                  icon={faEnvelope}
+                  style={{ marginRight: '5px', marginTop: '2px' }}
+                />
+                <p>{user.customer.Email}</p>
+              </div>
             </div>
           </div>
+          <div className='userProfilaCustomerFavList'>{favList}</div>
         </div>
       );
     } else if (user && user.restoraunt) {
-      grade = this.calcGrade();
-      stars = this.buildStars(grade);
+      gradesObj = this.calcGrade();
+      if (typeof gradesObj.grade === 'string') {
+        stars = this.buildStars(0);
+      } else if (typeof gradesObj.grade === 'number') {
+        stars = this.buildStars(gradesObj.grade);
+      }
 
       filteredGrades = this.props.grades.filter(
         (g) => g.RestaurantID === this.props.user.restoraunt._id
@@ -123,6 +188,12 @@ class UserProfile extends Component {
           <div className='userName'>
             <h1>{user.restoraunt.Name}</h1>
             <h1>{numberOfGrades}</h1>
+            <h1>{gradesObj.grade}</h1>
+            <h1>{gradesObj.jedan}</h1>
+            <h1>{gradesObj.dva}</h1>
+            <h1>{gradesObj.tri}</h1>
+            <h1>{gradesObj.cetiri}</h1>
+            <h1>{gradesObj.pet}</h1>
             <div>{stars}</div>
           </div>
           <div className='userInf'>
@@ -212,6 +283,7 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   user: state.auth.user,
   grades: state.floorPlan.grades,
+  restoraunts: state.floorPlan.restoraunts,
 });
 export default connect(mapStateToProps, { logout, getGrades })(
   withRouter(UserProfile)

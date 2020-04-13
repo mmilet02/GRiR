@@ -40,8 +40,8 @@ exports.login = async (req, res, next) => {
           RestorauntPage: restoraunt.RestorauntPage,
           Phone: restoraunt.Phone,
           Viewes: restoraunt.Viewes,
-          ImgName: restoraunt.ImgName
-        }
+          ImgName: restoraunt.ImgName,
+        },
       });
     } else {
       const isMatch = await bcrypt.compare(Password, customer.Password);
@@ -55,8 +55,9 @@ exports.login = async (req, res, next) => {
           _id: customer._id,
           Name: customer.Name,
           Email: customer.Email,
-          Phone: customer.Phone
-        }
+          Phone: customer.Phone,
+          Favorite: customer.Favorite,
+        },
       });
     }
   } catch (e) {
