@@ -3,36 +3,36 @@ const mongoose = require('mongoose');
 const ReservationSchema = new mongoose.Schema({
   RestorauntID: {
     type: String,
-    required: true
+    required: true,
   },
   FloorPlanID: {
     type: String,
-    required: true
+    required: true,
   },
   CustomerID: {
     type: String,
-    required: true
+    required: true,
   },
   TableID: {
-    type: String,
-    required: true
+    type: [String],
+    required: true,
   },
   Date: {
     type: Date,
-    required: true
+    required: true,
   },
   Hour: {
     type: String,
-    required: true
+    required: true,
   },
   Comment: {
     type: String,
-    required: true
+    required: true,
   },
   NumberOfPeople: {
     type: Number,
-    required: true
-  }
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('reservation', ReservationSchema);

@@ -145,6 +145,20 @@ export const updateFavorite = (_id, Favorite, token) => (dispatch) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
+export const uploadImage = (formData) => (dispatch) => {
+  const config = {
+    headers: {
+      'Content-type': 'multipart/form-data',
+    },
+  };
+
+  axios
+    .post('/api/restoraunts/image', formData, config)
+    .then((res) => console.log(res.data))
+    .catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
+};
 // Setup config/headers and token
 export const tokenConfig = (token) => {
   // Headers

@@ -17,6 +17,11 @@ import {
   faHeart,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import DatePicker from './DayPicker.js';
+import {
+  getReservation,
+  addReservation,
+} from '../../actions/reservationsAction.js';
 
 class Restoraunt extends Component {
   constructor(props) {
@@ -26,14 +31,24 @@ class Restoraunt extends Component {
       isOpen: false,
       isOpen1: false,
       isOpen2: false,
+      isOpen3: false,
+      isOpen4: false,
       didGrade: false,
       favorite: false,
       Comment: '',
+      Comment1: '',
       grade: 0,
       gradeComment: {},
+      startDate: new Date(),
+      startDate1: new Date(),
+      floorPlanID: '',
+      tableID: [],
+      numberOfPeople: 0,
+      count: 0,
     };
   }
   componentDidMount() {
+    this.props.getReservation();
     let did = false;
     let gradeComment = {};
     if (this.props.user && this.props.user.customer) {
@@ -158,8 +173,17 @@ class Restoraunt extends Component {
   closeModal2 = () => {
     this.setState({ isOpen2: false });
   };
+  closeModal3 = () => {
+    this.setState({ isOpen3: false });
+  };
+  closeModal4 = () => {
+    this.setState({ isOpen4: false });
+  };
   openModal2 = () => {
     this.setState({ isOpen2: true });
+  };
+  openModal4 = () => {
+    this.setState({ isOpen4: true });
   };
 
   buildStars = (grade) => {
@@ -230,6 +254,56 @@ class Restoraunt extends Component {
     }
   };
 
+  handleDayPickerChange = (date) => {
+    this.setState({
+      startDate: date,
+    });
+  };
+  handleDayPickerChange1 = (date) => {
+    this.setState({
+      startDate1: date,
+    });
+  };
+  handleFloorPlan = (FloorPlanID, TableID, NumberOfPeople, x) => {
+    if (x === 'plus') {
+      this.setState({
+        floorPlanID: FloorPlanID,
+        tableID: [...this.state.tableID, TableID],
+        numberOfPeople: this.state.numberOfPeople + NumberOfPeople,
+      });
+    } else {
+      this.setState({
+        floorPlanID: FloorPlanID,
+        tableID: this.state.tableID.filter((tab) => tab !== TableID),
+        numberOfPeople: this.state.numberOfPeople - NumberOfPeople,
+      });
+    }
+  };
+  handleReservation = (resto) => {
+    if (!this.props.user || this.props.user.restoraunt) {
+      this.setState({
+        isOpen3: true,
+      });
+    } else {
+      const { token } = this.props.user;
+      let hour = `${this.state.startDate1.getHours()}:${this.state.startDate1.getMinutes()}`;
+      console.log(typeof hour);
+      console.log(hour);
+      let reservation = {
+        RestorauntID: resto._id,
+        FloorPlanID: this.state.floorPlanID,
+        CustomerID: this.props.user.customer._id,
+        TableID: this.state.tableID,
+        Date: this.state.startDate,
+        Hour: hour,
+        Comment: this.state.Comment1,
+        NumberOfPeople: this.state.numberOfPeople,
+      };
+      console.log(reservation);
+      this.props.addReservation(reservation, token);
+    }
+  };
+
   handleChange = (e) => {
     const { value, name } = e.target;
     this.setState({
@@ -240,6 +314,12 @@ class Restoraunt extends Component {
   onSubmit = (resto) => {
     this.closeModal();
     this.onStarClick(this.state.grade, resto, this.state.Comment);
+  };
+
+  handleCount = (n) => {
+    this.setState({
+      count: n,
+    });
   };
   render() {
     const { user } = this.props;
@@ -332,8 +412,18 @@ class Restoraunt extends Component {
     );
     let modalContent = {};
     let favModal = {};
+    let resModal = {};
 
     if (user && user.restoraunt) {
+      resModal = (
+        <div className='modal'>
+          <div className='closeRestoraunt' onClick={this.closeModal3}>
+            +
+          </div>
+          <p>Sorry as restoraunt you cant make reservation.</p>
+          <button onClick={this.closeModal3}>OK</button>
+        </div>
+      );
       modalContent = (
         <div className='modal'>
           <div className='closeRestoraunt' onClick={this.closeModal}>
@@ -344,6 +434,15 @@ class Restoraunt extends Component {
         </div>
       );
     } else if (!user) {
+      resModal = (
+        <div className='modal'>
+          <div className='closeRestoraunt' onClick={this.closeModal3}>
+            +
+          </div>
+          <p>You need to be sign in to make reservation.</p>
+          <button onClick={this.closeModal3}>OK</button>
+        </div>
+      );
       favModal = (
         <div className='modal'>
           <div className='closeRestoraunt' onClick={this.closeModal1}>
@@ -430,7 +529,9 @@ class Restoraunt extends Component {
                   icon={faClock}
                   style={{ marginRight: '5px', marginTop: '2px' }}
                 />
-                <p>{resto.WorkingHours}</p>
+                <p>{resto.StartingHour}</p>
+                <p>-</p>
+                <p>{resto.EndingHour}</p>
               </div>
             </div>
             <div className='restourantDesc'>
@@ -439,7 +540,7 @@ class Restoraunt extends Component {
           </div>
           <div className='restourantImages'>
             <img
-              src={'http://localhost:3000/images/' + resto.ImgName}
+              src={'http://localhost:3000/uploads/' + resto.ImgName}
               alt=''
               className='restourantImg'
             />
@@ -465,12 +566,43 @@ class Restoraunt extends Component {
           <h2>Floor plan</h2>
         </div>
         <div className='bossDiv'>
-          <div className='floorPlanContainerEx'>
-            <FloorPlanExample></FloorPlanExample>
+          <div className='reserveInfo'>
+            <DatePicker
+              restoraunt={resto}
+              handleDayPickerChange={this.handleDayPickerChange}
+              handleDayPickerChange1={this.handleDayPickerChange1}
+              datum={this.state.startDate}
+              vrime={this.state.startDate1}
+            />
+            <label>
+              <input
+                className='commentInput'
+                type='text'
+                placeholder='Enter your comment'
+                name='Comment1'
+                value={this.state.Comment1}
+                onChange={this.handleChange}
+              />
+            </label>
           </div>
-          <div className='reserveInfo'></div>
+          <div className='floorPlanContainerEx'>
+            <FloorPlanExample
+              restoraunt={resto}
+              openModal={this.openModal4}
+              handleFloorPlan={this.handleFloorPlan}
+              datum={this.state.startDate}
+              datum1={this.state.startDate1}
+              handleCount={this.handleCount}
+              count={this.state.count}
+            ></FloorPlanExample>
+          </div>
         </div>
-        <div className='reserveBtn'>RESERVE</div>
+        <div
+          className='reserveBtn'
+          onClick={() => this.handleReservation(resto)}
+        >
+          RESERVE
+        </div>
         <Popup
           open={this.state.isOpen}
           closeOnDocumentClick
@@ -494,8 +626,28 @@ class Restoraunt extends Component {
             <div className='closeRestoraunt' onClick={this.closeModal2}>
               +
             </div>
-            <div className='gcCon'>{gcList}</div>
+            {gcList}
             <button onClick={this.closeModal2}>OK</button>
+          </div>
+        </Popup>
+        <Popup
+          open={this.state.isOpen3}
+          closeOnDocumentClick
+          onClose={this.closeModal3}
+        >
+          {resModal}
+        </Popup>
+        <Popup
+          open={this.state.isOpen4}
+          closeOnDocumentClick
+          onClose={this.closeModal4}
+        >
+          <div className='modal'>
+            <div className='closeRestoraunt' onClick={this.closeModal4}>
+              +
+            </div>
+            <p>Sorry if u want reserve more than 2 tables call restoraunt</p>
+            <button onClick={this.closeModal4}>OK</button>
           </div>
         </Popup>
       </div>
@@ -513,4 +665,6 @@ export default connect(mapStateToProps, {
   addGrade,
   getGrades,
   updateFavorite,
+  addReservation,
+  getReservation,
 })(withRouter(Restoraunt));

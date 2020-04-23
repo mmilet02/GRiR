@@ -4,13 +4,16 @@ import { register, registerC } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 import { Link } from 'react-router-dom';
 import FloorPlanCreating from '../Boss/FloorPlanCreating/FloorPlanCreating.js';
-import { saveFloorPlan } from '../../actions/floorPlanAction.js';
+import { saveFloorPlan, uploadImage } from '../../actions/floorPlanAction.js';
+import NumericInput from 'react-numeric-input';
 import './Register.css';
 
 class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      startW: 0,
+      endW: 0,
       msg: null,
       Name: '',
       Email: '',
@@ -23,6 +26,8 @@ class Register extends Component {
       Location: '',
       step: 0,
       user: '',
+      Image: 'Izaberi sliku',
+      file: '',
       floorPlanList: [],
       typeDropDownList: [
         'Morsko',
@@ -78,19 +83,41 @@ class Register extends Component {
     });
   };
 
+  updateNumberPicker1 = (e) => {
+    console.log('hello');
+    this.setState({ startW: e });
+  };
+  updateNumberPicker2 = (e) => {
+    this.setState({ endW: e });
+  };
+
+  handleChangeFile = (e) => {
+    this.setState({
+      ...this.state,
+      file: e.target.files[0],
+      Image: e.target.files[0].name,
+    });
+  };
+
   formSubmit = (e) => {
     e.preventDefault();
+
     this.props.clearErrors();
     if (this.state.user === 'restaurant') {
+      let formData = new FormData();
+      formData.append('file', this.state.file);
+      console.log(formData);
       const {
         Name,
         Email,
         Description,
         Type,
         Location,
-        WorkingHours,
+        startW,
+        endW,
         RestorauntPage,
         Phone,
+        Image,
         Password,
       } = this.state;
 
@@ -100,14 +127,16 @@ class Register extends Component {
         Description,
         Type,
         Location,
-        WorkingHours,
+        StartingHour: startW,
+        EndingHour: endW,
         RestorauntPage,
         Phone,
         Viewes: 0,
-        ImgName: 'hello',
+        ImgName: Image,
         Password,
       };
       this.props.register(newRestoraunt, this.state.floorPlanList);
+      this.props.uploadImage(formData);
     } else {
       const { Name, Email, Phone, Password } = this.state;
 
@@ -244,7 +273,33 @@ class Register extends Component {
                   onChange={this.handleChange}
                 />
               </label>
-              <label>
+              <div
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'space-evenly',
+                }}
+              >
+                <NumericInput
+                  onChange={(valueAsNumber) =>
+                    this.updateNumberPicker1(valueAsNumber)
+                  }
+                  min={0}
+                  max={23}
+                  value={this.state.startW}
+                  mobile
+                />
+                <NumericInput
+                  onChange={(valueAsNumber) =>
+                    this.updateNumberPicker2(valueAsNumber)
+                  }
+                  min={0}
+                  max={23}
+                  value={this.state.endW}
+                  mobile
+                />
+              </div>
+              {/* <label>
                 <input
                   className='userInput'
                   type='text'
@@ -253,7 +308,7 @@ class Register extends Component {
                   value={this.state.WorkingHours}
                   onChange={this.handleChange}
                 />
-              </label>
+              </label> */}
               <label>
                 <input
                   className='userInput'
@@ -273,6 +328,16 @@ class Register extends Component {
                   value={this.state.Phone}
                   onChange={this.handleChange}
                 />
+              </label>
+              <label>
+                <input
+                  type='file'
+                  name='Image'
+                  className='userInput'
+                  onChange={this.handleChangeFile}
+                  accept='image/png, image/jpeg, image/jpg'
+                />
+                {this.state.Image}
               </label>
               <label>
                 <input
@@ -392,4 +457,5 @@ export default connect(mapStateToProps, {
   clearErrors,
   registerC,
   saveFloorPlan,
+  uploadImage,
 })(Register);

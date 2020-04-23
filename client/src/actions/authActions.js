@@ -6,7 +6,7 @@ import {
   LOGIN_FAIL,
   LOGOUT_SUCCESS,
   REGISTER_SUCCESS,
-  REGISTER_FAIL
+  REGISTER_FAIL,
 } from './types.js';
 import { returnErrors } from './errorActions';
 import { saveFloorPlan } from './floorPlanAction.js';
@@ -18,16 +18,16 @@ export const loadRestoraunt = () => (dispatch, getState) => {
 
   axios
     .get('/api/auth', tokenConfig(getState))
-    .then(res =>
+    .then((res) =>
       dispatch({
         type: RESTORAUNT_LOADED,
-        payload: res.data
+        payload: res.data,
       })
     )
-    .catch(err => {
+    .catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({
-        type: AUTH_ERROR
+        type: AUTH_ERROR,
       });
     });
 };
@@ -40,20 +40,21 @@ export const register = (
     Description,
     Type,
     Location,
-    WorkingHours,
+    StartingHour,
+    EndingHour,
     RestorauntPage,
     Phone,
     Viewes,
     ImgName,
-    Password
+    Password,
   },
   floorPlanList
-) => dispatch => {
+) => (dispatch) => {
   // Headers
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
 
   // Request body
@@ -63,41 +64,42 @@ export const register = (
     Description,
     Type,
     Location,
-    WorkingHours,
+    StartingHour,
+    EndingHour,
     RestorauntPage,
     Phone,
     Viewes,
     ImgName,
-    Password
+    Password,
   });
 
   axios
     .post('/api/restoraunts', body, config)
-    .then(res => {
+    .then((res) => {
       dispatch({
         type: REGISTER_SUCCESS,
-        payload: res.data
+        payload: res.data,
       });
       console.log(res.data.restoraunt._id);
       dispatch(saveFloorPlan(floorPlanList, res.data.restoraunt._id));
     })
-    .catch(err => {
+    .catch((err) => {
       dispatch(
         returnErrors(err.response.data, err.response.status, 'REGISTER_FAIL')
       );
       dispatch({
-        type: REGISTER_FAIL
+        type: REGISTER_FAIL,
       });
     });
 };
 
 // Register customer
-export const registerC = ({ Name, Email, Phone, Password }) => dispatch => {
+export const registerC = ({ Name, Email, Phone, Password }) => (dispatch) => {
   // Headers
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
 
   // Request body
@@ -105,34 +107,34 @@ export const registerC = ({ Name, Email, Phone, Password }) => dispatch => {
     Name,
     Email,
     Phone,
-    Password
+    Password,
   });
 
   axios
     .post('/api/customer', body, config)
-    .then(res =>
+    .then((res) =>
       dispatch({
         type: REGISTER_SUCCESS,
-        payload: res.data
+        payload: res.data,
       })
     )
-    .catch(err => {
+    .catch((err) => {
       dispatch(
         returnErrors(err.response.data, err.response.status, 'REGISTER_FAIL')
       );
       dispatch({
-        type: REGISTER_FAIL
+        type: REGISTER_FAIL,
       });
     });
 };
 
 // Login User
-export const login = ({ Email, Password }) => dispatch => {
+export const login = ({ Email, Password }) => (dispatch) => {
   // Headers
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
 
   // Request body
@@ -140,18 +142,18 @@ export const login = ({ Email, Password }) => dispatch => {
 
   axios
     .post('/api/auth', body, config)
-    .then(res =>
+    .then((res) =>
       dispatch({
         type: LOGIN_SUCCESS,
-        payload: res.data
+        payload: res.data,
       })
     )
-    .catch(err => {
+    .catch((err) => {
       dispatch(
         returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL')
       );
       dispatch({
-        type: LOGIN_FAIL
+        type: LOGIN_FAIL,
       });
     });
 };
@@ -159,20 +161,20 @@ export const login = ({ Email, Password }) => dispatch => {
 // Logout User
 export const logout = () => {
   return {
-    type: LOGOUT_SUCCESS
+    type: LOGOUT_SUCCESS,
   };
 };
 
 // Setup config/headers and token
-export const tokenConfig = getState => {
+export const tokenConfig = (getState) => {
   // Get token from localstorage
   const token = getState().auth.token;
 
   // Headers
   const config = {
     headers: {
-      'Content-type': 'application/json'
-    }
+      'Content-type': 'application/json',
+    },
   };
 
   // If token, add to headers

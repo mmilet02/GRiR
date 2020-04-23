@@ -23,7 +23,7 @@ class FloorPlanCreating extends Component {
       scale: 25,
       tableExampleSize: 50,
       currentFloorPlanWidth: 1000,
-      currentFloorPlanHeight: 500
+      currentFloorPlanHeight: 500,
     };
   }
 
@@ -31,7 +31,7 @@ class FloorPlanCreating extends Component {
   openModal = () => {
     this.setState({
       isOpen: true,
-      tempId: '0'
+      tempId: '0',
     });
   };
   //Covert the actual size of table to scale 1:25
@@ -39,7 +39,7 @@ class FloorPlanCreating extends Component {
     let newSize = this.state.circleRadius * this.state.scale;
     const dropTargetPosition = this.boss.current.getBoundingClientRect();
     this.setState({
-      floorPlanList: this.state.floorPlanList.map(table => {
+      floorPlanList: this.state.floorPlanList.map((table) => {
         if (table._id === this.state.tempId) {
           table.SizeX = newSize;
           table.CoordX = this.state.xCoord - newSize / 2;
@@ -73,7 +73,7 @@ class FloorPlanCreating extends Component {
           }
         }
         return table;
-      })
+      }),
     });
   };
   // Close pop up modal
@@ -82,13 +82,13 @@ class FloorPlanCreating extends Component {
     this.convertToMainScale();
   };
   //Handle input of table size
-  handleSizeChange = e => {
+  handleSizeChange = (e) => {
     if (e.target.name === 'circleRadius') {
       this.setState({ [e.target.name]: e.target.value });
     }
   };
   // Handle pop up modal submit and activate closeModal()
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     this.closeModal();
   };
@@ -114,7 +114,7 @@ class FloorPlanCreating extends Component {
   onDropImg = (table, finalPosition, initialPosition) => {
     console.log(initialPosition.x + ' ' + initialPosition.y);
     this.openModal();
-    if (this.state.floorPlanList.find(tab => tab._id === table._id)) {
+    if (this.state.floorPlanList.find((tab) => tab._id === table._id)) {
       const [newXposition, newYposition] = this.calculateYX(
         finalPosition,
         initialPosition
@@ -126,7 +126,7 @@ class FloorPlanCreating extends Component {
       this.setState({
         tempId: table._id,
         xCoord: centerX,
-        yCoord: centerY
+        yCoord: centerY,
       });
     } else {
       const [newXposition, newYposition] = this.calculateYX(
@@ -143,20 +143,21 @@ class FloorPlanCreating extends Component {
         TableType: table.TableType,
         SizeX: 0,
         CoordX: 0,
-        CoordY: 0
+        CoordY: 0,
+        NumberOfPeople: table.NumberOfPeople,
       };
       this.setState({
         floorPlanList: [...this.state.floorPlanList, temp],
         tempId: temp._id,
         xCoord: centerX,
-        yCoord: centerY
+        yCoord: centerY,
       });
     }
   };
   //Open and close grid
-  handleGrid = e => {
+  handleGrid = (e) => {
     this.setState({
-      isGridOn: !this.state.isGridOn
+      isGridOn: !this.state.isGridOn,
     });
   };
   handleFloorPlanResize = (width, height) => {
@@ -242,7 +243,7 @@ class FloorPlanCreating extends Component {
           style={{
             width: gridCellsWidth,
             height: gridCellsHeight,
-            zIndex: '2'
+            zIndex: '2',
           }}
         ></GridTarget>
       );
@@ -306,5 +307,5 @@ class FloorPlanCreating extends Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = (state) => ({});
 export default connect(mapStateToProps, { saveFloorPlan })(FloorPlanCreating);

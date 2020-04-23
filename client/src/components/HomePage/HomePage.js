@@ -30,7 +30,7 @@ class HomePage extends Component {
             <Link to={'/restoraunt/' + rest._id} style={{ width: '100%' }}>
               <div className='resImgCon'>
                 <img
-                  src={'http://localhost:3000/images/' + rest.ImgName}
+                  src={'http://localhost:3000/uploads/' + rest.ImgName}
                   alt=''
                   className='resImg'
                 />

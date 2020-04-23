@@ -6,7 +6,7 @@
   will-change: transform;
   display: flex;
   justify-content: center;
-  z-index: 2;
+  z-index: 3;
 }
 .header a {
   color: #333;

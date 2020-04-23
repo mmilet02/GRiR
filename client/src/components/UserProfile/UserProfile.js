@@ -12,7 +12,6 @@ import {
   faEnvelope,
   faPhone,
   faStar,
-  faStarHalf,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -126,7 +125,7 @@ class UserProfile extends Component {
           <div className='favRestoCon'>
             <Link to={'/restoraunt/' + favo._id} style={{ width: '100%' }}>
               <img
-                src={'http://localhost:3000/images/' + favo.ImgName}
+                src={'http://localhost:3000/uploads/' + favo.ImgName}
                 alt=''
                 className='favRestoImg'
               />
@@ -219,7 +218,9 @@ class UserProfile extends Component {
                     icon={faClock}
                     style={{ marginRight: '5px', marginTop: '2px' }}
                   />
-                  <p>{user.restoraunt.WorkingHours}</p>
+                  <p>{user.restoraunt.StartingHour}</p>
+                  <p>-</p>
+                  <p>{user.restoraunt.EndingHour}</p>
                 </div>
               </div>
               <div className='userDesc'>
@@ -228,7 +229,7 @@ class UserProfile extends Component {
             </div>
             <div className='userImages'>
               <img
-                src={'http://localhost:3000/images/' + user.restoraunt.ImgName}
+                src={'http://localhost:3000/uploads/' + user.restoraunt.ImgName}
                 alt=''
                 className='userImg'
               />

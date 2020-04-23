@@ -179,7 +179,7 @@ class RestorauntList extends Component {
               <Link to={'/restoraunt/' + rest._id} style={{ width: '100%' }}>
                 <div className='resLisImgCon'>
                   <img
-                    src={'http://localhost:3000/images/' + rest.ImgName}
+                    src={'http://localhost:3000/uploads/' + rest.ImgName}
                     alt=''
                     className='resLisImg'
                   />

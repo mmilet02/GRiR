@@ -10,11 +10,10 @@
 
 .floorPlanCont {
   position: relative;
-  width: 1000px;
-  height: 500px;
+  width: 100%;
+  height: 100%;
 }
 
 .fpCon {
   width: 100%;
-  padding: 40px 0px;
 }

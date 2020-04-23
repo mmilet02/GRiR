@@ -2,6 +2,8 @@ const Restoraunts = require('../models/Restoraunts.js');
 const Customer = require('../models/Customer.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const path = require('path');
+const fileUpload = require('express-fileupload');
 
 /**
  * @route   POST api/restoraunts
@@ -15,19 +17,20 @@ exports.postRestoraunt = async (req, res, next) => {
     Description,
     Type,
     Location,
-    WorkingHours,
+    StartingHour,
+    EndingHour,
     RestorauntPage,
     Phone,
     Viewes,
     ImgName,
-    Password
+    Password,
   } = req.body;
 
   //Simple validation
-  if (!Name || !Email || !WorkingHours || !Phone || !Password) {
+  if (!Name || !Email  || !Phone || !Password) {
     return res
       .status(400)
-      .json({ msg: 'Please enter name, email,working hours and phone.' });
+      .json({ msg: 'Please enter name, email and phone.' });
   }
   try {
     // Check for existing restoraunt
@@ -50,12 +53,13 @@ exports.postRestoraunt = async (req, res, next) => {
       Description,
       Type,
       Location,
-      WorkingHours,
+      StartingHour,
+      EndingHour,
       RestorauntPage,
       Phone,
       Viewes,
       ImgName,
-      Password: hash
+      Password: hash,
     });
 
     const savedRestoraunt = await newRestoraunt.save();
@@ -75,12 +79,13 @@ exports.postRestoraunt = async (req, res, next) => {
         Description: savedRestoraunt.Description,
         Type: savedRestoraunt.Type,
         Location: savedRestoraunt.Location,
-        WorkingHours: savedRestoraunt.WorkingHours,
+        StartingHour: savedRestoraunt.StartingHour,
+        EndingHour: savedRestoraunt.EndingHour,
         RestorauntPage: savedRestoraunt.RestorauntPage,
         Phone: savedRestoraunt.Phone,
         Viewes: savedRestoraunt.Viewes,
-        ImgName: savedRestoraunt.ImgName
-      }
+        ImgName: savedRestoraunt.ImgName,
+      },
     });
   } catch (e) {
     res.status(400).json({ msg: e.message });
@@ -96,12 +101,37 @@ exports.getRestoraunts = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       data: restoraunt,
-      count: restoraunt.length
+      count: restoraunt.length,
     });
   } catch (err) {
     return res.status(500).json({
       success: false,
-      error: 'Server error'
+      error: 'Server error',
+    });
+  }
+};
+
+//@desc Upload resto image
+//@route POST /api/restoraunts/image
+//access public
+exports.uploadImage = async (req, res, next) => {
+  if (req.files === null)
+    return res.status(400).json({ msg: 'No file uploaded.' });
+  try {
+    const file = req.files.file;
+    let pathFile = path.join(`${__dirname}`, '../');
+    console.log(pathFile);
+    await file.mv(
+      `C:/Users/KORISNIK/Desktop/MARIN/DIPLOMSKI/grir/client/public/uploads/${file.name}`
+    );
+
+    res
+      .status(200)
+      .json({ fileName: file.name, filePath: `/uploads/${file.name}` });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      error: 'Server error',
     });
   }
 };
