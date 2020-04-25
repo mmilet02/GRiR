@@ -1,5 +1,6 @@
 const Restoraunts = require('../models/Restoraunts.js');
 const Customer = require('../models/Customer.js');
+const Admin = require('../models/Admin.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -17,49 +18,66 @@ exports.login = async (req, res, next) => {
   }
   try {
     // Check for existing restoraunt
+    if (Email === 'admin') {
+      const admin = await Admin.findOne({ Email });
+      if (!admin) throw Error('User does not exists');
 
-    const restoraunt = await Restoraunts.findOne({ Email });
-    const customer = await Customer.findOne({ Email });
-    if (!restoraunt && !customer) throw Error('User does not exists');
-
-    //Validate password
-    if (restoraunt) {
-      const isMatch = await bcrypt.compare(Password, restoraunt.Password);
+      const isMatch = await bcrypt.compare(Password, admin.Password);
       if (!isMatch) throw Error('Invalid credentials');
 
-      const token = jwt.sign({ _id: restoraunt._id }, process.env.JWT_SECRET);
+      const token = jwt.sign({ _id: admin._id }, process.env.JWT_SECRET);
 
       res.json({
         token,
-        restoraunt: {
-          _id: restoraunt._id,
-          Name: restoraunt.Name,
-          Email: restoraunt.Email,
-          Description: restoraunt.Description,
-          StartingHour: restoraunt.StartingHour,
-          EndingHour: restoraunt.EndingHour,
-          RestorauntPage: restoraunt.RestorauntPage,
-          Phone: restoraunt.Phone,
-          Viewes: restoraunt.Viewes,
-          ImgName: restoraunt.ImgName,
+        admin: {
+          _id: admin._id,
+          Email: admin.Email,
         },
       });
     } else {
-      const isMatch = await bcrypt.compare(Password, customer.Password);
-      if (!isMatch) throw Error('Invalid credentials');
+      const restoraunt = await Restoraunts.findOne({ Email });
+      const customer = await Customer.findOne({ Email });
+      if (!restoraunt && !customer) throw Error('User does not exists');
 
-      const token = jwt.sign({ _id: customer._id }, process.env.JWT_SECRET);
+      //Validate password
+      if (restoraunt) {
+        const isMatch = await bcrypt.compare(Password, restoraunt.Password);
+        if (!isMatch) throw Error('Invalid credentials');
 
-      res.json({
-        token,
-        customer: {
-          _id: customer._id,
-          Name: customer.Name,
-          Email: customer.Email,
-          Phone: customer.Phone,
-          Favorite: customer.Favorite,
-        },
-      });
+        const token = jwt.sign({ _id: restoraunt._id }, process.env.JWT_SECRET);
+
+        res.json({
+          token,
+          restoraunt: {
+            _id: restoraunt._id,
+            Name: restoraunt.Name,
+            Email: restoraunt.Email,
+            Description: restoraunt.Description,
+            StartingHour: restoraunt.StartingHour,
+            EndingHour: restoraunt.EndingHour,
+            RestorauntPage: restoraunt.RestorauntPage,
+            Phone: restoraunt.Phone,
+            Viewes: restoraunt.Viewes,
+            ImgName: restoraunt.ImgName,
+          },
+        });
+      } else {
+        const isMatch = await bcrypt.compare(Password, customer.Password);
+        if (!isMatch) throw Error('Invalid credentials');
+
+        const token = jwt.sign({ _id: customer._id }, process.env.JWT_SECRET);
+
+        res.json({
+          token,
+          customer: {
+            _id: customer._id,
+            Name: customer.Name,
+            Email: customer.Email,
+            Phone: customer.Phone,
+            Favorite: customer.Favorite,
+          },
+        });
+      }
     }
   } catch (e) {
     res.status(400).json({ msg: e.message });

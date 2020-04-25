@@ -222,7 +222,7 @@ class Restoraunt extends Component {
   };
 
   updateFav = (id) => {
-    if (!this.props.user) {
+    if (!this.props.user || this.props.user.admin) {
       this.setState({
         isOpen1: true,
       });
@@ -280,7 +280,11 @@ class Restoraunt extends Component {
     }
   };
   handleReservation = (resto) => {
-    if (!this.props.user || this.props.user.restoraunt) {
+    if (
+      !this.props.user ||
+      this.props.user.restoraunt ||
+      this.props.user.admin
+    ) {
       this.setState({
         isOpen3: true,
       });
@@ -430,6 +434,34 @@ class Restoraunt extends Component {
             +
           </div>
           <p>Sorry as restoraunt you cant add grade</p>
+          <button onClick={this.closeModal}>OK</button>
+        </div>
+      );
+    } else if (user && user.admin) {
+      favModal = (
+        <div className='modal'>
+          <div className='closeRestoraunt' onClick={this.closeModal1}>
+            +
+          </div>
+          <p>Sorry as admin you cant add restoraunt in favorite.</p>
+          <button onClick={this.closeModal1}>OK</button>
+        </div>
+      );
+      resModal = (
+        <div className='modal'>
+          <div className='closeRestoraunt' onClick={this.closeModal3}>
+            +
+          </div>
+          <p>Sorry as admin you cant make reservation.</p>
+          <button onClick={this.closeModal3}>OK</button>
+        </div>
+      );
+      modalContent = (
+        <div className='modal'>
+          <div className='closeRestoraunt' onClick={this.closeModal}>
+            +
+          </div>
+          <p>Sorry as admin you cant add grade</p>
           <button onClick={this.closeModal}>OK</button>
         </div>
       );

@@ -105,6 +105,13 @@ form {
   font-weight: 600;
 }
 
+.popUpTableList {
+  width: 90%;
+  margin: 20px auto;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
 @media only screen and (max-width: 600px) {
   .login_button {
     background-color: greenyellow;

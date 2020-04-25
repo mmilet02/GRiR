@@ -5,13 +5,29 @@ import { clearErrors } from '../../actions/errorActions';
 import { Link } from 'react-router-dom';
 import FloorPlanCreating from '../Boss/FloorPlanCreating/FloorPlanCreating.js';
 import { saveFloorPlan, uploadImage } from '../../actions/floorPlanAction.js';
+import { getTableTypes } from '../../actions/tableTypesActions.js';
 import NumericInput from 'react-numeric-input';
+import Popup from 'reactjs-popup';
 import './Register.css';
 
 class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      tableDescriptionList: [
+        {
+          tableID: '3257',
+          tableType: 'okrugli niski ',
+        },
+        {
+          tableID: '3233',
+          tableType: 'kockasti visoki ',
+        },
+      ],
+      TableID: '',
+      TableType: '',
+      isOpen: false,
+      FloorPlanImg: 'Floor plan image',
       startW: 0,
       endW: 0,
       msg: null,
@@ -60,6 +76,7 @@ class Register extends Component {
   };
   componentDidMount() {
     this.props.clearErrors();
+    this.props.getTableTypes();
   }
 
   componentDidUpdate(prevProps) {
@@ -135,7 +152,8 @@ class Register extends Component {
         ImgName: Image,
         Password,
       };
-      this.props.register(newRestoraunt, this.state.floorPlanList);
+      // this.props.register(newRestoraunt, this.state.floorPlanList);
+      this.props.register(newRestoraunt);
       this.props.uploadImage(formData);
     } else {
       const { Name, Email, Phone, Password } = this.state;
@@ -162,6 +180,38 @@ class Register extends Component {
       });
     }
   };
+  handleDeleteRow = (tableId) => {
+    this.setState({
+      tableDescriptionList: this.state.tableDescriptionList.filter(
+        (td) => td.tableID !== tableId
+      ),
+    });
+  };
+  closeModal = () => {
+    this.setState({ isOpen: false });
+  };
+  closeModalAndAdd = () => {
+    let temp = {
+      tableID: this.state.TableID,
+      tableType: this.state.TableType,
+    };
+    this.setState({
+      tableDescriptionList: [...this.state.tableDescriptionList, temp],
+      isOpen: false,
+      TableID: '',
+      TableType: '',
+    });
+  };
+  handleAddRowPopUp = () => {
+    this.setState({
+      isOpen: true,
+    });
+  };
+  hadnleTypeClick = (t) => {
+    this.setState({
+      TableType: t,
+    });
+  };
   render() {
     let a = 0,
       b = 0;
@@ -182,7 +232,43 @@ class Register extends Component {
         </option>
       );
     });
-
+    let tableDescription = this.state.tableDescriptionList.map((td) => {
+      return (
+        <div
+          style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-evenly',
+          }}
+        >
+          <p>{td.tableID}</p>
+          <p>{td.tableType}</p>
+          <div
+            style={{
+              cursor: 'pointer',
+              border: '1px solid #333',
+              padding: '5px',
+            }}
+            onClick={() => this.handleDeleteRow(td.tableID)}
+          >
+            Delete
+          </div>
+        </div>
+      );
+    });
+    let tableTypes = this.props.types.map((table) => {
+      return (
+        <img
+          onClick={() => this.hadnleTypeClick(table.TableType)}
+          src={'http://localhost:3000/images/' + table.ImageName}
+          alt=''
+          style={{
+            width: '10%',
+            height: 'auto',
+          }}
+        />
+      );
+    });
     let step = '';
     if (this.state.step === 0) {
       step = (
@@ -299,16 +385,6 @@ class Register extends Component {
                   mobile
                 />
               </div>
-              {/* <label>
-                <input
-                  className='userInput'
-                  type='text'
-                  placeholder='Enter your working hours'
-                  name='WorkingHours'
-                  value={this.state.WorkingHours}
-                  onChange={this.handleChange}
-                />
-              </label> */}
               <label>
                 <input
                   className='userInput'
@@ -341,6 +417,37 @@ class Register extends Component {
               </label>
               <label>
                 <input
+                  type='file'
+                  name='FloorPlanImg'
+                  className='userInput'
+                  onChange={this.handleChangeFile}
+                  accept='image/png, image/jpeg, image/jpg'
+                />
+                {this.state.FloorPlanImg}
+              </label>
+              <div style={{ width: '100%' }}>
+                <div
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <div
+                    style={{
+                      cursor: 'pointer',
+                      border: '1px solid #333',
+                      padding: '5px',
+                    }}
+                    onClick={() => this.handleAddRowPopUp()}
+                  >
+                    Add table
+                  </div>
+                </div>
+                {tableDescription}
+              </div>
+              <label>
+                <input
                   className='userInput'
                   type='password'
                   placeholder='Password'
@@ -370,9 +477,9 @@ class Register extends Component {
               </div>
             </form>
           </div>
-          <FloorPlanCreating
+          {/* <FloorPlanCreating
             handleSaveFloorPLan={this.handleSaveFloorPLan}
-          ></FloorPlanCreating>
+          ></FloorPlanCreating> */}
         </div>
       );
     } else if (this.state.step === 1 && this.state.user === 'guest') {
@@ -445,11 +552,39 @@ class Register extends Component {
         </div>
       );
     }
-    return <div className='reg_page'>{step}</div>;
+    return (
+      <div className='reg_page'>
+        {step}
+        <Popup
+          open={this.state.isOpen}
+          closeOnDocumentClick
+          onClose={this.closeModal}
+        >
+          <div className='modal'>
+            <div className='closeRestoraunt' onClick={this.closeModal}>
+              +
+            </div>
+            <label>
+              <input
+                className='userInput'
+                type='text'
+                placeholder='Enter your table id'
+                name='TableID'
+                value={this.state.TableID}
+                onChange={this.handleChange}
+              />
+            </label>
+            <div className='popUpTableList'>{tableTypes}</div>
+            <button onClick={this.closeModalAndAdd}>OK</button>
+          </div>
+        </Popup>
+      </div>
+    );
   }
 }
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  types: state.tableTypes.tableTypes,
   error: state.error,
 });
 export default connect(mapStateToProps, {
@@ -458,4 +593,5 @@ export default connect(mapStateToProps, {
   registerC,
   saveFloorPlan,
   uploadImage,
+  getTableTypes,
 })(Register);

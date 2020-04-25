@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { login } from '../../actions/authActions';
+import { login, loginAdmin } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 import { Link, withRouter } from 'react-router-dom';
 import './Login.css';
@@ -11,15 +11,15 @@ class Login extends Component {
     this.state = {
       msg: null,
       Email: '',
-      Password: ''
+      Password: '',
     };
   }
 
-  handleChange = e => {
+  handleChange = (e) => {
     const { value, name } = e.target;
     this.setState({
       ...this.state,
-      [name]: value
+      [name]: value,
     });
   };
   componentDidMount() {
@@ -43,15 +43,15 @@ class Login extends Component {
     }
   }
 
-  formSubmit = e => {
+  formSubmit = (e) => {
     e.preventDefault();
     this.props.clearErrors();
     const { Email, Password } = this.state;
-    const restoraunt = {
+    const user = {
       Email,
-      Password
+      Password,
     };
-    this.props.login(restoraunt);
+    this.props.login(user);
   };
 
   render() {
@@ -91,7 +91,7 @@ class Login extends Component {
                 className='login_button'
                 onClick={this.formSubmit}
                 style={{
-                  marginTop: this.state.msg !== null ? '30px' : '60px'
+                  marginTop: this.state.msg !== null ? '30px' : '60px',
                 }}
               >
                 LOGIN
@@ -108,10 +108,10 @@ class Login extends Component {
     );
   }
 }
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   user: state.auth.user,
-  error: state.error
+  error: state.error,
 });
 export default connect(mapStateToProps, { login, clearErrors })(
   withRouter(Login)

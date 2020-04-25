@@ -264,6 +264,29 @@ class UserProfile extends Component {
           </div>
         </React.Fragment>
       );
+    } else if (user && user.admin) {
+      korisnik = (
+        <div className='userProfileCustomerConn'>
+          <div className='nesto'>
+            <div className='userProfileCustomerImgCon'>
+              <img
+                src='http://localhost:3000/images/tim.jpg'
+                alt=''
+                className='userProfileCustomerImg'
+              />
+            </div>
+            <div className='userProfileCustomerInfoCon'>
+              <div className='userProfileCustomerInfo'>
+                <FontAwesomeIcon
+                  icon={faEnvelope}
+                  style={{ marginRight: '5px', marginTop: '2px' }}
+                />
+                <p>{user.admin.Email}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
     }
     return (
       <div className='userCon'>

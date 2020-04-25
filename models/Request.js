@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const RestorauntSchema = new mongoose.Schema({
+const RequestSchema = new mongoose.Schema({
   Name: {
     type: String,
     required: true,
@@ -38,15 +38,7 @@ const RestorauntSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  Viewes: {
-    type: Number,
-    required: true,
-  },
   ImgName: {
-    type: String,
-    required: true,
-  },
-  ValidatedBy: {
     type: String,
     required: true,
   },
@@ -54,6 +46,22 @@ const RestorauntSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  TableList: [
+    {
+      TableID: {
+        type: String,
+        required: true,
+      },
+      TableType: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
+  FloorPlanImgName: {
+    type: String,
+    required: true,
+  },
 });
 
-module.exports = mongoose.model('restoraunts', RestorauntSchema);
+module.exports = mongoose.model('request', RequestSchema);

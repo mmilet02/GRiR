@@ -33,23 +33,20 @@ export const loadRestoraunt = () => (dispatch, getState) => {
 };
 
 // Register restoraunt
-export const register = (
-  {
-    Name,
-    Email,
-    Description,
-    Type,
-    Location,
-    StartingHour,
-    EndingHour,
-    RestorauntPage,
-    Phone,
-    Viewes,
-    ImgName,
-    Password,
-  },
-  floorPlanList
-) => (dispatch) => {
+export const register = ({
+  Name,
+  Email,
+  Description,
+  Type,
+  Location,
+  StartingHour,
+  EndingHour,
+  RestorauntPage,
+  Phone,
+  Viewes,
+  ImgName,
+  Password,
+}) => (dispatch) => {
   // Headers
   const config = {
     headers: {
@@ -81,7 +78,7 @@ export const register = (
         payload: res.data,
       });
       console.log(res.data.restoraunt._id);
-      dispatch(saveFloorPlan(floorPlanList, res.data.restoraunt._id));
+      // dispatch(saveFloorPlan(floorPlanList, res.data.restoraunt._id));
     })
     .catch((err) => {
       dispatch(
