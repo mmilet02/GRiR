@@ -67,12 +67,13 @@ export const getGrades = () => (dispatch) => {
 export const saveFloorPlan = (floorPlan, id) => (dispatch) => {
   console.log('uslo....');
 
-  let temp = {
+  let temp = JSON.stringify({
     RestaurantID: id,
     NumbOfTables: floorPlan.length,
     TableList: floorPlan,
-  };
+  });
 
+  console.log(temp);
   const config = {
     headers: {
       'Content-type': 'application/json',

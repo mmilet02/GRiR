@@ -16,6 +16,7 @@ class RestorauntList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      restoraunts: [],
       filteredList: [],
       filter: false,
       filterSearch: false,
@@ -90,13 +91,10 @@ class RestorauntList extends Component {
 
     niz = niz.filter((n) => n.value !== '');
 
-    console.log(niz);
-
     let restaurantFiltered = this.props.restoraunts.filter((rest) => {
       for (let i = 0; i < niz.length; i++) {
         let h = niz[i].tip;
-        console.log(niz[i].tip);
-        if (rest[h] !== niz[i].value) {
+        if (rest[h] !== niz[i].value || rest.ValidatedBy === 'none') {
           return false;
         }
       }
@@ -119,7 +117,7 @@ class RestorauntList extends Component {
           <Link to={'/restoraunt/' + rest._id} style={{ width: '100%' }}>
             <div className='resLisImgCon'>
               <img
-                src={'http://localhost:3000/images/' + rest.ImgName}
+                src={'http://localhost:3000/uploads/' + rest.ImgName}
                 alt=''
                 className='resLisImg'
               />
@@ -163,7 +161,9 @@ class RestorauntList extends Component {
       loading = false;
       restoraunt = this.props.restoraunts
         .filter((rest) => {
-          if (
+          if (rest.ValidatedBy === 'none') {
+            return false;
+          } else if (
             rest.Name.toUpperCase().includes(
               this.state.searchTerm.toUpperCase()
             )
@@ -174,6 +174,7 @@ class RestorauntList extends Component {
           }
         })
         .map((rest) => {
+          console.log(rest.ValidatedBy === 'none');
           return (
             <div className='resLisCon' key={rest._id}>
               <Link to={'/restoraunt/' + rest._id} style={{ width: '100%' }}>

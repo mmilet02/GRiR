@@ -24,6 +24,7 @@ class HomePage extends Component {
     let aktualnoRestoraunt = this.props.restoraunts
       .sort((a, b) => (a.Viewes > b.Viewes ? -1 : b.Viewes > a.Viewes ? 1 : 0))
       .slice(0, 5)
+      .filter((res) => res.ValidatedBy !== 'none')
       .map((rest) => {
         return (
           <div className='resCon' key={rest._id}>

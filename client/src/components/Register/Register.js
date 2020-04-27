@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { register, registerC } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 import { Link } from 'react-router-dom';
-import FloorPlanCreating from '../Boss/FloorPlanCreating/FloorPlanCreating.js';
 import { saveFloorPlan, uploadImage } from '../../actions/floorPlanAction.js';
 import { getTableTypes } from '../../actions/tableTypesActions.js';
 import NumericInput from 'react-numeric-input';
@@ -14,16 +13,7 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tableDescriptionList: [
-        {
-          tableID: '3257',
-          tableType: 'okrugli niski ',
-        },
-        {
-          tableID: '3233',
-          tableType: 'kockasti visoki ',
-        },
-      ],
+      tableDescriptionList: [],
       TableID: '',
       TableType: '',
       isOpen: false,
@@ -67,13 +57,6 @@ class Register extends Component {
     };
   }
 
-  handleSaveFloorPLan = (floorPlanList) => {
-    console.log(floorPlanList);
-    // this.props.saveFloorPlan(this.state.floorPlanList);
-    this.setState({
-      floorPlanList: floorPlanList,
-    });
-  };
   componentDidMount() {
     this.props.clearErrors();
     this.props.getTableTypes();
@@ -101,7 +84,6 @@ class Register extends Component {
   };
 
   updateNumberPicker1 = (e) => {
-    console.log('hello');
     this.setState({ startW: e });
   };
   updateNumberPicker2 = (e) => {
@@ -136,6 +118,8 @@ class Register extends Component {
         Phone,
         Image,
         Password,
+        FloorPlanImg,
+        tableDescriptionList,
       } = this.state;
 
       const newRestoraunt = {
@@ -150,9 +134,12 @@ class Register extends Component {
         Phone,
         Viewes: 0,
         ImgName: Image,
+        TableList: tableDescriptionList,
+        FloorPlanImgName: FloorPlanImg,
+        ValidatedBy: 'none',
         Password,
       };
-      // this.props.register(newRestoraunt, this.state.floorPlanList);
+      //this.props.register(newRestoraunt, this.state.floorPlanList);
       this.props.register(newRestoraunt);
       this.props.uploadImage(formData);
     } else {
@@ -192,8 +179,8 @@ class Register extends Component {
   };
   closeModalAndAdd = () => {
     let temp = {
-      tableID: this.state.TableID,
-      tableType: this.state.TableType,
+      TableID: this.state.TableID,
+      TableType: this.state.TableType,
     };
     this.setState({
       tableDescriptionList: [...this.state.tableDescriptionList, temp],
@@ -240,9 +227,10 @@ class Register extends Component {
             display: 'flex',
             justifyContent: 'space-evenly',
           }}
+          key={td.TableID}
         >
-          <p>{td.tableID}</p>
-          <p>{td.tableType}</p>
+          <p>{td.TableID}</p>
+          <p>{td.TableType}</p>
           <div
             style={{
               cursor: 'pointer',
@@ -259,6 +247,7 @@ class Register extends Component {
     let tableTypes = this.props.types.map((table) => {
       return (
         <img
+          key={table._id}
           onClick={() => this.hadnleTypeClick(table.TableType)}
           src={'http://localhost:3000/images/' + table.ImageName}
           alt=''
@@ -477,9 +466,6 @@ class Register extends Component {
               </div>
             </form>
           </div>
-          {/* <FloorPlanCreating
-            handleSaveFloorPLan={this.handleSaveFloorPLan}
-          ></FloorPlanCreating> */}
         </div>
       );
     } else if (this.state.step === 1 && this.state.user === 'guest') {

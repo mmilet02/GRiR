@@ -24,12 +24,14 @@ export default function (state = initialState, action) {
         floorPlanList: action.payload,
         loading: false,
       };
+
     case GET_GRADES:
       return {
         ...state,
         grades: action.payload,
         loading: false,
       };
+
     case ADD_GRADE:
       return {
         ...state,

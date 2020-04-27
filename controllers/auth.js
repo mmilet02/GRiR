@@ -59,6 +59,9 @@ exports.login = async (req, res, next) => {
             Phone: restoraunt.Phone,
             Viewes: restoraunt.Viewes,
             ImgName: restoraunt.ImgName,
+            TableList: restoraunt.TableList,
+            FloorPlanImgName: restoraunt.FloorPlanImgName,
+            ValidatedBy: restoraunt.ValidatedBy,
           },
         });
       } else {

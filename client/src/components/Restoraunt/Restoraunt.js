@@ -326,6 +326,7 @@ class Restoraunt extends Component {
     });
   };
   render() {
+    console.log(this.props.match.params.id);
     const { user } = this.props;
     let resto = {};
     for (const rest of this.state.rests) {

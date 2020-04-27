@@ -35,14 +35,14 @@ class App extends Component {
                 <Route exact path='/'>
                   <HomePage />
                 </Route>
-                <Route path='/fpc'>
-                  <FloorPlanCreating />
-                </Route>
                 <Route path='/fpe/:id'>
                   <FloorPlanExample />
                 </Route>
                 <Route path='/main'>
                   <RestorauntList />
+                </Route>
+                <Route path='/fpc/:id'>
+                  <FloorPlanCreating />
                 </Route>
                 <Route path='/aboutus'>
                   <AboutUs />

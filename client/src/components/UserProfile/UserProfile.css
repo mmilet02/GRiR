@@ -119,6 +119,20 @@
   justify-content: space-evenly;
 }
 
+.adminRestoList {
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.adminRestoListColumn {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+}
+
 .userProfilaCustomerFavList {
   display: flex;
   flex-direction: row;
@@ -176,4 +190,17 @@
   margin: 0px 0px 0px 0px;
   color: yellow;
   cursor: pointer;
+}
+
+.rInfo {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.rInfoC1 {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
 }

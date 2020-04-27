@@ -23,14 +23,15 @@ exports.postRestoraunt = async (req, res, next) => {
     Phone,
     Viewes,
     ImgName,
+    TableList,
+    FloorPlanImgName,
+    ValidatedBy,
     Password,
   } = req.body;
 
   //Simple validation
-  if (!Name || !Email  || !Phone || !Password) {
-    return res
-      .status(400)
-      .json({ msg: 'Please enter name, email and phone.' });
+  if (!Name || !Email || !Phone || !Password) {
+    return res.status(400).json({ msg: 'Please enter name, email and phone.' });
   }
   try {
     // Check for existing restoraunt
@@ -59,6 +60,9 @@ exports.postRestoraunt = async (req, res, next) => {
       Phone,
       Viewes,
       ImgName,
+      TableList,
+      FloorPlanImgName,
+      ValidatedBy,
       Password: hash,
     });
 
@@ -85,6 +89,9 @@ exports.postRestoraunt = async (req, res, next) => {
         Phone: savedRestoraunt.Phone,
         Viewes: savedRestoraunt.Viewes,
         ImgName: savedRestoraunt.ImgName,
+        TableList: savedRestoraunt.TableList,
+        FloorPlanImgName: savedRestoraunt.FloorPlanImgName,
+        ValidatedBy: savedRestoraunt.ValidatedBy,
       },
     });
   } catch (e) {

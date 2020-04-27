@@ -7,6 +7,7 @@ import Popup from 'reactjs-popup';
 import GridTarget from '../GridTarget/GridTarget.js';
 import { connect } from 'react-redux';
 import { saveFloorPlan } from '../../../actions/floorPlanAction.js';
+import { withRouter } from 'react-router';
 
 class FloorPlanCreating extends Component {
   constructor(props) {
@@ -227,10 +228,15 @@ class FloorPlanCreating extends Component {
     //     currentFloorPlanWidth: tempFloorPlanWidth
     //   });
   };
-  // handleSaveFloorPLan = () => {
-  //   this.props.saveFloorPlan(this.state.floorPlanList);
-  // };
+  handleSaveFloorPLan = () => {
+    console.log(this.props.match.params.id);
+    this.props.saveFloorPlan(
+      this.state.floorPlanList,
+      this.props.match.params.id
+    );
+  };
   render() {
+    console.log(this.props.match.params.id);
     let gridCells = [];
     let gridCellsHeight = this.state.currentFloorPlanHeight / 800;
     let gridCellsWidth = this.state.currentFloorPlanWidth / 800;
@@ -293,12 +299,7 @@ class FloorPlanCreating extends Component {
           <button className='regBtn' onClick={this.handleGrid}>
             Grid on/off
           </button>
-          <button
-            className='regBtn'
-            onClick={() =>
-              this.props.handleSaveFloorPLan(this.state.floorPlanList)
-            }
-          >
+          <button className='regBtn' onClick={() => this.handleSaveFloorPLan()}>
             Save floor plan
           </button>
         </div>
@@ -308,4 +309,6 @@ class FloorPlanCreating extends Component {
 }
 
 const mapStateToProps = (state) => ({});
-export default connect(mapStateToProps, { saveFloorPlan })(FloorPlanCreating);
+export default connect(mapStateToProps, { saveFloorPlan })(
+  withRouter(FloorPlanCreating)
+);
