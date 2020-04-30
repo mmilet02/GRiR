@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { addFloorPlan, getFloorPlans } = require('../controllers/floorPlans.js');
+const {
+  addFloorPlan,
+  getFloorPlans,
+  downloadFloorPlan,
+} = require('../controllers/floorPlans.js');
 const auth = require('../middleware/auth.js');
 
 router.route('/').post(addFloorPlan);

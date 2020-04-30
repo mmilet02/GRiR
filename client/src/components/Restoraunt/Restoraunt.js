@@ -562,9 +562,11 @@ class Restoraunt extends Component {
                   icon={faClock}
                   style={{ marginRight: '5px', marginTop: '2px' }}
                 />
-                <p>{resto.StartingHour}</p>
-                <p>-</p>
-                <p>{resto.EndingHour}</p>
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                  <p>{resto.StartingHour}</p>
+                  <p>-</p>
+                  <p>{resto.EndingHour}</p>
+                </div>
               </div>
             </div>
             <div className='restourantDesc'>

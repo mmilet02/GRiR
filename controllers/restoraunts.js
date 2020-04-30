@@ -125,16 +125,24 @@ exports.uploadImage = async (req, res, next) => {
   if (req.files === null)
     return res.status(400).json({ msg: 'No file uploaded.' });
   try {
-    const file = req.files.file;
-    let pathFile = path.join(`${__dirname}`, '../');
-    console.log(pathFile);
-    await file.mv(
-      `C:/Users/KORISNIK/Desktop/MARIN/DIPLOMSKI/grir/client/public/uploads/${file.name}`
+    const file1 = req.files.file1;
+    let pathFile2 = path.join(`${__dirname}`, '../');
+    await file1.mv(
+      `C:/Users/KORISNIK/Desktop/MARIN/DIPLOMSKI/grir/client/public/uploads/${file1.name}`
     );
 
-    res
-      .status(200)
-      .json({ fileName: file.name, filePath: `/uploads/${file.name}` });
+    const file2 = req.files.file2;
+    let pathFile1 = path.join(`${__dirname}`, '../');
+    await file2.mv(
+      `C:/Users/KORISNIK/Desktop/MARIN/DIPLOMSKI/grir/client/public/uploads/${file2.name}`
+    );
+
+    res.status(200).json({
+      fileName1: file1.name,
+      filePath1: `/uploads/${file1.name}`,
+      fileName2: file2.name,
+      filePath2: `/uploads/${file2.name}`,
+    });
   } catch (err) {
     return res.status(500).json({
       success: false,

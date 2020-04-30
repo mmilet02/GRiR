@@ -148,7 +148,11 @@ class RestorauntList extends Component {
                       icon={faClock}
                       style={{ marginRight: '5px', marginTop: '2px' }}
                     />
-                    <p>{rest.WorkingHours}</p>
+                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                      <p>{rest.StartingHour}</p>
+                      <p>-</p>
+                      <p>{rest.EndingHour}</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -211,7 +215,11 @@ class RestorauntList extends Component {
                           icon={faClock}
                           style={{ marginRight: '5px', marginTop: '2px' }}
                         />
-                        <p>{rest.WorkingHours}</p>
+                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                          <p>{rest.StartingHour}</p>
+                          <p>-</p>
+                          <p>{rest.EndingHour}</p>
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -8,6 +8,8 @@ import GridTarget from '../GridTarget/GridTarget.js';
 import { connect } from 'react-redux';
 import { saveFloorPlan } from '../../../actions/floorPlanAction.js';
 import { withRouter } from 'react-router';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class FloorPlanCreating extends Component {
   constructor(props) {
@@ -235,6 +237,8 @@ class FloorPlanCreating extends Component {
       this.props.match.params.id
     );
   };
+
+  goBackArrow = () => {};
   render() {
     console.log(this.props.match.params.id);
     let gridCells = [];
@@ -254,8 +258,16 @@ class FloorPlanCreating extends Component {
         ></GridTarget>
       );
     }
+
     return (
       <div className='container'>
+        <div className='goBack'>
+          <FontAwesomeIcon
+            onClick={this.props.history.goBack}
+            icon={faArrowLeft}
+            style={{ marginRight: '5px', marginTop: '2px', cursor: 'pointer' }}
+          />
+        </div>
         <div className='containerS'>
           <div
             className='floorPlanContainer'

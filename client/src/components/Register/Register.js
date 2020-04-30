@@ -17,7 +17,7 @@ class Register extends Component {
       TableID: '',
       TableType: '',
       isOpen: false,
-      FloorPlanImg: 'Floor plan image',
+      FloorPlanImg: 'You didnt choose Floor plan',
       startW: 0,
       endW: 0,
       msg: null,
@@ -32,8 +32,9 @@ class Register extends Component {
       Location: '',
       step: 0,
       user: '',
-      Image: 'Izaberi sliku',
-      file: '',
+      Image: 'You didnt choose image',
+      file1: '',
+      file2: '',
       floorPlanList: [],
       typeDropDownList: [
         'Morsko',
@@ -91,11 +92,19 @@ class Register extends Component {
   };
 
   handleChangeFile = (e) => {
-    this.setState({
-      ...this.state,
-      file: e.target.files[0],
-      Image: e.target.files[0].name,
-    });
+    if (e.target.name === 'FloorPlanImg') {
+      this.setState({
+        ...this.state,
+        file2: e.target.files[0],
+        FloorPlanImg: e.target.files[0].name,
+      });
+    } else if (e.target.name === 'Image') {
+      this.setState({
+        ...this.state,
+        file1: e.target.files[0],
+        Image: e.target.files[0].name,
+      });
+    }
   };
 
   formSubmit = (e) => {
@@ -104,8 +113,8 @@ class Register extends Component {
     this.props.clearErrors();
     if (this.state.user === 'restaurant') {
       let formData = new FormData();
-      formData.append('file', this.state.file);
-      console.log(formData);
+      formData.append('file1', this.state.file1);
+      formData.append('file2', this.state.file2);
       const {
         Name,
         Email,
@@ -139,7 +148,6 @@ class Register extends Component {
         ValidatedBy: 'none',
         Password,
       };
-      //this.props.register(newRestoraunt, this.state.floorPlanList);
       this.props.register(newRestoraunt);
       this.props.uploadImage(formData);
     } else {
@@ -167,10 +175,12 @@ class Register extends Component {
       });
     }
   };
-  handleDeleteRow = (tableId) => {
+  handleDeleteRow = (n) => {
+    console.log(n);
+    let id = this.state.tableDescriptionList[n].TableID;
     this.setState({
       tableDescriptionList: this.state.tableDescriptionList.filter(
-        (td) => td.tableID !== tableId
+        (td) => td.TableID !== id
       ),
     });
   };
@@ -199,6 +209,7 @@ class Register extends Component {
       TableType: t,
     });
   };
+
   render() {
     let a = 0,
       b = 0;
@@ -219,13 +230,17 @@ class Register extends Component {
         </option>
       );
     });
+
+    let n = -1;
     let tableDescription = this.state.tableDescriptionList.map((td) => {
+      n++;
       return (
         <div
           style={{
             width: '100%',
             display: 'flex',
             justifyContent: 'space-evenly',
+            margin: '5px 0px',
           }}
           key={td.TableID}
         >
@@ -237,13 +252,14 @@ class Register extends Component {
               border: '1px solid #333',
               padding: '5px',
             }}
-            onClick={() => this.handleDeleteRow(td.tableID)}
+            onClick={() => this.handleDeleteRow(n)}
           >
             Delete
           </div>
         </div>
       );
     });
+
     let tableTypes = this.props.types.map((table) => {
       return (
         <img
@@ -395,23 +411,31 @@ class Register extends Component {
                 />
               </label>
               <label>
-                <input
-                  type='file'
-                  name='Image'
-                  className='userInput'
-                  onChange={this.handleChangeFile}
-                  accept='image/png, image/jpeg, image/jpg'
-                />
+                <div className='upload-btn-wrapper'>
+                  <button className='btn'>Upload a image</button>
+
+                  <input
+                    type='file'
+                    name='Image'
+                    className='userInput'
+                    onChange={this.handleChangeFile}
+                    accept='image/png, image/jpeg, image/jpg'
+                  />
+                </div>
                 {this.state.Image}
               </label>
               <label>
-                <input
-                  type='file'
-                  name='FloorPlanImg'
-                  className='userInput'
-                  onChange={this.handleChangeFile}
-                  accept='image/png, image/jpeg, image/jpg'
-                />
+                <div className='upload-btn-wrapper'>
+                  <button className='btn'>Upload a floor plan</button>
+
+                  <input
+                    type='file'
+                    name='FloorPlanImg'
+                    className='userInput'
+                    onChange={this.handleChangeFile}
+                    accept='image/png, image/jpeg, image/jpg'
+                  />
+                </div>
                 {this.state.FloorPlanImg}
               </label>
               <div style={{ width: '100%' }}>
@@ -427,6 +451,7 @@ class Register extends Component {
                       cursor: 'pointer',
                       border: '1px solid #333',
                       padding: '5px',
+                      margin: '10px 0px 5px 0px',
                     }}
                     onClick={() => this.handleAddRowPopUp()}
                   >

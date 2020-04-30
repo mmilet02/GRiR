@@ -8,10 +8,31 @@
   z-index: 1;
 }
 
+.backGo {
+  width: 90%;
+  margin: 0 auto;
+}
+.floorPlanContBig {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.floorPlanContSmall {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
 .floorPlanCont {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 1000px;
+  height: 500px;
+}
+
+.choiceFields {
+  width: 100px;
+  height: 300px;
+  border: 1px solid black;
 }
 
 .fpCon {

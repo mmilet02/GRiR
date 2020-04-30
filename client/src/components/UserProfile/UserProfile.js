@@ -152,6 +152,7 @@ class UserProfile extends Component {
 
     return <div style={{ width: '100%' }}>{tablica}</div>;
   };
+
   render() {
     let gradesObj = 0;
     let filteredGrades = {};
@@ -176,6 +177,7 @@ class UserProfile extends Component {
               width: '100%',
               display: 'flex',
               justifyContent: 'space-evenly',
+              margin: '10px 0px',
             }}
             key={td.TableID}
           >
@@ -187,23 +189,40 @@ class UserProfile extends Component {
     }
 
     if (user && user.customer) {
-      favList = user.customer.Favorite.map((fav) => {
-        for (let i = 0; i < this.props.restoraunts.length; i++) {
-          if (this.props.restoraunts[i]._id === fav)
-            favo = this.props.restoraunts[i];
-        }
-        return (
-          <div className='favRestoCon'>
-            <Link to={'/restoraunt/' + favo._id} style={{ width: '100%' }}>
-              <img
-                src={'http://localhost:3000/uploads/' + favo.ImgName}
-                alt=''
-                className='favRestoImg'
-              />
-            </Link>
+      if (user.customer.Favorite.length === 0) {
+        favList = (
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <p>Sorry you dont have favorite yet</p>
           </div>
         );
-      });
+      } else {
+        favList = user.customer.Favorite.map((fav) => {
+          for (let i = 0; i < this.props.restoraunts.length; i++) {
+            if (this.props.restoraunts[i]._id === fav)
+              favo = this.props.restoraunts[i];
+          }
+          return (
+            <div className='favRestoCon'>
+              <Link to={'/restoraunt/' + favo._id} style={{ width: '100%' }}>
+                <img
+                  src={'http://localhost:3000/uploads/' + favo.ImgName}
+                  alt=''
+                  className='favRestoImg'
+                />
+              </Link>
+            </div>
+          );
+        });
+      }
+
       korisnik = (
         <div className='userProfileCustomerConn'>
           <div className='nesto'>
@@ -289,9 +308,11 @@ class UserProfile extends Component {
                     icon={faClock}
                     style={{ marginRight: '5px', marginTop: '2px' }}
                   />
-                  <p>{user.restoraunt.StartingHour}</p>
-                  <p>-</p>
-                  <p>{user.restoraunt.EndingHour}</p>
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <p>{user.restoraunt.StartingHour}</p>
+                    <p>-</p>
+                    <p>{user.restoraunt.EndingHour}</p>
+                  </div>
                 </div>
               </div>
               <div className='userDesc'>
@@ -434,23 +455,59 @@ class UserProfile extends Component {
           closeOnDocumentClick
           onClose={() => this.closeModal()}
         >
-          <div className='modal'>
+          <div className='modalUserProfile'>
             <div className='closeRestoraunt' onClick={() => this.closeModal()}>
               +
             </div>
             <div className='rInfo'>
               <div className='rInfoC1'>
-                <p>{this.state.resto.Name}</p>
-                <p>{this.state.resto.Email}</p>
-                <p>{this.state.resto.Type}</p>
-                <p>{this.state.resto.Location}</p>
-                <p>{this.state.resto.StartingHour}</p>
-                <p>{this.state.resto.EndingHour}</p>
-                <p>{this.state.resto.RestorauntPage}</p>
-                <p>{this.state.resto.Phone}</p>
-                <p>{this.state.resto.Viewes}</p>
-                <p>{this.state.resto.ImgName}</p>
-                <p>{this.state.resto.FloorPlanImgName}</p>
+                <p>
+                  <b>Name:</b> {this.state.resto.Name}
+                </p>
+                <p>
+                  <b>Email:</b> {this.state.resto.Email}
+                </p>
+                <p>
+                  <b>Food type:</b> {this.state.resto.Type}
+                </p>
+                <p>
+                  <b>Location:</b> {this.state.resto.Location}
+                </p>
+                <p>
+                  <b>Working:</b> {this.state.resto.StartingHour}-
+                  {this.state.resto.EndingHour}
+                </p>
+                <p>
+                  <b>Web page:</b> {this.state.resto.RestorauntPage}
+                </p>
+                <p>
+                  <b>Phone:</b> {this.state.resto.Phone}
+                </p>
+                <p>
+                  <b>Views:</b> {this.state.resto.Viewes}
+                </p>
+                <p>
+                  <b>Image:</b> {this.state.resto.ImgName}
+                </p>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                  }}
+                >
+                  <p>
+                    <b>Floor plan:</b> {this.state.resto.FloorPlanImgName}
+                  </p>
+                  <a
+                    href={
+                      'http://localhost:3000/uploads/' +
+                      this.state.resto.ImgName
+                    }
+                    download
+                  >
+                    <button>Download</button>
+                  </a>
+                </div>
               </div>
               <div className='rInfoC2'>{tablica}</div>
             </div>
@@ -468,6 +525,7 @@ const mapStateToProps = (state) => ({
   grades: state.floorPlan.grades,
   restoraunts: state.floorPlan.restoraunts,
 });
-export default connect(mapStateToProps, { logout, getGrades })(
-  withRouter(UserProfile)
-);
+export default connect(mapStateToProps, {
+  logout,
+  getGrades,
+})(withRouter(UserProfile));

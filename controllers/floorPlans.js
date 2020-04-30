@@ -1,6 +1,6 @@
 const FloorPlans = require('../models/FloorPlans.js');
 
-const addTable = async temp => {
+const addTable = async (temp) => {
   return await Tables.create(temp);
 };
 //@desc Get all floor plans
@@ -12,12 +12,12 @@ exports.getFloorPlans = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       data: floorPlan,
-      count: floorPlan.length
+      count: floorPlan.length,
     });
   } catch (err) {
     return res.status(500).json({
       success: false,
-      error: 'Server error'
+      error: 'Server error',
     });
   }
 };
@@ -32,20 +32,20 @@ exports.addFloorPlan = async (req, res, next) => {
 
     return res.status(201).json({
       success: true,
-      data: floorPlan
+      data: floorPlan,
     });
   } catch (err) {
     if (err.name === 'ValidationError') {
-      const messages = Object.values(err.errors).map(val => val.message);
+      const messages = Object.values(err.errors).map((val) => val.message);
 
       return res.status(400).json({
         success: false,
-        error: messages
+        error: messages,
       });
     } else {
       return res.status(500).json({
         success: false,
-        error: 'Server Error'
+        error: 'Server Error',
       });
     }
   }
