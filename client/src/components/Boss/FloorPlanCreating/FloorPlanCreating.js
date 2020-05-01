@@ -27,9 +27,13 @@ class FloorPlanCreating extends Component {
       tableExampleSize: 50,
       currentFloorPlanWidth: 1000,
       currentFloorPlanHeight: 500,
+      file: '',
     };
   }
 
+  componentWillUnmount() {
+    URL.revokeObjectURL(this.state.file);
+  }
   // Open pop up modal
   openModal = () => {
     this.setState({
@@ -238,9 +242,18 @@ class FloorPlanCreating extends Component {
     );
   };
 
-  goBackArrow = () => {};
+  handleChangeFile = (event) => {
+    this.setState({
+      file: URL.createObjectURL(event.target.files[0]),
+    });
+  };
   render() {
-    console.log(this.props.match.params.id);
+    let resto = {};
+    for (const rest of this.props.restoraunts) {
+      if (rest._id === this.props.match.params.id) {
+        resto = rest;
+      }
+    }
     let gridCells = [];
     let gridCellsHeight = this.state.currentFloorPlanHeight / 800;
     let gridCellsWidth = this.state.currentFloorPlanWidth / 800;
@@ -278,11 +291,17 @@ class FloorPlanCreating extends Component {
             // }}
           >
             <FloorPlan
+              file={this.state.file}
+              FloorPlanImgName={resto.FloorPlanImgName}
               onDropImg={this.onDropImg}
               floorPlanList={this.state.floorPlanList}
               handleFloorPlanResize={this.handleFloorPlanResize}
             />
-
+            {/* <img
+              src={'http://localhost:3000/uploads/' + resto.FloorPlanImgName}
+              alt='none'
+              style={{ position: 'absolute', width: '100%', margin: 'auto 0' }}
+            ></img> */}
             {this.state.isGridOn ? (
               <div className='grid'>{gridCells}</div>
             ) : null}
@@ -308,6 +327,18 @@ class FloorPlanCreating extends Component {
           </div>
         </Popup>
         <div className='containerM'>
+          <label>
+            <div className='upload-btn-wrapper'>
+              <button className='btn'>Upload a floor plan</button>
+
+              <input
+                type='file'
+                className='userInput'
+                onChange={this.handleChangeFile}
+                accept='image/png, image/jpeg, image/jpg'
+              />
+            </div>
+          </label>
           <button className='regBtn' onClick={this.handleGrid}>
             Grid on/off
           </button>
@@ -320,7 +351,9 @@ class FloorPlanCreating extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  restoraunts: state.floorPlan.restoraunts,
+});
 export default connect(mapStateToProps, { saveFloorPlan })(
   withRouter(FloorPlanCreating)
 );

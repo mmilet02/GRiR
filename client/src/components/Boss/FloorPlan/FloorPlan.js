@@ -17,12 +17,12 @@ function FloorPlan(props) {
         monitor.getSourceClientOffset(),
         monitor.getInitialSourceClientOffset()
       ),
-    collect: monitor => ({
-      isOver: !!monitor.isOver()
-    })
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
   });
 
-  const floorPlanList = props.floorPlanList.map(table => {
+  const floorPlanList = props.floorPlanList.map((table) => {
     let tt = <h1>noob</h1>;
     if (table.TableType === 'circle') {
       tt = (
@@ -53,15 +53,21 @@ function FloorPlan(props) {
   return (
     <div
       ref={drop}
-      style={{ backgroundColor: isOver ? 'green' : 'white' }}
+      style={{
+        // backgroundImage: `url(/uploads/${props.FloorPlanImgName})`,
+        backgroundImage: `url(${props.file})`,
+        backgroundRepeat: ' no-repeat',
+        backgroundPosition: 'center',
+        backgroundSize: 'contain',
+      }}
       className='floorPlan'
     >
-      <ResizeObserver
-        onResize={rect => {
-          props.handleFloorPlanResize(rect.width, rect.height);
+      {/* <ResizeObserver
+        onResize={(rect) => {
+          // props.handleFloorPlanResize(rect.width, rect.height);
         }}
-        onPosition={rect => {}}
-      />
+        onPosition={(rect) => {}}
+      /> */}
       {floorPlanList}
     </div>
   );
@@ -70,7 +76,7 @@ function FloorPlan(props) {
 FloorPlan.propTypes = {
   onDropImg: PropTypes.func.isRequired,
   handleFloorPlanResize: PropTypes.func.isRequired,
-  floorPlanList: PropTypes.array.isRequired
+  floorPlanList: PropTypes.array.isRequired,
 };
 
 export default FloorPlan;
