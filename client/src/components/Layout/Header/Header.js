@@ -67,7 +67,7 @@ class Header extends Component {
           </strong>
         }
         <Link to='/profile'>
-          <div className='navLink'>My profile</div>
+          <div className='navLink'>Moj profil</div>
         </Link>
       </Fragment>
     );
@@ -75,10 +75,10 @@ class Header extends Component {
     const guestLinks = (
       <Fragment>
         <Link to='/login'>
-          <div className='navLink'>Login</div>
+          <div className='navLink'>Sign in</div>
         </Link>
         <Link to='/reg'>
-          <div className='navLink'>Register</div>
+          <div className='navLink reg'>Get started</div>
         </Link>
       </Fragment>
     );
@@ -86,17 +86,21 @@ class Header extends Component {
     const head = (
       <div className='gridd'>
         <div className='h1'>
-          <h1>LOGO</h1>
+          <img
+            src='http://localhost:3000/images/logo.png'
+            alt='logo'
+            style={{ height: '100px', width: 'auto' }}
+          ></img>
         </div>
         <div className='h2'>
           <Link to='/'>
             <div className='navLink'>Home</div>
           </Link>
           <Link to='/aboutus'>
-            <div className='navLink'>About us</div>
+            <div className='navLink'>O nama</div>
           </Link>
           <Link to='/main'>
-            <div className='navLink'>Reserve now!</div>
+            <div className='navLink'>Rezerviraj!</div>
           </Link>
           {this.props.auth && this.props.auth.isAuthenticated
             ? authLinks
@@ -109,7 +113,11 @@ class Header extends Component {
       <Fragment>
         <div className='gridd'>
           <div className='h1'>
-            <h1>LOGO</h1>
+            <img
+              src='http://localhost:3000/images/logo.png'
+              alt='logo'
+              style={{ height: '100px', width: 'auto' }}
+            ></img>
           </div>
           <HamburgerMenu
             isOpen={this.state.open}
@@ -145,11 +153,12 @@ class Header extends Component {
         </div>
       </Fragment>
     );
+
     return (
       <header
         className={this.state.isScrolling ? 'header is-active' : 'header'}
       >
-        {this.state.width > 600 ? head : hamburger}
+        {this.state.width > 633 ? head : hamburger}
         <ResizeObserver
           onResize={(rect) => {
             this.setState({ height: rect.height });
