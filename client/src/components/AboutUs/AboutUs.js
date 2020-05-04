@@ -18,7 +18,7 @@ class AboutUs extends Component {
     return (
       <div className='auCon'>
         <div className='asHeader'>
-          <h1>MM - NAME</h1>
+          <h1>EasyEat</h1>
         </div>
         <div className='asContent'>
           <div className='content'>
@@ -46,7 +46,7 @@ class AboutUs extends Component {
               </p>
             </div>
           </div>
-          <div className='content'>
+          <div className='content2'>
             <div className='content1text'>
               <p>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
@@ -65,69 +65,78 @@ class AboutUs extends Component {
             </div>
             <div className='content1img'>
               <img
-                src='http://localhost:3000/images/medium.jpg'
+                src='http://localhost:3000/images/jason-leung-poI7DelFiVA-unsplash.jpg'
                 alt=''
                 className='conImage'
               ></img>
             </div>
           </div>
-          <div className='content'>
-            <div className='info1'>
-              <div className='info1_1'>
+          <div className='content1'>
+            <div className='contentSmall'>
+              <img
+                src='http://localhost:3000/images/logo.png'
+                alt=''
+                className='logoAboutUs'
+              ></img>
+              <div className='info1'>
                 <div className='infoFA'>
                   <FontAwesomeIcon
+                    className='aboutUsFa'
                     icon={faUserTie}
                     style={{ marginRight: '5px', marginTop: '2px' }}
                   />
-                  <p>Vlasnik</p>
+                  <p>MM-group</p>
                 </div>
                 <div className='infoFA'>
                   <FontAwesomeIcon
+                    className='aboutUsFa'
                     icon={faMapMarkerAlt}
                     style={{ marginRight: '5px', marginTop: '2px' }}
                   />
-                  <p>Lokacija</p>
+                  <p>Split</p>
                 </div>{' '}
                 <div className='infoFA'>
                   <FontAwesomeIcon
                     icon={faPhone}
+                    className='aboutUsFa'
                     style={{ marginRight: '5px', marginTop: '2px' }}
                   />
-                  <p>Telefon</p>
+                  <p>+385 98 673 782</p>
                 </div>{' '}
                 <div className='infoFA'>
                   <FontAwesomeIcon
+                    className='aboutUsFa'
                     icon={faEnvelope}
                     style={{ marginRight: '5px', marginTop: '2px' }}
                   />
-                  <p>Email</p>
+                  <p>mmGroup@gmail.com</p>
                 </div>
               </div>
-              <div className='info1_2'>
-                <div className='tim'>
-                  <img
-                    src='http://localhost:3000/images/tim.jpg'
-                    alt=''
-                    className='timImg'
-                  ></img>
-                  <p>Mate Matić</p>
-                </div>
-                <div className='tim'>
-                  <img
-                    src='http://localhost:3000/images/tim.jpg'
-                    alt=''
-                    className='timImg'
-                  ></img>
-                  <p>Mate Matić</p>
-                </div>
-                <div className='tim'>
-                  <img
-                    src='http://localhost:3000/images/tim.jpg'
-                    alt=''
-                    className='timImg'
-                  ></img>
-                  <p>Mate Matić</p>
-                </div>
+            </div>
+            <div className='info1_2'>
+              <div className='tim'>
+                <img
+                  src='http://localhost:3000/images/tim.jpg'
+                  alt=''
+                  className='timImg'
+                ></img>
+                <p>Marin Miletić</p>
+              </div>
+              <div className='tim'>
+                <img
+                  src='http://localhost:3000/images/tim.jpg'
+                  alt=''
+                  className='timImg'
+                ></img>
+                <p>Mario Mileta</p>
+              </div>
+              <div className='tim'>
+                <img
+                  src='http://localhost:3000/images/tim.jpg'
+                  alt=''
+                  className='timImg'
+                ></img>
+                <p>Toni Androja</p>
               </div>
             </div>
           </div>

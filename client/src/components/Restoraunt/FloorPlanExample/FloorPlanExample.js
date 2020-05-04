@@ -85,7 +85,7 @@ class FloorPlanExample extends Component {
             left: '0',
           }}
         >
-          <p>Sorry admited yet</p>
+          <p>Sorry not accepted yet</p>
         </div>
       );
     } else {

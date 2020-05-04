@@ -11,14 +11,13 @@ function GridTarget(props) {
     accept: ItemType.TABLES,
     drop: (item, monitor) =>
       props.onDropImg(
-        item.tableType,
-        item.imageName,
+        item.table,
         monitor.getSourceClientOffset(),
         monitor.getInitialSourceClientOffset()
       ),
-    collect: monitor => ({
-      isOver: !!monitor.isOver()
-    })
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
   });
   return (
     <div
@@ -30,7 +29,7 @@ function GridTarget(props) {
 }
 
 GridTarget.propTypes = {
-  onDropImg: PropTypes.func.isRequired
+  onDropImg: PropTypes.func.isRequired,
 };
 
 export default GridTarget;
