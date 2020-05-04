@@ -35,9 +35,11 @@ class HomePage extends Component {
   }
 
   render() {
+    let a = -1;
     let catList = this.state.cat.map((c) => {
+      a++;
       return (
-        <div className='category'>
+        <div className='category' key={a}>
           <svg width='30' height='30' viewBox='0 0 30 30' fill='none'>
             <circle cx='15' cy='15' r='15' fill='#1E1B1D'></circle>
             <path
