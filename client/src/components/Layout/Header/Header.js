@@ -99,7 +99,7 @@ class Header extends Component {
           <Link to='/aboutus'>
             <div className='navLink'>O nama</div>
           </Link>
-          <Link to='/main'>
+          <Link to='/main/none'>
             <div className='navLink'>Rezerviraj!</div>
           </Link>
           {this.props.auth && this.props.auth.isAuthenticated

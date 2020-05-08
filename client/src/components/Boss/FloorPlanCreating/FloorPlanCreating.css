@@ -36,8 +36,6 @@
 
 .floorPlanContainer {
   position: relative;
-  width: 1000px;
-  height: 500px;
   z-index: 1;
 }
 .grid {
@@ -103,4 +101,15 @@
   left: 0;
   top: 0;
   opacity: 0;
+}
+
+.userInputSize {
+  width: 100px;
+  height: 40px;
+  padding-left: 15px;
+  margin-bottom: 10px;
+  opacity: 0.9;
+
+  box-sizing: border-box;
+  color: black;
 }

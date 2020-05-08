@@ -16,6 +16,8 @@ class Register extends Component {
       tableDescriptionList: [],
       TableID: '',
       TableType: '',
+      TableSize: '',
+      NOP: '',
       isOpen: false,
       FloorPlanImg: 'You didnt choose Floor plan',
       startW: 0,
@@ -197,12 +199,16 @@ class Register extends Component {
     let temp = {
       TableID: this.state.TableID,
       TableType: this.state.TableType,
+      TableSize: this.state.TableSize,
+      NOP: this.state.NOP,
     };
     this.setState({
       tableDescriptionList: [...this.state.tableDescriptionList, temp],
       isOpen: false,
       TableID: '',
       TableType: '',
+      NOP: '',
+      TableSize: '',
     });
   };
   handleAddRowPopUp = () => {
@@ -252,6 +258,8 @@ class Register extends Component {
         >
           <p>{td.TableID}</p>
           <p>{td.TableType}</p>
+          <p>{td.TableSize}</p>
+          <p>{td.NOP}</p>
           <div
             style={{
               cursor: 'pointer',
@@ -588,6 +596,26 @@ class Register extends Component {
                 placeholder='Enter your table id'
                 name='TableID'
                 value={this.state.TableID}
+                onChange={this.handleChange}
+              />
+            </label>
+            <label>
+              <input
+                className='userInput'
+                type='text'
+                placeholder='Enter your table number of people'
+                name='NOP'
+                value={this.state.NOP}
+                onChange={this.handleChange}
+              />
+            </label>
+            <label>
+              <input
+                className='userInput'
+                type='text'
+                placeholder='Enter your table size'
+                name='TableSize'
+                value={this.state.TableSize}
                 onChange={this.handleChange}
               />
             </label>

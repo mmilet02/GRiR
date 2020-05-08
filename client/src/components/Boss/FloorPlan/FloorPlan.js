@@ -27,6 +27,7 @@ function FloorPlan(props) {
     if (table.TableType === 'circle') {
       tt = (
         <DraggTableTypesSecond
+          handleSelectTable={props.handleSelectTable}
           top={table.CoordY}
           left={table.CoordX}
           visina={table.SizeX}
@@ -38,6 +39,7 @@ function FloorPlan(props) {
     } else if (table.TableType === 'square') {
       tt = (
         <DraggTableTypesSecond
+          handleSelectTable={props.handleSelectTable}
           top={table.CoordY}
           left={table.CoordX}
           visina={table.SizeX}
@@ -53,21 +55,20 @@ function FloorPlan(props) {
   return (
     <div
       ref={drop}
-      style={{
-        // backgroundImage: `url(/uploads/${props.FloorPlanImgName})`,
-        backgroundImage: `url(${props.file})`,
-        backgroundRepeat: ' no-repeat',
-        backgroundPosition: 'center',
-        backgroundSize: 'contain',
-      }}
+      // style={{
+      //   backgroundImage: `url(${props.file})`,
+      //   backgroundRepeat: ' no-repeat',
+      //   backgroundPosition: 'center',
+      //   backgroundSize: 'contain',
+      // }}
       className='floorPlan'
     >
-      {/* <ResizeObserver
+      <ResizeObserver
         onResize={(rect) => {
-          // props.handleFloorPlanResize(rect.width, rect.height);
+          props.handleFloorPlanResize(rect.width, rect.height);
         }}
         onPosition={(rect) => {}}
-      /> */}
+      />
       {floorPlanList}
     </div>
   );

@@ -17,22 +17,50 @@ class FloorPlanCreating extends Component {
     this.boss = React.createRef();
     this.state = {
       floorPlanList: [],
+      deleteThisTables: [],
+      sizeWidth: 0,
+      sizeHeight: 0,
       isOpen: false,
       xCoord: 0,
       yCoord: 0,
       circleRadius: 0,
       tempId: '0',
       isGridOn: false,
-      scale: 25,
+      scale: 0,
       tableExampleSize: 50,
-      currentFloorPlanWidth: 1000,
-      currentFloorPlanHeight: 500,
+      widthForChange: 0,
+      heightForChange: 0,
+      currentFloorPlanHeight: '500px',
       file: '',
+      btnDisabled: true,
+      good: false,
     };
   }
 
   componentWillUnmount() {
     URL.revokeObjectURL(this.state.file);
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.state.scale !== 0 &&
+      this.state.good &&
+      prevState.scale !== this.state.scale
+    ) {
+      let size = this.state.sizeHeight * this.state.scale;
+      let diffHeight = prevState.heightForChange - size;
+      let diffWidth = prevState.widthForChange - this.state.widthForChange;
+      console.log(diffHeight);
+      console.log(diffWidth);
+      this.setState({
+        currentFloorPlanHeight: `${size}px`,
+        heightForChange: size,
+        floorPlanList: this.state.floorPlanList.map((table) => {
+          table.SizeX = table.realSize * this.state.scale;
+
+          return table;
+        }),
+      });
+    }
   }
   // Open pop up modal
   openModal = () => {
@@ -49,6 +77,7 @@ class FloorPlanCreating extends Component {
       floorPlanList: this.state.floorPlanList.map((table) => {
         if (table._id === this.state.tempId) {
           table.SizeX = newSize;
+          table.realSize = this.state.circleRadius;
           table.CoordX = this.state.xCoord - newSize / 2;
           table.CoordY = this.state.yCoord - newSize / 2;
           console.log(table.CoordX + ' ' + table.CoordY);
@@ -78,7 +107,10 @@ class FloorPlanCreating extends Component {
               dropTargetPosition.right - newSize - dropTargetPosition.left;
             console.log(table.CoordX + ' ' + table.CoordY);
           }
+          table.CoordX = (table.CoordX / this.state.widthForChange) * 100;
+          table.CoordY = (table.CoordY / this.state.heightForChange) * 100;
         }
+
         return table;
       }),
     });
@@ -93,6 +125,11 @@ class FloorPlanCreating extends Component {
     if (e.target.name === 'circleRadius') {
       this.setState({ [e.target.name]: e.target.value });
     }
+  };
+
+  handleChangeSize = (e) => {
+    let num = parseInt(e.target.value);
+    this.setState({ [e.target.name]: num });
   };
   // Handle pop up modal submit and activate closeModal()
   handleSubmit = (e) => {
@@ -119,7 +156,6 @@ class FloorPlanCreating extends Component {
   };
   //Trigger on drop and crate the same table in floor plan
   onDropImg = (table, finalPosition, initialPosition) => {
-    console.log(initialPosition.x + ' ' + initialPosition.y);
     this.openModal();
     if (this.state.floorPlanList.find((tab) => tab._id === table._id)) {
       const [newXposition, newYposition] = this.calculateYX(
@@ -150,6 +186,7 @@ class FloorPlanCreating extends Component {
         TableType: table.TableType,
         SizeX: 0,
         CoordX: 0,
+        realSize: 0,
         CoordY: 0,
         NumberOfPeople: table.NumberOfPeople,
       };
@@ -168,6 +205,12 @@ class FloorPlanCreating extends Component {
     });
   };
   handleFloorPlanResize = (width, height) => {
+    console.log(width, height);
+    this.setState({
+      scale: width / this.state.sizeWidth,
+      widthForChange: width,
+      heightForChange: height,
+    });
     // console.log(
     //   this.state.currentFloorPlanWidth + ' ' + this.state.currentFloorPlanHeight
     // );
@@ -243,9 +286,41 @@ class FloorPlanCreating extends Component {
   };
 
   handleChangeFile = (event) => {
+    const height = this.boss.clientHeight;
+    const width = this.boss.clientWidth;
     this.setState({
       file: URL.createObjectURL(event.target.files[0]),
+      good: true,
     });
+  };
+  handleDeleteTables = () => {
+    let list = this.state.deleteThisTables;
+    let list2 = this.state.floorPlanList;
+    for (let i = 0; i < list.length; i++) {
+      list2 = list2.filter((l) => l._id !== list[i]);
+    }
+
+    this.setState({
+      floorPlanList: list2,
+      btnDisabled: true,
+      deleteThisTables: [],
+    });
+  };
+
+  handleSelectTable = (id) => {
+    let isThere = this.state.deleteThisTables.find((n) => n === id);
+    let list = this.state.deleteThisTables.filter((n) => n !== id);
+    if (isThere) {
+      this.setState({
+        deleteThisTables: list,
+        btnDisabled: list.length > 0 ? false : true,
+      });
+    } else {
+      this.setState({
+        deleteThisTables: [...this.state.deleteThisTables, id],
+        btnDisabled: false,
+      });
+    }
   };
   render() {
     let resto = {};
@@ -285,23 +360,23 @@ class FloorPlanCreating extends Component {
           <div
             className='floorPlanContainer'
             ref={this.boss}
-            // style={{
-            //   height: this.state.currentFloorPlanHeight + 'px',
-            //   width: this.state.currentFloorPlanWidth + 'px'
-            // }}
+            style={{
+              backgroundImage: `url(${this.state.file})`,
+              backgroundRepeat: ' no-repeat',
+              backgroundPosition: 'center',
+              backgroundSize: '100% auto',
+              height: this.state.currentFloorPlanHeight,
+              width: '90%',
+            }}
           >
             <FloorPlan
+              handleSelectTable={this.handleSelectTable}
               file={this.state.file}
               FloorPlanImgName={resto.FloorPlanImgName}
               onDropImg={this.onDropImg}
               floorPlanList={this.state.floorPlanList}
               handleFloorPlanResize={this.handleFloorPlanResize}
             />
-            {/* <img
-              src={'http://localhost:3000/uploads/' + resto.FloorPlanImgName}
-              alt='none'
-              style={{ position: 'absolute', width: '100%', margin: 'auto 0' }}
-            ></img> */}
             {this.state.isGridOn ? (
               <div className='grid'>{gridCells}</div>
             ) : null}
@@ -339,11 +414,36 @@ class FloorPlanCreating extends Component {
               />
             </div>
           </label>
+          <label>
+            <input
+              name='sizeWidth'
+              type='text'
+              placeholder='width of restourant..'
+              className='userInputSize'
+              onChange={this.handleChangeSize}
+            />
+          </label>
+          <label>
+            <input
+              name='sizeHeight'
+              type='text'
+              placeholder='height of restourant..'
+              className='userInputSize'
+              onChange={this.handleChangeSize}
+            />
+          </label>
           <button className='regBtn' onClick={this.handleGrid}>
             Grid on/off
           </button>
           <button className='regBtn' onClick={() => this.handleSaveFloorPLan()}>
             Save floor plan
+          </button>
+          <button
+            className='regBtn'
+            disabled={this.state.btnDisabled}
+            onClick={() => this.handleDeleteTables()}
+          >
+            Delete tables
           </button>
         </div>
       </div>

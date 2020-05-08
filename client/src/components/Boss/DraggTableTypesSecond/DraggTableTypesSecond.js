@@ -9,15 +9,16 @@ function DraggTableTypesSecond(props) {
   const [{ isDraggable }, drag] = useDrag({
     item: {
       type: ItemType.TABLES,
-      table: props.table
+      table: props.table,
     },
-    collect: monitor => ({
-      isDraggable: !!monitor.isDragging()
-    })
+    collect: (monitor) => ({
+      isDraggable: !!monitor.isDragging(),
+    }),
   });
   return (
     <div>
       <img
+        onClick={() => props.handleSelectTable(props.table._id)}
         ref={drag}
         src={'http://localhost:3000/images/' + props.table.ImageName}
         alt=''
@@ -25,9 +26,9 @@ function DraggTableTypesSecond(props) {
           height: props.visina + 'px',
           width: props.širina + 'px',
           position: 'absolute',
-          top: props.top,
-          left: props.left,
-          opacity: isDraggable ? '0.5' : '1'
+          top: props.top + '%',
+          left: props.left + '%',
+          opacity: isDraggable ? '0.5' : '1',
         }}
       />
     </div>
@@ -39,7 +40,7 @@ DraggTableTypesSecond.propTypes = {
   left: PropTypes.number.isRequired,
   visina: PropTypes.number.isRequired,
   širina: PropTypes.number.isRequired,
-  table: PropTypes.object.isRequired
+  table: PropTypes.object.isRequired,
 };
 
 export default DraggTableTypesSecond;

@@ -8,6 +8,7 @@ import {
   faClock,
   faUtensils,
 } from '@fortawesome/free-solid-svg-icons';
+import { withRouter } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getRestoraunts, getGrades } from '../../actions/floorPlanAction.js';
 import { Link } from 'react-router-dom';
@@ -16,6 +17,7 @@ class RestorauntList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      first: true,
       restoraunts: [],
       filteredList: [],
       filter: false,
@@ -50,10 +52,22 @@ class RestorauntList extends Component {
       ],
     };
   }
+  componentWillMount() {
+    if (
+      this.props.match.params.type &&
+      this.props.match.params.type !== 'none'
+    ) {
+      this.setState({
+        filterSearch: true,
+        Type: this.props.match.params.type,
+      });
+    }
+  }
   componentDidMount() {
     this.props.getRestoraunts();
     this.props.getGrades();
     window.scrollTo(0, 0);
+    this.filterSearchFun();
   }
   handleChangeS = (e) => {
     const { value, name } = e.target;
@@ -95,6 +109,7 @@ class RestorauntList extends Component {
       { tip: 'Type', value: this.state.Type },
     ];
 
+    console.log(niz);
     niz = niz.filter((n) => n.value !== '');
 
     let restaurantFiltered = this.props.restoraunts.filter((rest) => {
@@ -109,6 +124,7 @@ class RestorauntList extends Component {
 
     this.setState({
       filteredList: restaurantFiltered,
+      first: false,
     });
   };
 
@@ -116,6 +132,10 @@ class RestorauntList extends Component {
     let loading = false;
     let restoraunt = '';
     let restaurantFiltered = this.state.filteredList;
+
+    // if (this.state.filterSearch && this.state.first) {
+    //   this.filterSearchFun();
+    // }
 
     restaurantFiltered = restaurantFiltered.map((rest) => {
       return (
@@ -167,6 +187,7 @@ class RestorauntList extends Component {
         </div>
       );
     });
+
     if (this.props.restoraunts.length > 0) {
       loading = false;
       restoraunt = this.props.restoraunts
@@ -348,4 +369,4 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   getRestoraunts,
   getGrades,
-})(RestorauntList);
+})(withRouter(RestorauntList));

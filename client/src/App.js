@@ -38,7 +38,7 @@ class App extends Component {
                 <Route path='/fpe/:id'>
                   <FloorPlanExample />
                 </Route>
-                <Route path='/main'>
+                <Route path='/main/:type'>
                   <RestorauntList />
                 </Route>
                 <Route path='/fpc/:id'>
