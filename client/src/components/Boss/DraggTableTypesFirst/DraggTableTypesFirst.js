@@ -82,6 +82,13 @@ function DraggTableTypesFirst(props) {
         src={'http://localhost:3000/images/' + props.table.ImageName}
         alt=''
         style={{
+          width:
+            props.table.TableType === 'circle' ||
+            props.table.TableType === 'square'
+              ? '50px'
+              : '100px',
+          height: '50px',
+
           opacity: isDraggable ? '0.5' : '1',
         }}
       />

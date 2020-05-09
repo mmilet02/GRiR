@@ -25,6 +25,13 @@ function DraggTableTypesSecond(props) {
         style={{
           height: props.visina + 'px',
           width: props.širina + 'px',
+          transform:
+            props.table.TableType === 'circle' ||
+            props.table.TableType === 'square'
+              ? 'rotate(0deg)'
+              : props.table.Orientation === 'o'
+              ? 'rotate(90deg)'
+              : 'rotate(0deg)',
           position: 'absolute',
           top: props.top + '%',
           left: props.left + '%',

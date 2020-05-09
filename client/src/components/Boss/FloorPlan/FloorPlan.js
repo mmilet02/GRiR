@@ -48,21 +48,27 @@ function FloorPlan(props) {
           table={table}
         ></DraggTableTypesSecond>
       );
+    } else if (
+      table.TableType === 'rectangle' ||
+      table.TableType === 'elipse'
+    ) {
+      tt = (
+        <DraggTableTypesSecond
+          handleSelectTable={props.handleSelectTable}
+          top={table.CoordY}
+          left={table.CoordX}
+          visina={table.SizeY}
+          širina={table.SizeX}
+          key={table._id}
+          table={table}
+        ></DraggTableTypesSecond>
+      );
     }
     return tt;
   });
 
   return (
-    <div
-      ref={drop}
-      // style={{
-      //   backgroundImage: `url(${props.file})`,
-      //   backgroundRepeat: ' no-repeat',
-      //   backgroundPosition: 'center',
-      //   backgroundSize: 'contain',
-      // }}
-      className='floorPlan'
-    >
+    <div ref={drop} className='floorPlan'>
       <ResizeObserver
         onResize={(rect) => {
           props.handleFloorPlanResize(rect.width, rect.height);
