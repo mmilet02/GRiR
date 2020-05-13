@@ -1,11 +1,11 @@
 .tablesList {
-  width: 150px;
-  height: 300px;
+  width: 100%;
+
   background-color: rgb(255, 255, 255);
   border: 1px solid #333;
-  padding: 10px 0px;
+  padding: 10px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-around;
   align-items: center;
   z-index: 2;

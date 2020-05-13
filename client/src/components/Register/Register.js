@@ -19,6 +19,7 @@ class Register extends Component {
       TableSize: '',
       NOP: '',
       isOpen: false,
+      isOpen1: false,
       FloorPlanImg: 'You didnt choose Floor plan',
       startW: 0,
       endW: 0,
@@ -37,6 +38,8 @@ class Register extends Component {
       Image: 'You didnt choose image',
       file1: '',
       file2: '',
+      TableSizeW: '',
+      TableSizeH: '',
       floorPlanList: [],
       typeDropDownList: [
         'Restoran',
@@ -195,6 +198,9 @@ class Register extends Component {
   closeModal = () => {
     this.setState({ isOpen: false });
   };
+  closeModal1 = () => {
+    this.setState({ isOpen1: false });
+  };
   closeModalAndAdd = () => {
     let temp = {
       TableID: this.state.TableID,
@@ -211,15 +217,41 @@ class Register extends Component {
       TableSize: '',
     });
   };
+  closeModalAndAdd1 = () => {
+    let temp = {
+      TableID: this.state.TableID,
+      TableType: this.state.TableType,
+      TableSizeW: this.state.TableSizeW,
+      TableSizeH: this.state.TableSizeH,
+      NOP: this.state.NOP,
+    };
+    this.setState({
+      tableDescriptionList: [...this.state.tableDescriptionList, temp],
+      isOpen1: false,
+      TableID: '',
+      TableType: '',
+      NOP: '',
+      TableSizeW: '',
+      TableSizeH: '',
+    });
+  };
   handleAddRowPopUp = () => {
     this.setState({
       isOpen: true,
     });
   };
   hadnleTypeClick = (t) => {
-    this.setState({
-      TableType: t,
-    });
+    if (t === 'circle' || t === 'square') {
+      this.setState({
+        TableType: t,
+        isOpen: true,
+      });
+    } else if (t === 'rectangle' || t === 'elipse') {
+      this.setState({
+        TableType: t,
+        isOpen1: true,
+      });
+    }
   };
 
   render() {
@@ -246,32 +278,62 @@ class Register extends Component {
     let n = -1;
     let tableDescription = this.state.tableDescriptionList.map((td) => {
       n++;
-      return (
-        <div
-          style={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-evenly',
-            margin: '5px 0px',
-          }}
-          key={td.TableID}
-        >
-          <p>{td.TableID}</p>
-          <p>{td.TableType}</p>
-          <p>{td.TableSize}</p>
-          <p>{td.NOP}</p>
+      if (td.TableType === 'circle' || td.TableType === 'square') {
+        return (
           <div
             style={{
-              cursor: 'pointer',
-              border: '1px solid #333',
-              padding: '5px',
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'space-evenly',
+              margin: '5px 0px',
             }}
-            onClick={() => this.handleDeleteRow(n)}
+            key={td.TableID}
           >
-            Delete
+            <p>{td.TableID}</p>
+            <p>{td.TableType}</p>
+            <p>{td.TableSize}</p>
+            <p>{td.NOP}</p>
+            <div
+              style={{
+                cursor: 'pointer',
+                border: '1px solid #333',
+                padding: '5px',
+              }}
+              onClick={() => this.handleDeleteRow(n)}
+            >
+              Delete
+            </div>
           </div>
-        </div>
-      );
+        );
+      } else if (td.TableType === 'rectangle' || td.TableType === 'elipse') {
+        return (
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'space-evenly',
+              margin: '5px 0px',
+            }}
+            key={td.TableID}
+          >
+            <p>{td.TableID}</p>
+            <p>{td.TableType}</p>
+            <p>{td.TableSizeW}</p>
+            <p>{td.TableSizeH}</p>
+            <p>{td.NOP}</p>
+            <div
+              style={{
+                cursor: 'pointer',
+                border: '1px solid #333',
+                padding: '5px',
+              }}
+              onClick={() => this.handleDeleteRow(n)}
+            >
+              Delete
+            </div>
+          </div>
+        );
+      }
     });
 
     let tableTypes = this.props.types.map((table) => {
@@ -282,7 +344,11 @@ class Register extends Component {
           src={'http://localhost:3000/images/' + table.ImageName}
           alt=''
           style={{
-            width: '10%',
+            marginLeft: '5px',
+            width:
+              table.TableType === 'circle' || table.TableType === 'square'
+                ? '10%'
+                : '20%',
             height: 'auto',
           }}
         />
@@ -452,26 +518,21 @@ class Register extends Component {
                 </div>
                 {this.state.FloorPlanImg}
               </label>
-              <div style={{ width: '100%' }}>
-                <div
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <div
-                    style={{
-                      cursor: 'pointer',
-                      border: '1px solid #333',
-                      padding: '5px',
-                      margin: '10px 0px 5px 0px',
-                    }}
-                    onClick={() => this.handleAddRowPopUp()}
-                  >
-                    Add table
-                  </div>
-                </div>
+              <div
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                <h3>ADD TABLE</h3>
+              </div>
+              <div className='popUpTableList'>{tableTypes}</div>
+              <div
+                style={{
+                  width: '100%',
+                }}
+              >
                 {tableDescription}
               </div>
               <label>
@@ -619,8 +680,60 @@ class Register extends Component {
                 onChange={this.handleChange}
               />
             </label>
-            <div className='popUpTableList'>{tableTypes}</div>
+
             <button onClick={this.closeModalAndAdd}>OK</button>
+          </div>
+        </Popup>
+        <Popup
+          open={this.state.isOpen1}
+          closeOnDocumentClick
+          onClose={this.closeModal1}
+        >
+          <div className='modal'>
+            <div className='closeRestoraunt' onClick={this.closeModal1}>
+              +
+            </div>
+            <label>
+              <input
+                className='userInput'
+                type='text'
+                placeholder='Enter your table id'
+                name='TableID'
+                value={this.state.TableID}
+                onChange={this.handleChange}
+              />
+            </label>
+            <label>
+              <input
+                className='userInput'
+                type='text'
+                placeholder='Enter your table number of people'
+                name='NOP'
+                value={this.state.NOP}
+                onChange={this.handleChange}
+              />
+            </label>
+            <label>
+              <input
+                className='userInput'
+                type='text'
+                placeholder='Enter your table width size'
+                name='TableSizeW'
+                value={this.state.TableSizeW}
+                onChange={this.handleChange}
+              />
+            </label>
+            <label>
+              <input
+                className='userInput'
+                type='text'
+                placeholder='Enter your table heigh size'
+                name='TableSizeH'
+                value={this.state.TableSizeH}
+                onChange={this.handleChange}
+              />
+            </label>
+            <button onClick={this.closeModalAndAdd1}>OK</button>
           </div>
         </Popup>
       </div>

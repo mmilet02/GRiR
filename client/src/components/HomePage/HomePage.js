@@ -115,17 +115,23 @@ class HomePage extends Component {
         </div>
 
         <div className='feature'>
-          <div className='featureImgCon c1'>
+          <div
+            className='featureImgCon c1'
+            style={{ height: this.state.width }}
+          >
             <img
               src='http://localhost:3000/images/browserW.svg'
               alt='security'
               className='fImg'
             />
             <div className='textF'>
-              <p>100% SECURITY</p>
+              <p>SECURITY</p>
             </div>
           </div>
-          <div className='featureImgCon c2'>
+          <div
+            className='featureImgCon c2'
+            style={{ height: this.state.width }}
+          >
             <img
               src='http://localhost:3000/images/serviceW.svg'
               alt='24/7 support'
@@ -136,7 +142,10 @@ class HomePage extends Component {
               <p>24/7 SUPPORT</p>
             </div>
           </div>
-          <div className='featureImgCon c3'>
+          <div
+            className='featureImgCon c3'
+            style={{ height: this.state.width }}
+          >
             <img
               src='http://localhost:3000/images/medalW.svg'
               alt='safe'

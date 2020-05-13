@@ -17,7 +17,7 @@ class FloorPlanCreating extends Component {
     this.boss = React.createRef();
     this.state = {
       floorPlanList: [],
-      deleteThisTables: [],
+      deleteThisTables: 'not selected',
       sizeWidth: 0,
       sizeHeight: 0,
       isOpen: false,
@@ -26,6 +26,7 @@ class FloorPlanCreating extends Component {
       yCoord: 0,
       csSize: 0,
       reSizeX: 0,
+      NOP: 0,
       reSizeY: 0,
       tempId: '0',
       tempType: '',
@@ -40,6 +41,7 @@ class FloorPlanCreating extends Component {
       btnDisabled: true,
       good: false,
       step: 0,
+      infoTable: {},
     };
   }
 
@@ -126,6 +128,7 @@ class FloorPlanCreating extends Component {
             }
             table.CoordX = (table.CoordX / this.state.widthForChange) * 100;
             table.CoordY = (table.CoordY / this.state.heightForChange) * 100;
+            table.NumberOfPeople = this.state.NOP;
           }
 
           return table;
@@ -172,6 +175,7 @@ class FloorPlanCreating extends Component {
             }
             table.CoordX = (table.CoordX / this.state.widthForChange) * 100;
             table.CoordY = (table.CoordY / this.state.heightForChange) * 100;
+            table.NumberOfPeople = this.state.NOP;
           }
           return table;
         }),
@@ -226,8 +230,6 @@ class FloorPlanCreating extends Component {
   //Trigger on drop and crate the same table in floor plan
   onDropImg = (table, finalPosition, initialPosition) => {
     if (table.TableType === 'circle' || table.TableType === 'square') {
-      this.openModal();
-
       if (this.state.floorPlanList.find((tab) => tab._id === table._id)) {
         const [newXposition, newYposition] = this.calculateYX(
           finalPosition,
@@ -240,10 +242,14 @@ class FloorPlanCreating extends Component {
         this.setState({
           tempId: table._id,
           tempType: table.TableType,
+          csSize: table.realSize,
           xCoord: centerX,
           yCoord: centerY,
         });
+        this.convertToMainScale();
       } else {
+        this.openModal();
+
         const [newXposition, newYposition] = this.calculateYX(
           finalPosition,
           initialPosition
@@ -260,7 +266,7 @@ class FloorPlanCreating extends Component {
           CoordX: 0,
           realSize: 0,
           CoordY: 0,
-          NumberOfPeople: table.NumberOfPeople,
+          NumberOfPeople: 0,
         };
         this.setState({
           floorPlanList: [...this.state.floorPlanList, temp],
@@ -274,8 +280,6 @@ class FloorPlanCreating extends Component {
       table.TableType === 'rectangle' ||
       table.TableType === 'elipse'
     ) {
-      this.openModal1();
-
       if (this.state.floorPlanList.find((tab) => tab._id === table._id)) {
         const [newXposition, newYposition] = this.calculateYX(
           finalPosition,
@@ -288,10 +292,15 @@ class FloorPlanCreating extends Component {
         this.setState({
           tempId: table._id,
           tempType: table.TableType,
+          reSizeX: table.realSizeX,
+          reSizeY: table.realSizeY,
           xCoord: centerX,
           yCoord: centerY,
         });
+        this.convertToMainScale();
       } else {
+        this.openModal1();
+
         const [newXposition, newYposition] = this.calculateYX(
           finalPosition,
           initialPosition
@@ -311,7 +320,7 @@ class FloorPlanCreating extends Component {
           realSizeX: 0,
           realSizeY: 0,
           CoordY: 0,
-          NumberOfPeople: table.NumberOfPeople,
+          NumberOfPeople: 0,
         };
         this.setState({
           floorPlanList: [...this.state.floorPlanList, temp],
@@ -419,30 +428,55 @@ class FloorPlanCreating extends Component {
     });
   };
   handleDeleteTables = () => {
-    let list = this.state.deleteThisTables;
-    let list2 = this.state.floorPlanList;
-    for (let i = 0; i < list.length; i++) {
-      list2 = list2.filter((l) => l._id !== list[i]);
-    }
+    // let list = this.state.deleteThisTables;
+    // let list2 = this.state.floorPlanList;
+    // for (let i = 0; i < list.length; i++) {
+    //   list2 = list2.filter((l) => l._id !== list[i]);
+    // }
 
+    let list2 = this.state.floorPlanList.filter(
+      (l) => l._id !== this.state.deleteThisTables
+    );
     this.setState({
       floorPlanList: list2,
       btnDisabled: true,
-      deleteThisTables: [],
+      deleteThisTables: 'not selected',
     });
   };
 
   handleSelectTable = (id) => {
-    let isThere = this.state.deleteThisTables.find((n) => n === id);
-    let list = this.state.deleteThisTables.filter((n) => n !== id);
+    // let isThere = this.state.deleteThisTables.find((n) => n === id);
+    // let list = this.state.deleteThisTables.filter((n) => n !== id);
+    // if (isThere) {
+    //   this.setState({
+    //     deleteThisTables: list,
+    //     btnDisabled: list.length > 0 ? false : true,
+    //   });
+    // } else {
+    //   this.setState({
+    //     deleteThisTables: [...this.state.deleteThisTables, id],
+    //     btnDisabled: false,
+    //   });
+    // }
+
+    let isThere = this.state.deleteThisTables === id;
+
     if (isThere) {
       this.setState({
-        deleteThisTables: list,
-        btnDisabled: list.length > 0 ? false : true,
+        deleteThisTables: 'not selected',
+        infoTable: {},
+        btnDisabled: true,
       });
     } else {
+      let table = '';
+      for (let i = 0; i < this.state.floorPlanList.length; i++) {
+        if (id === this.state.floorPlanList[i]._id) {
+          table = this.state.floorPlanList[i];
+        }
+      }
       this.setState({
-        deleteThisTables: [...this.state.deleteThisTables, id],
+        deleteThisTables: id,
+        infoTable: table,
         btnDisabled: false,
       });
     }
@@ -459,6 +493,7 @@ class FloorPlanCreating extends Component {
       reOri: x,
     });
   };
+
   render() {
     let resto = {};
     for (const rest of this.props.restoraunts) {
@@ -470,6 +505,47 @@ class FloorPlanCreating extends Component {
     let gridCellsHeight = this.state.currentFloorPlanHeight / 800;
     let gridCellsWidth = this.state.currentFloorPlanWidth / 800;
 
+    let infoSelectedTable = '';
+    if (this.state.deleteThisTables === 'not selected') {
+      infoSelectedTable = (
+        <React.Fragment>
+          <p>Select one table to see his info</p>
+        </React.Fragment>
+      );
+    } else {
+      if (
+        this.state.infoTable.TableType === 'circle' ||
+        this.state.infoTable.TableType === 'square'
+      ) {
+        infoSelectedTable = (
+          <div>
+            <p>ID: {this.state.infoTable._id}</p>
+            <p>Type: {this.state.infoTable.TableType}</p>
+            <p>Size: {this.state.infoTable.realSize}</p>
+            <p>NOP: {this.state.infoTable.NumberOfPeople}</p>
+          </div>
+        );
+      } else if (
+        this.state.infoTable.TableType === 'rectangle' ||
+        this.state.infoTable.TableType === 'elipse'
+      ) {
+        infoSelectedTable = (
+          <div>
+            <p>ID: {this.state.infoTable._id}</p>
+            <p>Type: {this.state.infoTable.TableType}</p>
+            <p>Width: {this.state.infoTable.realSizeX}</p>
+            <p>Height: {this.state.infoTable.realSizeY}</p>
+            <p>NOP: {this.state.infoTable.NumberOfPeople}</p>
+          </div>
+        );
+      } else {
+        infoSelectedTable = (
+          <React.Fragment>
+            <p>yeee</p>
+          </React.Fragment>
+        );
+      }
+    }
     for (let i = 0; i < 800; i++) {
       gridCells.push(
         <GridTarget
@@ -550,6 +626,7 @@ class FloorPlanCreating extends Component {
     } else if (this.state.step === 1) {
       fpc = (
         <React.Fragment>
+          <TableList></TableList>
           <div className='containerS'>
             <div
               className='floorPlanContainer'
@@ -575,7 +652,7 @@ class FloorPlanCreating extends Component {
                 <div className='grid'>{gridCells}</div>
               ) : null}
             </div>
-            <TableList></TableList>
+            <div className='infoSelectedTable'>{infoSelectedTable}</div>
           </div>
           <div className='containerM'>
             <button className='regBtn' onClick={this.handleGrid}>
@@ -598,7 +675,6 @@ class FloorPlanCreating extends Component {
         </React.Fragment>
       );
     }
-
     return (
       <div className='container'>
         <div className='goBack'>
@@ -624,6 +700,12 @@ class FloorPlanCreating extends Component {
               placeholder='Size x..'
               onChange={this.handleSizeChange}
             />
+            <input
+              name='NOP'
+              type='text'
+              placeholder='Number of people'
+              onChange={this.handleSizeChange}
+            />
             <button onClick={this.handleSubmit}>OK</button>
           </div>
         </Popup>
@@ -646,6 +728,12 @@ class FloorPlanCreating extends Component {
               name='reSizeY'
               type='text'
               placeholder='Size y..'
+              onChange={this.handleSizeChange}
+            />
+            <input
+              name='NOP'
+              type='text'
+              placeholder='Number of people'
               onChange={this.handleSizeChange}
             />
             <button onClick={() => this.handleOriation('v')}>VODORAVNO</button>
