@@ -7,6 +7,7 @@ import {
   GET_GRADES,
   ADD_GRADE,
   UPDATE_FAVORITE,
+  UPDATE_VALIDATEDBY,
 } from './types.js';
 import { returnErrors } from './errorActions';
 import axios from 'axios';
@@ -64,12 +65,17 @@ export const getGrades = () => (dispatch) => {
     });
 };
 
-export const saveFloorPlan = (floorPlan, id) => (dispatch) => {
+export const saveFloorPlan = (floorPlan, id, width, height, imageName) => (
+  dispatch
+) => {
   console.log('uslo....');
 
   let temp = JSON.stringify({
     RestaurantID: id,
     NumbOfTables: floorPlan.length,
+    Width: width,
+    Height: height,
+    FloorPlanImgName: imageName,
     TableList: floorPlan,
   });
 
@@ -146,6 +152,30 @@ export const updateFavorite = (_id, Favorite, token) => (dispatch) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
+
+export const updateValidatedBy = (_id, ValidatedBy) => (dispatch) => {
+  let temp = {
+    _id,
+    ValidatedBy,
+  };
+  const config = {
+    headers: {
+      'Content-type': 'application/json',
+    },
+  };
+  axios
+    .post('/api/restoraunts/ValidatedBy', temp, config)
+    .then((res) =>
+      dispatch({
+        type: UPDATE_VALIDATEDBY,
+        payload: res.data,
+      })
+    )
+    .catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
+};
+
 export const uploadImage = (formData) => (dispatch) => {
   const config = {
     headers: {
@@ -160,6 +190,22 @@ export const uploadImage = (formData) => (dispatch) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
+
+export const uploadFpImage = (formData) => (dispatch) => {
+  const config = {
+    headers: {
+      'Content-type': 'multipart/form-data',
+    },
+  };
+
+  axios
+    .post('/api/floorplans/image', formData, config)
+    .then((res) => console.log(res.data))
+    .catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
+};
+
 // Setup config/headers and token
 export const tokenConfig = (token) => {
   // Headers

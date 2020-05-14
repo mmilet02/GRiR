@@ -4,6 +4,7 @@ import SelectableTable from '../SelectableTable/SelectableTable.js';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getFloorPlans } from '../../../actions/floorPlanAction.js';
+import ResizeObserver from 'react-resize-observer';
 import equal from 'fast-deep-equal';
 import { withRouter } from 'react-router';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
@@ -12,18 +13,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 class FloorPlanExample extends Component {
   constructor(props) {
     super(props);
+    this.ref = React.createRef();
     this.state = {
       floorPlans: [],
       datum: '',
       datum1: '',
+      widthForChange: 0,
+      heightForChange: 0,
     };
   }
   componentDidMount() {
     this.props.getFloorPlans();
+    const { current } = this.ref;
     this.setState({
       floorPlans: this.props.list,
       datum: this.props.datum,
       datum1: this.props.datum1,
+      widthForChange: current.offsetWidth,
     });
   }
   componentDidUpdate() {
@@ -43,6 +49,13 @@ class FloorPlanExample extends Component {
       });
     }
   }
+
+  handleFloorPlanResize = (width, height) => {
+    this.setState({
+      widthForChange: width,
+      heightForChange: height,
+    });
+  };
   render() {
     let resto = {};
 
@@ -61,6 +74,9 @@ class FloorPlanExample extends Component {
 
     let floorPlan = [];
     let id = '';
+    let width = 0;
+    let height = 0;
+    let imgName = '';
     if (this.props.match.params.id) {
       for (let i = 0; i < this.state.floorPlans.length; i++) {
         if (
@@ -68,9 +84,15 @@ class FloorPlanExample extends Component {
         ) {
           floorPlan = this.state.floorPlans[i].TableList;
           id = this.state.floorPlans[i]._id;
+          width = this.state.floorPlans[i].Width;
+          height = this.state.floorPlans[i].Height;
+          imgName = this.state.floorPlans[i].FloorPlanImgName;
         }
       }
     }
+    let scale = this.state.widthForChange / width;
+    let currentFloorPlanHeight = `${scale * height}px`;
+
     if (resto.ValidatedBy === 'none') {
       floorPlan = (
         <div
@@ -186,16 +208,34 @@ class FloorPlanExample extends Component {
 
     return (
       <div className='floorPlanContBig'>
-        <div className='backGo'>
+        {/* <div className='backGo'>
           <FontAwesomeIcon
             onClick={this.props.history.goBack}
             icon={faArrowLeft}
             style={{ marginRight: '5px', marginTop: '2px', cursor: 'pointer' }}
           />
-        </div>
+        </div> */}
         <div className='floorPlanContSmall'>
-          <div className='floorPlanCont'>
-            <div className='floorPlan'>{floorPlan}</div>
+          <div
+            className='floorPlanCont'
+            style={{
+              backgroundImage: `url(/uploads/${imgName})`,
+              backgroundRepeat: ' no-repeat',
+              backgroundPosition: 'center',
+              backgroundSize: '100% auto',
+              height: currentFloorPlanHeight,
+              width: '80%',
+            }}
+          >
+            <div className='floorPlan' ref={this.ref}>
+              <ResizeObserver
+                onResize={(rect) => {
+                  this.handleFloorPlanResize(rect.width, rect.height);
+                }}
+                onPosition={(rect) => {}}
+              />
+              {floorPlan}
+            </div>
           </div>
           <div className='choiceFields'></div>
         </div>

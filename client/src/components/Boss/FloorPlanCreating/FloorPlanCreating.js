@@ -6,7 +6,12 @@ import uuid from 'react-uuid';
 import Popup from 'reactjs-popup';
 import GridTarget from '../GridTarget/GridTarget.js';
 import { connect } from 'react-redux';
-import { saveFloorPlan } from '../../../actions/floorPlanAction.js';
+import { Link } from 'react-router-dom';
+import {
+  saveFloorPlan,
+  uploadFpImage,
+  updateValidatedBy,
+} from '../../../actions/floorPlanAction.js';
 import { withRouter } from 'react-router';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,6 +31,8 @@ class FloorPlanCreating extends Component {
       yCoord: 0,
       csSize: 0,
       reSizeX: 0,
+      floorPlanImageName: '',
+      floorPlanImage: '',
       NOP: 0,
       reSizeY: 0,
       tempId: '0',
@@ -413,17 +420,30 @@ class FloorPlanCreating extends Component {
   };
   handleSaveFloorPLan = () => {
     console.log(this.props.match.params.id);
+    let formData = new FormData();
+    formData.append('file', this.state.floorPlanImage);
+
     this.props.saveFloorPlan(
       this.state.floorPlanList,
-      this.props.match.params.id
+      this.props.match.params.id,
+      this.state.sizeWidth,
+      this.state.sizeHeight,
+      this.state.floorPlanImageName
     );
+    this.props.uploadFpImage(formData);
+    if (this.props.user && this.props.user.admin) {
+      this.props.updateValidatedBy(
+        this.props.match.params.id,
+        this.props.user.admin._id
+      );
+    }
   };
 
   handleChangeFile = (event) => {
-    const height = this.boss.clientHeight;
-    const width = this.boss.clientWidth;
     this.setState({
       file: URL.createObjectURL(event.target.files[0]),
+      floorPlanImage: event.target.files[0],
+      floorPlanImageName: event.target.files[0].name,
       good: true,
     });
   };
@@ -586,6 +606,7 @@ class FloorPlanCreating extends Component {
                 <input
                   type='file'
                   className='userInput'
+                  name='floorPlanImage'
                   onChange={this.handleChangeFile}
                   accept='image/png, image/jpeg, image/jpg'
                 />
@@ -658,12 +679,14 @@ class FloorPlanCreating extends Component {
             <button className='regBtn' onClick={this.handleGrid}>
               Grid on/off
             </button>
-            <button
-              className='regBtn'
-              onClick={() => this.handleSaveFloorPLan()}
-            >
-              Save floor plan
-            </button>
+            <Link to='/'>
+              <button
+                className='regBtn'
+                onClick={() => this.handleSaveFloorPLan()}
+              >
+                Save floor plan
+              </button>
+            </Link>
             <button
               className='regBtn'
               disabled={this.state.btnDisabled}
@@ -748,7 +771,10 @@ class FloorPlanCreating extends Component {
 
 const mapStateToProps = (state) => ({
   restoraunts: state.floorPlan.restoraunts,
+  user: state.auth.user,
 });
-export default connect(mapStateToProps, { saveFloorPlan })(
-  withRouter(FloorPlanCreating)
-);
+export default connect(mapStateToProps, {
+  saveFloorPlan,
+  uploadFpImage,
+  updateValidatedBy,
+})(withRouter(FloorPlanCreating));

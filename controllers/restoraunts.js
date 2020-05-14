@@ -6,6 +6,37 @@ const path = require('path');
 const fileUpload = require('express-fileupload');
 
 /**
+ * @route   POST api/restoraunts/ValidatedBy
+ * @desc    update validateBy
+ * @access  public
+ */
+exports.updateValidateBy = async (req, res, next) => {
+  const { _id, ValidatedBy } = req.body;
+  const restoraunt = await Restoraunts.findOne({ _id });
+  restoraunt.ValidatedBy = ValidatedBy;
+  restoraunt.save();
+  return res.status(200).json({
+    restoraunt: {
+      _id: restoraunt._id,
+      Name: restoraunt.Name,
+      Email: restoraunt.Email,
+      Description: restoraunt.Description,
+      Type: restoraunt.Type,
+      Location: restoraunt.Location,
+      StartingHour: restoraunt.StartingHour,
+      EndingHour: restoraunt.EndingHour,
+      RestorauntPage: restoraunt.RestorauntPage,
+      Phone: restoraunt.Phone,
+      Viewes: restoraunt.Viewes,
+      ImgName: restoraunt.ImgName,
+      TableList: restoraunt.TableList,
+      FloorPlanImgName: restoraunt.FloorPlanImgName,
+      ValidatedBy: restoraunt.ValidatedBy,
+    },
+  });
+};
+
+/**
  * @route   POST api/restoraunts
  * @desc    register new restoraunt
  * @access  public

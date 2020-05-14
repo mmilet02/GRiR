@@ -50,3 +50,27 @@ exports.addFloorPlan = async (req, res, next) => {
     }
   }
 };
+
+//@desc Upload fp image
+//@route POST /api/floorplans/image
+//access public
+exports.uploadImage = async (req, res, next) => {
+  if (req.files === null)
+    return res.status(400).json({ msg: 'No file uploaded.' });
+  try {
+    const file = req.files.file;
+    await file.mv(
+      `C:/Users/KORISNIK/Desktop/MARIN/DIPLOMSKI/grir/client/public/uploads/${file.name}`
+    );
+
+    res.status(200).json({
+      fileName: file.name,
+      filePath1: `/uploads/${file.name}`,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      error: 'Server error',
+    });
+  }
+};
