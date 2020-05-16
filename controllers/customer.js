@@ -13,16 +13,14 @@ exports.postCustomer = async (req, res, next) => {
 
   //Simple validation
   if (!Name || !Email || !Phone || !Password) {
-    return res
-      .status(400)
-      .json({ msg: 'Please enter name, email,password and phone.' });
+    return res.status(400).json({ msg: 'Niste unijeli sva polja.' });
   }
   try {
     // Check for existing restoraunt
 
     const customer = await Customer.findOne({ Email });
     const restoraunt = await Restoraunts.findOne({ Email });
-    if (customer || restoraunt) throw Error('Customer already exists');
+    if (customer || restoraunt) throw Error('Gost s tim emailom već postoji.');
 
     //Create salt & hash
 

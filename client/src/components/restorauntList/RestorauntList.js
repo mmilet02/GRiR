@@ -7,6 +7,7 @@ import {
   faChevronUp,
   faClock,
   faUtensils,
+  faSearch,
 } from '@fortawesome/free-solid-svg-icons';
 import { withRouter } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -75,6 +76,8 @@ class RestorauntList extends Component {
       ...this.state,
       [name]: value,
       filterSearch: false,
+      Type: '',
+      Location: '',
     });
   };
 
@@ -125,6 +128,7 @@ class RestorauntList extends Component {
     this.setState({
       filteredList: restaurantFiltered,
       first: false,
+      searchTerm: '',
     });
   };
 
@@ -133,14 +137,10 @@ class RestorauntList extends Component {
     let restoraunt = '';
     let restaurantFiltered = this.state.filteredList;
 
-    // if (this.state.filterSearch && this.state.first) {
-    //   this.filterSearchFun();
-    // }
-
     restaurantFiltered = restaurantFiltered.map((rest) => {
       return (
-        <div className='resLisCon' key={rest._id}>
-          <Link to={'/restoraunt/' + rest._id} style={{ width: '100%' }}>
+        <Link to={'/restoraunt/' + rest._id} className='conLink'>
+          <div className='resLisCon' key={rest._id}>
             <div className='resLisImgCon'>
               <img
                 src={'http://localhost:3000/uploads/' + rest.ImgName}
@@ -152,39 +152,37 @@ class RestorauntList extends Component {
               <div className='restLisInfoHead'>
                 <h3>{rest.Name}</h3>
               </div>
-              <div className='restLisInfoBot'>
-                <div className='restLisInfoBot1'>
-                  <div className='info'>
-                    {' '}
-                    <FontAwesomeIcon
-                      icon={faMapMarkerAlt}
-                      style={{ marginRight: '5px', marginTop: '2px' }}
-                    />
-                    <p>{rest.Location}</p>
-                  </div>
-                  <div className='info'>
-                    <FontAwesomeIcon
-                      icon={faUtensils}
-                      style={{ marginRight: '5px', marginTop: '2px' }}
-                    />
-                    <p>{rest.Type}</p>
-                  </div>
-                  <div className='info'>
-                    <FontAwesomeIcon
-                      icon={faClock}
-                      style={{ marginRight: '5px', marginTop: '2px' }}
-                    />
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <p>{rest.StartingHour}</p>
-                      <p>-</p>
-                      <p>{rest.EndingHour}</p>
-                    </div>
+              <div className='restLisInfoBot1'>
+                <div className='info'>
+                  {' '}
+                  <FontAwesomeIcon
+                    icon={faMapMarkerAlt}
+                    style={{ marginRight: '5px', marginTop: '2px' }}
+                  />
+                  <p>{rest.Location}</p>
+                </div>
+                <div className='info'>
+                  <FontAwesomeIcon
+                    icon={faUtensils}
+                    style={{ marginRight: '5px', marginTop: '2px' }}
+                  />
+                  <p>{rest.Type}</p>
+                </div>
+                <div className='info'>
+                  <FontAwesomeIcon
+                    icon={faClock}
+                    style={{ marginRight: '5px', marginTop: '2px' }}
+                  />
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <p>{rest.StartingHour}</p>
+                    <p>-</p>
+                    <p>{rest.EndingHour}</p>
                   </div>
                 </div>
               </div>
             </div>
-          </Link>
-        </div>
+          </div>
+        </Link>
       );
     });
 
@@ -207,8 +205,8 @@ class RestorauntList extends Component {
         .map((rest) => {
           console.log(rest.ValidatedBy === 'none');
           return (
-            <div className='resLisCon' key={rest._id}>
-              <Link to={'/restoraunt/' + rest._id} style={{ width: '100%' }}>
+            <Link to={'/restoraunt/' + rest._id} className='conLink'>
+              <div className='resLisCon' key={rest._id}>
                 <div className='resLisImgCon'>
                   <img
                     src={'http://localhost:3000/uploads/' + rest.ImgName}
@@ -220,39 +218,37 @@ class RestorauntList extends Component {
                   <div className='restLisInfoHead'>
                     <h3>{rest.Name}</h3>
                   </div>
-                  <div className='restLisInfoBot'>
-                    <div className='restLisInfoBot1'>
-                      <div className='info'>
-                        {' '}
-                        <FontAwesomeIcon
-                          icon={faMapMarkerAlt}
-                          style={{ marginRight: '5px', marginTop: '2px' }}
-                        />
-                        <p>{rest.Location}</p>
-                      </div>
-                      <div className='info'>
-                        <FontAwesomeIcon
-                          icon={faUtensils}
-                          style={{ marginRight: '5px', marginTop: '2px' }}
-                        />
-                        <p>{rest.Type}</p>
-                      </div>
-                      <div className='info'>
-                        <FontAwesomeIcon
-                          icon={faClock}
-                          style={{ marginRight: '5px', marginTop: '2px' }}
-                        />
-                        <div style={{ display: 'flex', flexDirection: 'row' }}>
-                          <p>{rest.StartingHour}</p>
-                          <p>-</p>
-                          <p>{rest.EndingHour}</p>
-                        </div>
+                  <div className='restLisInfoBot1'>
+                    <div className='info'>
+                      {' '}
+                      <FontAwesomeIcon
+                        icon={faMapMarkerAlt}
+                        style={{ marginRight: '5px', marginTop: '2px' }}
+                      />
+                      <p>{rest.Location}</p>
+                    </div>
+                    <div className='info'>
+                      <FontAwesomeIcon
+                        icon={faUtensils}
+                        style={{ marginRight: '5px', marginTop: '2px' }}
+                      />
+                      <p>{rest.Type}</p>
+                    </div>
+                    <div className='info'>
+                      <FontAwesomeIcon
+                        icon={faClock}
+                        style={{ marginRight: '5px', marginTop: '2px' }}
+                      />
+                      <div style={{ display: 'flex', flexDirection: 'row' }}>
+                        <p>{rest.StartingHour}</p>
+                        <p>-</p>
+                        <p>{rest.EndingHour}</p>
                       </div>
                     </div>
                   </div>
                 </div>
-              </Link>
-            </div>
+              </div>
+            </Link>
           );
         });
     } else {
@@ -279,67 +275,63 @@ class RestorauntList extends Component {
     });
     return (
       <div className='listCon'>
-        <label className='searchV'>
-          <input
-            name='searchTerm'
-            placeholder='Search restaurant by name'
-            value={this.state.searchTerm}
-            onChange={this.handleChangeS}
-          />
-        </label>
-        <div className='filterBtn' onClick={this.handleClick}>
-          <p style={{ marginLeft: '6px' }}>FILTER</p>
-          {this.state.filter ? (
-            <FontAwesomeIcon
-              icon={faChevronUp}
-              style={{ marginLeft: '7px', marginTop: '7px' }}
-              size='xs'
+        <div className='leftPart'>
+          <div className='search'>
+            <input
+              name='searchTerm'
+              className='searchTerm'
+              placeholder='Traži po imenu'
+              value={this.state.searchTerm}
+              onChange={this.handleChangeS}
             />
-          ) : (
-            <FontAwesomeIcon
-              icon={faChevronDown}
-              style={{ marginLeft: '7px', marginTop: '7px' }}
-              size='xs'
-            />
-          )}
-        </div>
-        <div className={this.state.filter ? 'filter shw' : 'filter'}>
-          <label style={{ width: '30%', margin: '20px 20px 0px 20px' }}>
-            <select
-              className='filterInput'
-              placeholder='What is the type of food that you make'
-              value={this.state.Type}
-              onChange={this.handleChangeF}
-              name='Type'
-            >
-              <option value='' disabled defaultValue hidden>
-                What is the type of food that you make
-              </option>
-              <option value=''>-</option>
-              {tddList}
-            </select>
-          </label>
-          <label
-            style={{ width: '30%', marginTop: '20px', marginRight: '20px' }}
-          >
-            <select
-              className='filterInput'
-              placeholder='What is the type of food that you make'
-              value={this.state.Location}
-              onChange={this.handleChangeF}
-              name='Location'
-            >
-              <option value='' disabled defaultValue hidden>
-                What is your location
-              </option>
-              <option value=''>-</option>
-              {lddList}
-            </select>
-          </label>
+            <button type='submit' disabled className='searchButton'>
+              <FontAwesomeIcon icon={faSearch} />
+            </button>
+          </div>
 
-          <div className='btnSearch' onClick={this.handleFilter}>
-            {' '}
-            <p>Search</p>{' '}
+          {/* <label className='searchV'>
+            <input
+              name='searchTerm'
+              placeholder='Search restaurant by name'
+              value={this.state.searchTerm}
+              onChange={this.handleChangeS}
+            />
+          </label> */}
+
+          <div className='filter'>
+            <label className='labelCon'>
+              Tip
+              <select
+                className='filterInput'
+                value={this.state.Type}
+                onChange={this.handleChangeF}
+                name='Type'
+              >
+                <option value='' defaultValue>
+                  Svi
+                </option>
+                {tddList}
+              </select>
+            </label>
+            <label className='labelCon'>
+              Lokacija
+              <select
+                className='filterInput'
+                value={this.state.Location}
+                onChange={this.handleChangeF}
+                name='Location'
+              >
+                <option value='' defaultValue>
+                  Svi
+                </option>
+                {lddList}
+              </select>
+            </label>
+
+            <div className='btnSearch' onClick={this.handleFilter}>
+              {' '}
+              <p>Pretraži</p>{' '}
+            </div>
           </div>
         </div>
         <div className='list'>

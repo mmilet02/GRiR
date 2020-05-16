@@ -1,29 +1,39 @@
 .login_page {
-  padding: 100px 0px;
-  background-image: url('http://localhost:3000/images/loginImg.jpg');
+  padding: 150px 0px;
+  background-image: url('http://localhost:3000/images/logoBack.jpg');
   background-repeat: no-repeat;
+  background-position: 50% 80%;
   background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   z-index: 2;
 }
 .form_wrapper {
-  width: 500px;
+  width: 90%;
+  margin: 0 auto;
+  padding-top: 20px;
 }
 
 .login_form {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  border: 2px solid rgb(3, 168, 124);
   align-items: center;
   /* opacity: 0.9; */
-  width: 50%;
+  width: 30%;
   margin: 0 auto;
   background-color: white;
-  border-radius: 5%;
 }
 .login_form h1 {
-  color: #333;
+  color: rgb(3, 168, 124);
 }
 
+.login_formh1 {
+  width: 100%;
+  text-align: center;
+}
 form {
   display: flex;
   flex-direction: column;
@@ -35,6 +45,7 @@ form {
   padding-left: 15px;
   margin-bottom: 10px;
   /* opacity: 0.9; */
+  outline: none;
   box-sizing: border-box;
   color: black;
 }
@@ -51,6 +62,7 @@ form {
   text-align: center;
   color: #5f5f5f;
   background-color: #d8d8d8;
+  outline: none;
 }
 
 .login_button:hover {
@@ -59,27 +71,64 @@ form {
   cursor: pointer;
 }
 .signup {
-  margin-top: 25px;
   text-decoration: none;
+  margin: 25px auto 0px auto;
 }
 .signup a {
-  color: white;
+  color: #525252;
 }
 
 .errBoxL {
   width: 100%;
-  color: #d8000c;
+  color: #e02f38;
   padding: 3px 0px;
   text-align: center;
   background-color: #ffbaba;
-  border: 2px red solid;
+  border: 1px red solid;
 }
 
-@media only screen and (max-width: 600px) {
-  .login_button {
-    background-color: greenyellow;
+@media only screen and (max-width: 1060px) {
+  .login_form {
+    width: 35%;
   }
-  .form_wrapper {
-    width: 100%;
+}
+
+@media only screen and (max-width: 1000px) {
+  .login_page {
+    padding: 100px 0px;
+  }
+
+  .login_form {
+    width: 40%;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .login_page {
+    padding: 70px 0px;
+  }
+
+  .login_form {
+    width: 45%;
+  }
+}
+
+@media only screen and (max-width: 607px) {
+  .login_page {
+    padding: 50px 0px;
+  }
+
+  .login_form {
+    width: 55%;
+  }
+}
+
+@media only screen and (max-width: 507px) {
+  .login_page {
+    padding: 40px 0px;
+  }
+
+  .login_form {
+    width: 70%;
   }
 }

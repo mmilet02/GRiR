@@ -92,7 +92,7 @@ class FloorPlanExample extends Component {
     }
     let scale = this.state.widthForChange / width;
     let currentFloorPlanHeight = `${scale * height}px`;
-
+    console.log(scale);
     if (resto.ValidatedBy === 'none') {
       floorPlan = (
         <div
@@ -145,6 +145,7 @@ class FloorPlanExample extends Component {
                         free={false}
                         key={table._id}
                         table={table}
+                        scale={scale}
                         handleFloorPlan={this.props.handleFloorPlan}
                         floorPlanID={id}
                       />
@@ -163,6 +164,7 @@ class FloorPlanExample extends Component {
                         free={false}
                         key={table._id}
                         table={table}
+                        scale={scale}
                         handleFloorPlan={this.props.handleFloorPlan}
                         floorPlanID={id}
                       />
@@ -181,6 +183,7 @@ class FloorPlanExample extends Component {
                         free={false}
                         key={table._id}
                         table={table}
+                        scale={scale}
                         handleFloorPlan={this.props.handleFloorPlan}
                         floorPlanID={id}
                       />
@@ -199,6 +202,7 @@ class FloorPlanExample extends Component {
             free={true}
             key={table._id}
             table={table}
+            scale={scale}
             handleFloorPlan={this.props.handleFloorPlan}
             floorPlanID={id}
           />

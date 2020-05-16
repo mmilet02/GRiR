@@ -359,21 +359,14 @@ class Register extends Component {
       step = (
         <div className='choiseUser'>
           <div className='step1Heading'>
-            <h1>CHOICE ONE</h1>
+            <h1>IZABERI JEDNO</h1>
           </div>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-evenly',
-              width: '100%',
-              height: '100%',
-            }}
-          >
+          <div className='choiceCon'>
             <div className='choice' onClick={() => this.handleUser('r')}>
-              <p>RESTAURANT</p>
+              <p>RESTORAN</p>
             </div>
             <div className='choice' onClick={() => this.handleUser('g')}>
-              <p>GUEST</p>
+              <p>GOST</p>
             </div>
           </div>
         </div>
@@ -381,14 +374,14 @@ class Register extends Component {
     } else if (this.state.step === 1 && this.state.user === 'restaurant') {
       step = (
         <div className='reg_form'>
-          <h1>REGISTER</h1>
+          <h1>REGISTRACIJA</h1>
           <div className='form_wrapper_reg'>
             <form className='form' onSubmit={this.formSubmit}>
               <label>
                 <input
                   className='userInput'
                   type='text'
-                  placeholder='Enter your name'
+                  placeholder='Ime'
                   name='Name'
                   value={this.state.Name}
                   onChange={this.handleChange}
@@ -398,7 +391,7 @@ class Register extends Component {
                 <input
                   className='userInput'
                   type='text'
-                  placeholder='Enter your email'
+                  placeholder='Email'
                   name='Email'
                   value={this.state.Email}
                   onChange={this.handleChange}
@@ -571,14 +564,14 @@ class Register extends Component {
     } else if (this.state.step === 1 && this.state.user === 'guest') {
       step = (
         <div className='reg_form'>
-          <h1>REGISTER</h1>
+          <h1>REGISTRACIJA</h1>
           <div className='form_wrapper_reg'>
             <form className='form' onSubmit={this.formSubmit}>
               <label>
                 <input
                   className='userInput'
                   type='text'
-                  placeholder='Enter your name'
+                  placeholder='Ime'
                   name='Name'
                   value={this.state.Name}
                   onChange={this.handleChange}
@@ -588,7 +581,7 @@ class Register extends Component {
                 <input
                   className='userInput'
                   type='text'
-                  placeholder='Enter your email'
+                  placeholder='Email'
                   name='Email'
                   value={this.state.Email}
                   onChange={this.handleChange}
@@ -598,7 +591,7 @@ class Register extends Component {
                 <input
                   className='userInput'
                   type='text'
-                  placeholder='Enter your phone'
+                  placeholder='Broj mobitela'
                   name='Phone'
                   value={this.state.Phone}
                   onChange={this.handleChange}
@@ -626,11 +619,11 @@ class Register extends Component {
                   marginTop: this.state.msg !== null ? '30px' : '60px',
                 }}
               >
-                REGISTER
+                SIGN UP
               </button>
               <div className='signup'>
                 <Link to='/login' className='signup'>
-                  Already a member? Login !
+                  Već imate račun? Prijavi te se !
                 </Link>
               </div>
             </form>

@@ -58,14 +58,17 @@ class Login extends Component {
     return (
       <div className='login_page'>
         <div className='login_form'>
-          <h1>LOGIN</h1>
+          <div className='login_formh1'>
+            <h1>PRIJAVA</h1>
+          </div>
+
           <div className='form_wrapper'>
             <form className='form' onSubmit={this.formSubmit}>
               <label>
                 <input
                   className='userInput'
                   type='text'
-                  placeholder='Enter your email'
+                  placeholder='Email'
                   name='Email'
                   value={this.state.Email}
                   onChange={this.handleChange}
@@ -94,11 +97,11 @@ class Login extends Component {
                   marginTop: this.state.msg !== null ? '30px' : '60px',
                 }}
               >
-                LOGIN
+                SIGN IN
               </button>
               <div className='signup'>
                 <Link to='/reg' className='signup'>
-                  Dont have an account? Sign up !
+                  Nemate račun? Registriraj te se !
                 </Link>
               </div>
             </form>

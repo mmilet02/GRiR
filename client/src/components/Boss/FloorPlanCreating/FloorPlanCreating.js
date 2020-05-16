@@ -27,17 +27,23 @@ class FloorPlanCreating extends Component {
       sizeHeight: 0,
       isOpen: false,
       isOpen1: false,
+      isOpen2: false,
       xCoord: 0,
       yCoord: 0,
       csSize: 0,
       reSizeX: 0,
+      chReSizeY: '0',
+      chReSizeX: '0',
       floorPlanImageName: '',
       floorPlanImage: '',
       NOP: 0,
+      chNOP: '0',
       reSizeY: 0,
       tempId: '0',
       tempType: '',
       reOri: '',
+      chReOri: '',
+      chReSize: '0',
       isGridOn: false,
       scale: 0,
       tableExampleSize: 50,
@@ -197,6 +203,54 @@ class FloorPlanCreating extends Component {
   closeModal1 = () => {
     this.setState({ isOpen1: false });
     this.convertToMainScale();
+  };
+  closeModal2 = () => {
+    this.setState({
+      isOpen2: false,
+      floorPlanList: this.state.floorPlanList.map((table) => {
+        if (
+          this.state.infoTable._id === table._id &&
+          (table.TableType === 'circle' || table.TableType === 'square')
+        ) {
+          if (this.state.chReSize !== '0' && this.state.chReSize !== '') {
+            table.SizeX = this.state.chReSize * this.state.scale;
+            table.realSize = this.state.chReSize;
+          }
+          if (this.state.chNOP !== '0' && this.state.chReSize !== '') {
+            table.NumberOfPeople = this.state.chNOP;
+          }
+        } else if (
+          this.state.infoTable._id === table._id &&
+          (table.TableType === 'rectangle' || table.TableType === 'elipse')
+        ) {
+          if (this.state.chNOP !== '0' && this.state.chReSize !== '') {
+            table.NumberOfPeople = this.state.chNOP;
+          }
+          if (this.state.chReSizeX !== '0' && this.state.chReSizeX !== '') {
+            table.SizeX = this.state.chReSizeX * this.state.scale;
+            table.realSizeX = this.state.chReSizeX;
+          }
+          if (this.state.chReSizeY !== '0' && this.state.chReSizeY !== '') {
+            table.SizeY = this.state.chReSizeY * this.state.scale;
+            table.realSizeY = this.state.chReSizeY;
+          }
+        }
+
+        return table;
+      }),
+    });
+
+    this.restart();
+  };
+
+  restart = () => {
+    this.setState({
+      chReSizeY: '0',
+      chReSizeX: '0',
+      chNOP: '0',
+      chReSize: '0',
+      chReOri: '',
+    });
   };
   //Handle input of table size
   handleSizeChange = (e) => {
@@ -513,6 +567,17 @@ class FloorPlanCreating extends Component {
       reOri: x,
     });
   };
+  chHandleOriation = (x) => {
+    this.setState({
+      chReOri: x,
+    });
+  };
+
+  handleBtnChangeTable = () => {
+    this.setState({
+      isOpen2: true,
+    });
+  };
 
   render() {
     let resto = {};
@@ -526,6 +591,7 @@ class FloorPlanCreating extends Component {
     let gridCellsWidth = this.state.currentFloorPlanWidth / 800;
 
     let infoSelectedTable = '';
+    let changeInfoTable = '';
     if (this.state.deleteThisTables === 'not selected') {
       infoSelectedTable = (
         <React.Fragment>
@@ -543,6 +609,29 @@ class FloorPlanCreating extends Component {
             <p>Type: {this.state.infoTable.TableType}</p>
             <p>Size: {this.state.infoTable.realSize}</p>
             <p>NOP: {this.state.infoTable.NumberOfPeople}</p>
+            <button onClick={() => this.handleBtnChangeTable()}>Change</button>
+          </div>
+        );
+
+        changeInfoTable = (
+          <div className='modal'>
+            <div className='close' onClick={this.closeModal2}>
+              +
+            </div>
+            <p>ID: {this.state.infoTable._id}</p>
+            <input
+              name='chReSize'
+              type='text'
+              placeholder={this.state.infoTable.realSize}
+              onChange={this.handleSizeChange}
+            />
+            <input
+              name='chNOP'
+              type='text'
+              placeholder={this.state.infoTable.NumberOfPeople}
+              onChange={this.handleSizeChange}
+            />
+            <button onClick={this.closeModal2}>OK</button>
           </div>
         );
       } else if (
@@ -556,6 +645,38 @@ class FloorPlanCreating extends Component {
             <p>Width: {this.state.infoTable.realSizeX}</p>
             <p>Height: {this.state.infoTable.realSizeY}</p>
             <p>NOP: {this.state.infoTable.NumberOfPeople}</p>
+            <button onClick={() => this.handleBtnChangeTable()}>Change</button>
+          </div>
+        );
+
+        changeInfoTable = (
+          <div className='modal'>
+            <div className='close' onClick={this.closeModal2}>
+              +
+            </div>
+            <input
+              name='chReSizeX'
+              type='text'
+              placeholder={this.state.infoTable.realSizeX}
+              onChange={this.handleSizeChange}
+            />
+            <input
+              name='chReSizeY'
+              type='text'
+              placeholder={this.state.infoTable.realSizeY}
+              onChange={this.handleSizeChange}
+            />
+            <input
+              name='chNOP'
+              type='text'
+              placeholder={this.state.infoTable.NumberOfPeople}
+              onChange={this.handleSizeChange}
+            />
+            <button onClick={() => this.chHandleOriation('v')}>
+              VODORAVNO
+            </button>
+            <button onClick={() => this.chHandleOriation('o')}>OKOMITO</button>
+            <button onClick={this.closeModal2}>OK</button>
           </div>
         );
       } else {
@@ -763,6 +884,13 @@ class FloorPlanCreating extends Component {
             <button onClick={() => this.handleOriation('o')}>OKOMITO</button>
             <button onClick={this.handleSubmit1}>OK</button>
           </div>
+        </Popup>
+        <Popup
+          open={this.state.isOpen2}
+          closeOnDocumentClick
+          onClose={this.closeModal2}
+        >
+          {changeInfoTable}
         </Popup>
       </div>
     );

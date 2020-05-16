@@ -14,16 +14,16 @@ exports.login = async (req, res, next) => {
 
   //Simple validation
   if (!Email || !Password) {
-    return res.status(400).json({ msg: 'Please enter all fields.' });
+    return res.status(400).json({ msg: 'Niste unijeli sva polja.' });
   }
   try {
     // Check for existing restoraunt
     if (Email === 'admin') {
       const admin = await Admin.findOne({ Email });
-      if (!admin) throw Error('User does not exists');
+      if (!admin) throw Error('Korisnik sa tim e-mailom nepostoji');
 
       const isMatch = await bcrypt.compare(Password, admin.Password);
-      if (!isMatch) throw Error('Invalid credentials');
+      if (!isMatch) throw Error('Lozinka je nevažeća');
 
       const token = jwt.sign({ _id: admin._id }, process.env.JWT_SECRET);
 
@@ -37,12 +37,13 @@ exports.login = async (req, res, next) => {
     } else {
       const restoraunt = await Restoraunts.findOne({ Email });
       const customer = await Customer.findOne({ Email });
-      if (!restoraunt && !customer) throw Error('User does not exists');
+      if (!restoraunt && !customer)
+        throw Error('Korisnik sa tim e-mailom nepostoji');
 
       //Validate password
       if (restoraunt) {
         const isMatch = await bcrypt.compare(Password, restoraunt.Password);
-        if (!isMatch) throw Error('Invalid credentials');
+        if (!isMatch) throw Error('Lozinka je nevažeća');
 
         const token = jwt.sign({ _id: restoraunt._id }, process.env.JWT_SECRET);
 
@@ -66,7 +67,7 @@ exports.login = async (req, res, next) => {
         });
       } else {
         const isMatch = await bcrypt.compare(Password, customer.Password);
-        if (!isMatch) throw Error('Invalid credentials');
+        if (!isMatch) throw Error('Lozinka je nevažeća');
 
         const token = jwt.sign({ _id: customer._id }, process.env.JWT_SECRET);
 

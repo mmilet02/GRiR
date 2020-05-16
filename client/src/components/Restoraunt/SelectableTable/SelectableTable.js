@@ -17,7 +17,9 @@ class SelectableTable extends Component {
     );
   };
   checkType = () => {
+    console.log(this.props.scale);
     if (this.props.table.TableType === 'circle') {
+      let s = this.props.table.realSize * this.props.scale;
       return (
         <div style={{ borderRadius: '50%' }}>
           <img
@@ -58,16 +60,17 @@ class SelectableTable extends Component {
             }
             alt=''
             style={{
-              height: this.props.table.SizeX + 'px',
-              width: this.props.table.SizeX + 'px',
+              height: s + 'px',
+              width: s + 'px',
               position: 'absolute',
-              top: this.props.table.CoordY,
-              left: this.props.table.CoordX,
+              top: this.props.table.CoordY + '%',
+              left: this.props.table.CoordX + '%',
             }}
           />
         </div>
       );
     } else if (this.props.table.TableType === 'square') {
+      let s = this.props.table.realSize * this.props.scale;
       return (
         <div>
           <img
@@ -108,11 +111,115 @@ class SelectableTable extends Component {
             }
             alt=''
             style={{
-              height: this.props.table.SizeX + 'px',
-              width: this.props.table.SizeX + 'px',
+              height: s + 'px',
+              width: s + 'px',
               position: 'absolute',
-              top: this.props.table.CoordY,
-              left: this.props.table.CoordX,
+              top: this.props.table.CoordY + '%',
+              left: this.props.table.CoordX + '%',
+            }}
+          />
+        </div>
+      );
+    } else if (this.props.table.TableType === 'rectangle') {
+      let h = this.props.table.realSizeY * this.props.scale;
+      let w = this.props.table.realSizeX * this.props.scale;
+      return (
+        <div>
+          <img
+            onClick={() => {
+              if (this.props.free) {
+                let n = this.props.count;
+                let x = '';
+
+                if (this.state.selected) {
+                  n--;
+                  x = 'minus';
+                  this.setState({
+                    selected: !this.state.selected,
+                  });
+                  this.handleSelected(x);
+                  this.props.handleCount(n);
+                } else {
+                  if (n + 1 > 2) {
+                    this.props.openModal();
+                  } else {
+                    n++;
+                    x = 'plus';
+                    this.setState({
+                      selected: !this.state.selected,
+                    });
+                    this.handleSelected(x);
+                    this.props.handleCount(n);
+                  }
+                }
+              }
+            }}
+            src={
+              this.props.free
+                ? !this.state.selected
+                  ? 'http://localhost:3000/images/rectangleN.png'
+                  : 'http://localhost:3000/images/rectangleSelected.png'
+                : 'http://localhost:3000/images/rectangleX.png'
+            }
+            alt=''
+            style={{
+              height: h + 'px',
+              width: w + 'px',
+              position: 'absolute',
+              top: this.props.table.CoordY + '%',
+              left: this.props.table.CoordX + '%',
+            }}
+          />
+        </div>
+      );
+    } else if (this.props.table.TableType === 'elipse') {
+      let h = this.props.table.realSizeY * this.props.scale;
+      let w = this.props.table.realSizeX * this.props.scale;
+      return (
+        <div>
+          <img
+            onClick={() => {
+              if (this.props.free) {
+                let n = this.props.count;
+                let x = '';
+
+                if (this.state.selected) {
+                  n--;
+                  x = 'minus';
+                  this.setState({
+                    selected: !this.state.selected,
+                  });
+                  this.handleSelected(x);
+                  this.props.handleCount(n);
+                } else {
+                  if (n + 1 > 2) {
+                    this.props.openModal();
+                  } else {
+                    n++;
+                    x = 'plus';
+                    this.setState({
+                      selected: !this.state.selected,
+                    });
+                    this.handleSelected(x);
+                    this.props.handleCount(n);
+                  }
+                }
+              }
+            }}
+            src={
+              this.props.free
+                ? !this.state.selected
+                  ? 'http://localhost:3000/images/elipseN.png'
+                  : 'http://localhost:3000/images/elipseSelected.png'
+                : 'http://localhost:3000/images/elipseX.png'
+            }
+            alt=''
+            style={{
+              height: h + 'px',
+              width: w + 'px',
+              position: 'absolute',
+              top: this.props.table.CoordY + '%',
+              left: this.props.table.CoordX + '%',
             }}
           />
         </div>
