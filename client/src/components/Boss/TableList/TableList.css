@@ -2,11 +2,12 @@
   width: 100%;
 
   background-color: rgb(255, 255, 255);
-  border: 1px solid #333;
+  border: 2px solid rgb(3, 168, 124);
   padding: 10px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  margin-bottom: 20px;
   z-index: 2;
 }

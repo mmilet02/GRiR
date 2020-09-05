@@ -37,11 +37,43 @@ exports.updateValidateBy = async (req, res, next) => {
 };
 
 /**
+ * @route   POST api/restoraunts/OnOff
+ * @desc    update validateBy
+ * @access  public
+ */
+exports.turnOnOffValidateBy = async (req, res, next) => {
+  const { _id, OnOff } = req.body;
+  const restoraunt = await Restoraunts.findOne({ _id });
+  restoraunt.ValidatedBy = OnOff;
+  restoraunt.save();
+  return res.status(200).json({
+    restoraunt: {
+      _id: restoraunt._id,
+      Name: restoraunt.Name,
+      Email: restoraunt.Email,
+      Description: restoraunt.Description,
+      Type: restoraunt.Type,
+      Location: restoraunt.Location,
+      StartingHour: restoraunt.StartingHour,
+      EndingHour: restoraunt.EndingHour,
+      RestorauntPage: restoraunt.RestorauntPage,
+      Phone: restoraunt.Phone,
+      Viewes: restoraunt.Viewes,
+      ImgName: restoraunt.ImgName,
+      TableList: restoraunt.TableList,
+      FloorPlanImgName: restoraunt.FloorPlanImgName,
+      ValidatedBy: restoraunt.ValidatedBy,
+    },
+  });
+};
+
+/**
  * @route   POST api/restoraunts
  * @desc    register new restoraunt
  * @access  public
  */
 exports.postRestoraunt = async (req, res, next) => {
+  console.log('step 1');
   const {
     Name,
     Email,
@@ -61,24 +93,38 @@ exports.postRestoraunt = async (req, res, next) => {
   } = req.body;
 
   //Simple validation
-  if (!Name || !Email || !Phone || !Password) {
-    return res.status(400).json({ msg: 'Please enter name, email and phone.' });
+  if (
+    !Name ||
+    !Email ||
+    !Phone ||
+    !Password ||
+    !Description ||
+    !Type ||
+    !Location ||
+    !StartingHour ||
+    !EndingHour ||
+    !RestorauntPage ||
+    ImgName === 'Niste izabrali sliku' ||
+    TableList.length == 0 ||
+    FloorPlanImgName === 'Niste izabrali tlocrt'
+  ) {
+    return res.status(400).json({ msg: 'Niste unijeli sva polja' });
   }
   try {
     // Check for existing restoraunt
-
+    console.log('step 2');
     const restoraunt = await Restoraunts.findOne({ Email });
     const customer = await Customer.findOne({ Email });
-    if (restoraunt || customer) throw Error('Restoraunt already exists');
+    if (restoraunt || customer) throw Error('User already exists');
 
     //Create salt & hash
 
     const salt = await bcrypt.genSalt(10);
     if (!salt) throw Error('Something went wrong with bcrypt');
-
+    console.log('step 3');
     const hash = await bcrypt.hash(Password, salt);
     if (!hash) throw Error('Something went wrong hashing the password');
-
+    console.log('step 4');
     const newRestoraunt = new Restoraunts({
       Name,
       Email,
@@ -100,7 +146,7 @@ exports.postRestoraunt = async (req, res, next) => {
     const savedRestoraunt = await newRestoraunt.save();
     if (!savedRestoraunt)
       throw Error('Something went wrong saving the restoraunt');
-
+    console.log('step 5');
     const token = jwt.sign(
       { _id: savedRestoraunt._id },
       process.env.JWT_SECRET

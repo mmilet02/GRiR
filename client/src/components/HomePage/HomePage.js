@@ -32,6 +32,7 @@ class HomePage extends Component {
   componentDidMount() {
     this.props.getRestoraunts();
     this.props.getCustomers();
+    window.scrollTo(0, 0);
   }
 
   render() {
@@ -39,7 +40,7 @@ class HomePage extends Component {
     let catList = this.state.cat.map((c) => {
       a++;
       return (
-        <Link to={'/main/' + c}>
+        <Link to={'/main/' + c} key={a}>
           <div className='category' key={a}>
             <svg width='30' height='30' viewBox='0 0 30 30' fill='none'>
               <circle cx='15' cy='15' r='15' fill='#1E1B1D'></circle>
@@ -111,7 +112,9 @@ class HomePage extends Component {
 
         <div className='provjera2'>
           <p>Već imate račun? </p>
-          <p className='pGreen'>Sign in.</p>
+          <Link to='/login'>
+            <p className='pGreen'>Sign in.</p>
+          </Link>
         </div>
 
         <div className='feature'>

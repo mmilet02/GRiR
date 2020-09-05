@@ -24,6 +24,7 @@ class Login extends Component {
   };
   componentDidMount() {
     this.props.clearErrors();
+    window.scrollTo(0, 0);
   }
 
   componentDidUpdate(prevProps) {

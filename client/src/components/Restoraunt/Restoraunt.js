@@ -6,6 +6,8 @@ import {
   addGrade,
   getGrades,
   updateFavorite,
+  getCustomers,
+  turnValidatedBy,
 } from '../../actions/floorPlanAction.js';
 import { withRouter } from 'react-router';
 import Popup from 'reactjs-popup';
@@ -15,6 +17,8 @@ import {
   faUtensils,
   faStar,
   faHeart,
+  faPhone,
+  faEnvelope,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DatePicker from './DayPicker.js';
@@ -28,6 +32,8 @@ class Restoraunt extends Component {
     super(props);
     this.state = {
       rests: [],
+      brLjudi: 0,
+      nizStolova: [],
       isOpen: false,
       isOpen1: false,
       isOpen2: false,
@@ -45,9 +51,14 @@ class Restoraunt extends Component {
       tableID: [],
       numberOfPeople: 0,
       count: 0,
+      msg: null,
+      msg1: null,
+      res: false,
     };
   }
   componentDidMount() {
+    window.scrollTo(0, 0);
+    this.props.getCustomers();
     this.props.getReservation();
     let did = false;
     let gradeComment = {};
@@ -71,7 +82,7 @@ class Restoraunt extends Component {
           ? did
             ? true
             : false
-          : true
+          : false
         : false,
       favorite:
         this.props.user && this.props.user.customer
@@ -85,7 +96,6 @@ class Restoraunt extends Component {
 
     window.scrollTo(0, 0);
   }
-
   calcGrade = (resto) => {
     let gradeComment = 0;
     for (let i = 0; i < this.props.grades.length; i++) {
@@ -98,6 +108,7 @@ class Restoraunt extends Component {
     );
 
     let gradeSum = 0;
+    let sum = 0;
     let g = 0;
     let n = 0;
     let jedan = 0;
@@ -109,14 +120,19 @@ class Restoraunt extends Component {
       for (let i = 0; i < filteredGrades.length; i++) {
         if (filteredGrades[i].Grade === 1) {
           jedan++;
+          sum++;
         } else if (filteredGrades[i].Grade === 2) {
           dva++;
+          sum++;
         } else if (filteredGrades[i].Grade === 3) {
           tri++;
+          sum++;
         } else if (filteredGrades[i].Grade === 4) {
           cetiri++;
+          sum++;
         } else if (filteredGrades[i].Grade === 5) {
           pet++;
+          sum++;
         }
         gradeSum += filteredGrades[i].Grade;
         n++;
@@ -124,7 +140,7 @@ class Restoraunt extends Component {
       g = gradeSum / n;
       g = g.toFixed(2);
     } else {
-      g = 'Sorry no grades';
+      g = '0.00';
     }
     let temp = {
       grade: g,
@@ -134,6 +150,7 @@ class Restoraunt extends Component {
       cetiri,
       pet,
       gradeComment,
+      sum,
     };
     return temp;
   };
@@ -151,6 +168,8 @@ class Restoraunt extends Component {
       );
       this.setState({
         didGrade: true,
+        grade: 0,
+        Comment: '',
       });
     } else {
       this.setState({ isOpen: true });
@@ -165,7 +184,7 @@ class Restoraunt extends Component {
   };
 
   closeModal = () => {
-    this.setState({ isOpen: false });
+    this.setState({ isOpen: false, msg: null, Comment: '', grade: 0 });
   };
   closeModal1 = () => {
     this.setState({ isOpen1: false });
@@ -280,6 +299,7 @@ class Restoraunt extends Component {
     }
   };
   handleReservation = (resto) => {
+    let newDate = new Date();
     if (
       !this.props.user ||
       this.props.user.restoraunt ||
@@ -288,11 +308,21 @@ class Restoraunt extends Component {
       this.setState({
         isOpen3: true,
       });
+    } else if (
+      this.state.Comment1 === '' ||
+      this.state.brLjudi === 0 ||
+      (this.state.startDate1.getMinutes() !== 0 &&
+        this.state.startDate1.getMinutes() !== 15 &&
+        this.state.startDate1.getMinutes() !== 30 &&
+        this.state.startDate1.getMinutes() !== 45) ||
+      newDate > this.state.startDate
+    ) {
+      this.setState({
+        msg1: 'Niste ispravno ispunili sva polja potrebna za rezervaciju',
+      });
     } else {
       const { token } = this.props.user;
       let hour = `${this.state.startDate1.getHours()}:${this.state.startDate1.getMinutes()}`;
-      console.log(typeof hour);
-      console.log(hour);
       let reservation = {
         RestorauntID: resto._id,
         FloorPlanID: this.state.floorPlanID,
@@ -301,10 +331,22 @@ class Restoraunt extends Component {
         Date: this.state.startDate,
         Hour: hour,
         Comment: this.state.Comment1,
-        NumberOfPeople: this.state.numberOfPeople,
+        NumberOfPeople: this.state.brLjudi,
       };
-      console.log(reservation);
+      this.setState({
+        msg1: null,
+        startDate: newDate,
+        startDate1: newDate,
+        Comment1: '',
+        nizStolova: [],
+        tableID: [],
+        count: 0,
+        numberOfPeople: 0,
+        brLjudi: 0,
+        res: true,
+      });
       this.props.addReservation(reservation, token);
+      this.props.history.push('/');
     }
   };
 
@@ -316,17 +358,65 @@ class Restoraunt extends Component {
     });
   };
   onSubmit = (resto) => {
-    this.closeModal();
-    this.onStarClick(this.state.grade, resto, this.state.Comment);
+    if (this.state.Comment === '' || this.state.grade === 0) {
+      this.setState({
+        msg: 'Niste unijeli sva polja',
+      });
+    } else {
+      this.setState({
+        msg: null,
+      });
+      this.closeModal();
+      this.onStarClick(this.state.grade, resto, this.state.Comment);
+    }
   };
 
-  handleCount = (n) => {
-    this.setState({
-      count: n,
-    });
+  handleCount = (n, table) => {
+    let niz = this.state.nizStolova;
+    let isThere = niz.find((n) => n._id === table._id);
+
+    if (isThere) {
+      let x = 0;
+      let list = niz.filter((n) => n._id !== table._id);
+      for (let i = 0; i < list.length; i++) {
+        x += parseInt(list[i].NumberOfPeople);
+      }
+      this.setState({
+        count: n,
+        nizStolova: list,
+        brLjudi: x,
+      });
+    } else {
+      let x = 0;
+      let list = [...this.state.nizStolova, table];
+      for (let i = 0; i < list.length; i++) {
+        x += parseInt(list[i].NumberOfPeople);
+      }
+      this.setState({
+        count: n,
+        nizStolova: list,
+        brLjudi: x,
+      });
+    }
+  };
+  handleDeleteTableID = (table) => {
+    let niz = this.state.nizStolova;
+    let isThere = niz.find((n) => n._id === table._id);
+    if (isThere) {
+      let x = 0;
+      let list = niz.filter((n) => n._id !== table._id);
+      for (let i = 0; i < list.length; i++) {
+        x += parseInt(list[i].NumberOfPeople);
+      }
+      this.setState({
+        count: list.length,
+        tableID: this.state.tableID.filter((tid) => tid !== table._id),
+        nizStolova: list,
+        brLjudi: x,
+      });
+    }
   };
   render() {
-    console.log(this.props.match.params.id);
     const { user } = this.props;
     let resto = {};
     for (const rest of this.state.rests) {
@@ -338,82 +428,109 @@ class Restoraunt extends Component {
       .filter((g) => g.RestaurantID === resto._id)
       .map((gc) => {
         let stars = this.buildStars(gc.Grade);
+        let c = '';
+        for (let i = 0; i < this.props.customers.length; i++) {
+          if (this.props.customers[i]._id === gc.CustomerID) {
+            c = this.props.customers[i].Name;
+          }
+        }
         return (
-          <div className='gcEle'>
-            <div className='gcGrade'>
-              <p>{stars}</p>
+          <div key={gc._id} className='r4' style={{ marginBottom: '20px' }}>
+            <div className='r1'>
+              <div className='r2'>
+                <img
+                  src='http://localhost:3000/images/tim.jpg'
+                  alt=''
+                  className='rImage'
+                />
+              </div>
+              <p>{c}</p>
             </div>
-            <div className='gcComment'>
+            <div className='r3'>
+              <div>{stars}</div>
               <p>{gc.Comment}</p>
             </div>
           </div>
         );
       });
     let gradesObj = this.calcGrade(resto);
-    let stars = {};
-    if (this.state.didGrade) {
-      stars = this.buildStars(gradesObj.grade);
-    } else {
-      stars = (
-        <React.Fragment>
-          {' '}
-          <FontAwesomeIcon
-            icon={faStar}
-            style={{ margin: '0px 5 px', color: 'black' }}
-            onClick={this.onStarClickO}
-          />
-          <FontAwesomeIcon
-            icon={faStar}
-            style={{ margin: '0px 5 px', color: 'black' }}
-            onClick={this.onStarClickO}
-          />
-          <FontAwesomeIcon
-            icon={faStar}
-            style={{ margin: '0px 5 px', color: 'black' }}
-            onClick={this.onStarClickO}
-          />
-          <FontAwesomeIcon
-            icon={faStar}
-            style={{ margin: '0px 5 px', color: 'black' }}
-            onClick={this.onStarClickO}
-          />
-          <FontAwesomeIcon
-            icon={faStar}
-            style={{ margin: '0px 5 px', color: 'black' }}
-            onClick={this.onStarClickO}
-          />
-        </React.Fragment>
-      );
-    }
-    let stars2 = (
+    let stars1 = {};
+    let stars3 = {};
+    let stars4 = {};
+    stars3 = (
       <React.Fragment>
         {' '}
         <FontAwesomeIcon
           icon={faStar}
-          style={{ margin: '0px 5 px', color: 'black' }}
+          style={{ margin: '0px 5 px', color: 'black', cursor: 'pointer' }}
+          onClick={this.onStarClickO}
+          size='lg'
+        />
+        <FontAwesomeIcon
+          icon={faStar}
+          style={{ margin: '0px 5 px', color: 'black', cursor: 'pointer' }}
+          onClick={this.onStarClickO}
+          size='lg'
+        />
+        <FontAwesomeIcon
+          icon={faStar}
+          style={{ margin: '0px 5 px', color: 'black', cursor: 'pointer' }}
+          onClick={this.onStarClickO}
+          size='lg'
+        />
+        <FontAwesomeIcon
+          icon={faStar}
+          style={{ margin: '0px 5 px', color: 'black', cursor: 'pointer' }}
+          onClick={this.onStarClickO}
+          size='lg'
+        />
+        <FontAwesomeIcon
+          icon={faStar}
+          style={{ margin: '0px 5 px', color: 'black', cursor: 'pointer' }}
+          onClick={this.onStarClickO}
+          size='lg'
+        />
+      </React.Fragment>
+    );
+    stars1 = this.buildStars(gradesObj.grade);
+    if (this.state.didGrade) {
+      stars4 = this.buildStars(gradesObj.gradeComment.Grade);
+    } else {
+    }
+    let stars2 = (
+      <div className='zvijezde'>
+        <h3 style={{ marginRight: '20px' }}>Ocjena: {this.state.grade}</h3>
+        <FontAwesomeIcon
+          className='s'
+          icon={faStar}
+          style={{ margin: '0px 5px', color: 'black' }}
           onClick={() => this.onStarClick1(1)}
         />
         <FontAwesomeIcon
+          className='s'
           icon={faStar}
-          style={{ margin: '0px 5 px', color: 'black' }}
+          style={{ margin: '0px 5px', color: 'black' }}
           onClick={() => this.onStarClick1(2)}
         />
         <FontAwesomeIcon
+          className='s'
           icon={faStar}
-          style={{ margin: '0px 5 px', color: 'black' }}
+          style={{ margin: '0px 5px', color: 'black' }}
           onClick={() => this.onStarClick1(3)}
         />
         <FontAwesomeIcon
+          className='s'
           icon={faStar}
-          style={{ margin: '0px 5 px', color: 'black' }}
+          style={{ margin: '0px 5px', color: 'black' }}
           onClick={() => this.onStarClick1(4)}
         />
         <FontAwesomeIcon
+          className='s'
           icon={faStar}
-          style={{ margin: '0px 5 px', color: 'black' }}
+          style={{ margin: '0px 5px', color: 'black' }}
           onClick={() => this.onStarClick1(5)}
         />
-      </React.Fragment>
+      </div>
     );
     let modalContent = {};
     let favModal = {};
@@ -422,67 +539,97 @@ class Restoraunt extends Component {
     if (user && user.restoraunt) {
       resModal = (
         <div className='modal'>
-          <div className='closeRestoraunt' onClick={this.closeModal3}>
-            +
-          </div>
-          <p>Sorry as restoraunt you cant make reservation.</p>
-          <button onClick={this.closeModal3}>OK</button>
+          <p className='modalP'>Kao restoran nemožete napraviti rezervaciju.</p>
+          <button className='btnModul' onClick={this.closeModal3}>
+            OK
+          </button>
         </div>
       );
       modalContent = (
         <div className='modal'>
-          <div className='closeRestoraunt' onClick={this.closeModal}>
-            +
-          </div>
-          <p>Sorry as restoraunt you cant add grade</p>
-          <button onClick={this.closeModal}>OK</button>
+          <p className='modalP'>
+            Kao restoran nemožete ocijeniti drugi restoran.
+          </p>
+          <button className='btnModul' onClick={this.closeModal}>
+            OK
+          </button>
+        </div>
+      );
+      favModal = (
+        <div className='modal'>
+          <p className='modalP'>
+            Kao restoran nemožete dodati restoran u favorite.
+          </p>
+          <button className='btnModul' onClick={this.closeModal1}>
+            OK
+          </button>
         </div>
       );
     } else if (user && user.admin) {
       favModal = (
         <div className='modal'>
-          <div className='closeRestoraunt' onClick={this.closeModal1}>
-            +
-          </div>
-          <p>Sorry as admin you cant add restoraunt in favorite.</p>
-          <button onClick={this.closeModal1}>OK</button>
+          <p className='modalP'>
+            Kao admin nemožete dodati restoran u favorite.
+          </p>
+          <button className='btnModul' onClick={this.closeModal1}>
+            OK
+          </button>
         </div>
       );
       resModal = (
         <div className='modal'>
-          <div className='closeRestoraunt' onClick={this.closeModal3}>
-            +
-          </div>
-          <p>Sorry as admin you cant make reservation.</p>
-          <button onClick={this.closeModal3}>OK</button>
+          <p className='modalP'>Kao admin nemožete napraviti rezervaciju.</p>
+          <button className='btnModul' onClick={this.closeModal3}>
+            OK
+          </button>
         </div>
       );
       modalContent = (
         <div className='modal'>
-          <div className='closeRestoraunt' onClick={this.closeModal}>
-            +
-          </div>
-          <p>Sorry as admin you cant add grade</p>
-          <button onClick={this.closeModal}>OK</button>
+          <p className='modalP'>Kao admin nemožete ocijeniti restoran</p>
+          <button className='btnModul' onClick={this.closeModal}>
+            OK
+          </button>
         </div>
       );
     } else if (!user) {
       resModal = (
         <div className='modal'>
-          <div className='closeRestoraunt' onClick={this.closeModal3}>
-            +
-          </div>
-          <p>You need to be sign in to make reservation.</p>
-          <button onClick={this.closeModal3}>OK</button>
+          <p className='modalP'>
+            Morate se prijaviti kako bi mogli napraviti rezervaciju.
+          </p>
+          <button className='btnModul' onClick={this.closeModal3}>
+            OK
+          </button>
         </div>
       );
       favModal = (
         <div className='modal'>
-          <div className='closeRestoraunt' onClick={this.closeModal1}>
-            +
-          </div>
-          <p>You need to be sign in to add restoraunt in favorite.</p>
-          <button onClick={this.closeModal1}>OK</button>
+          <p className='modalP'>
+            Morate se prijaviti kako bi mogli dodati restoran u favorite.
+          </p>
+          <button className='btnModul' onClick={this.closeModal1}>
+            OK
+          </button>
+        </div>
+      );
+      modalContent = (
+        <div className='modal'>
+          <p className='modalP'>
+            Morate se prijaviti kako bi mogli ocijeniti restoran.
+          </p>
+          <button className='btnModul' onClick={this.closeModal}>
+            OK
+          </button>
+        </div>
+      );
+    } else {
+      favModal = (
+        <div className='modal'>
+          <p className='modalP'>HELLLLOOOOOO</p>
+          <button className='btnModul' onClick={this.closeModal1}>
+            OK
+          </button>
         </div>
       );
       modalContent = (
@@ -490,37 +637,72 @@ class Restoraunt extends Component {
           <div className='closeRestoraunt' onClick={this.closeModal}>
             +
           </div>
-          <p>You need to be sign in to add grade.</p>
-          <button onClick={this.closeModal}>OK</button>
-        </div>
-      );
-    } else {
-      modalContent = (
-        <div className='modal'>
           <div
             style={{
               width: '90%',
               display: 'flex',
               flexDirection: 'column',
               margin: '0 auto',
+              padding: '0 10px',
             }}
           >
-            <div className='closeRestoraunt' onClick={this.closeModal}>
-              +
-            </div>
-            <div>{stars2}</div>
+            {stars2}
             <label>
-              <input
-                className='gradeInput'
+              <textarea
+                value={this.state.Comment}
+                onChange={this.handleChange}
+                name='Comment'
+                className='userInput'
+                rows='9'
+                cols='50'
+                placeholder='Enter your comment'
+                style={{
+                  height: '70px',
+                  resize: 'none',
+                  paddingRight: '15px',
+                  paddingTop: '10px',
+                }}
+              ></textarea>
+              {/* <input
+                className='userInput'
                 type='text'
                 placeholder='Enter your comment'
                 name='Comment'
                 value={this.state.Comment}
                 onChange={this.handleChange}
-              />
+              /> */}
             </label>
-            <button onClick={() => this.onSubmit(resto)}>OK</button>
+            {this.state.msg ? (
+              <div className='errBox' style={{ marginTop: '20px' }}>
+                <p style={{ color: 'red' }}>{this.state.msg}</p>
+              </div>
+            ) : null}
+            <button className='btnModul' onClick={() => this.onSubmit(resto)}>
+              OK
+            </button>
           </div>
+        </div>
+      );
+      resModal = (
+        <div className='modal'>
+          <p className='modalP'>heloooooooooooo</p>
+          <button className='btnModul' onClick={this.closeModal3}>
+            OK
+          </button>
+        </div>
+      );
+    }
+    let infoSelectedTable = (
+      <div className='infoS'>
+        <p>Broj stolova: 0</p>
+        <p>Broj ljudi: 0</p>
+      </div>
+    );
+    if (this.state.nizStolova.length > 0) {
+      infoSelectedTable = (
+        <div className='infoS'>
+          <p>Broj stolova: {this.state.nizStolova.length}</p>
+          <p>Broj ljudi: {this.state.brLjudi}</p>
         </div>
       );
     }
@@ -529,7 +711,9 @@ class Restoraunt extends Component {
       <div className='containerEx'>
         <div className='restourantName'>
           <h1>{resto.Name}</h1>
-          {this.props.user && this.props.user.restoraunt ? null : (
+
+          {this.props.user &&
+          (this.props.user.restoraunt || this.props.user.admin) ? null : (
             <FontAwesomeIcon
               icon={faHeart}
               className={
@@ -540,39 +724,6 @@ class Restoraunt extends Component {
           )}
         </div>
         <div className='restourantInf'>
-          <div className='restourantText'>
-            <div className='restourantInfo'>
-              <div className='restourantInfo1'>
-                {' '}
-                <FontAwesomeIcon
-                  icon={faMapMarkerAlt}
-                  style={{ marginRight: '5px', marginTop: '2px' }}
-                />
-                <p>{resto.Location}</p>
-              </div>
-              <div className='restourantInfo1'>
-                <FontAwesomeIcon
-                  icon={faUtensils}
-                  style={{ marginRight: '5px', marginTop: '2px' }}
-                />
-                <p>{resto.Type}</p>
-              </div>
-              <div className='restourantInfo1'>
-                <FontAwesomeIcon
-                  icon={faClock}
-                  style={{ marginRight: '5px', marginTop: '2px' }}
-                />
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <p>{resto.StartingHour}</p>
-                  <p>-</p>
-                  <p>{resto.EndingHour}</p>
-                </div>
-              </div>
-            </div>
-            <div className='restourantDesc'>
-              <p>{resto.Description}</p>
-            </div>
-          </div>
           <div className='restourantImages'>
             <img
               src={'http://localhost:3000/uploads/' + resto.ImgName}
@@ -580,45 +731,102 @@ class Restoraunt extends Component {
               className='restourantImg'
             />
           </div>
-        </div>
-        <div className='recenzija'>
-          <h1>{gradesObj.grade}</h1>
-          <h1>{gradesObj.jedan}</h1>
-          <h1>{gradesObj.dva}</h1>
-          <h1>{gradesObj.tri}</h1>
-          <h1>{gradesObj.cetiri}</h1>
-          <h1>{gradesObj.pet}</h1>
-          <div>{stars}</div>
-        </div>
-        <div className='recenzija'>
-          {this.state.didGrade ? <h1>{gradesObj.gradeComment.Grade}</h1> : null}
-          {this.state.didGrade ? (
-            <h1>{gradesObj.gradeComment.Comment}</h1>
-          ) : null}
-          <button onClick={this.openModal2}>See all</button>
-        </div>
-        <div className='restourantName' style={{ marginTop: '30px' }}>
-          <h2>Floor plan</h2>
+          <div className='restourantText'>
+            <div className='restourantInfo'>
+              <div className='restourantInfo2'>
+                <div className='restourantInfo1'>
+                  {' '}
+                  <FontAwesomeIcon
+                    icon={faMapMarkerAlt}
+                    style={{ marginRight: '5px', marginTop: '2px' }}
+                  />
+                  <p>{resto.Location}</p>
+                </div>
+                <div className='restourantInfo1'>
+                  <FontAwesomeIcon
+                    icon={faUtensils}
+                    style={{ marginRight: '5px', marginTop: '2px' }}
+                  />
+                  <p>{resto.Type}</p>
+                </div>
+                <div className='restourantInfo1'>
+                  <FontAwesomeIcon
+                    icon={faClock}
+                    style={{ marginRight: '5px', marginTop: '2px' }}
+                  />
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <p>{resto.StartingHour}:00</p>
+                    <p>-</p>
+                    <p>{resto.EndingHour}:00</p>
+                  </div>
+                </div>
+              </div>
+              <div className='restourantInfo2'>
+                <div className='restourantInfo1'>
+                  <FontAwesomeIcon
+                    icon={faEnvelope}
+                    style={{ marginRight: '5px', marginTop: '2px' }}
+                  />
+                  <p>{resto.Email}</p>
+                </div>
+                <div className='restourantInfo1'>
+                  <FontAwesomeIcon
+                    icon={faPhone}
+                    style={{ marginRight: '5px', marginTop: '2px' }}
+                  />
+                  <p>{resto.Phone}</p>
+                </div>
+              </div>
+            </div>
+            <div className='restourantDesc'>
+              <p>{resto.Description}</p>
+              <div className='restourantDesc1'>
+                <p style={{ marginRight: '10px' }}>
+                  Za više informacija o restoranu -{' '}
+                </p>
+                <a href={resto.RestorauntPage}>{resto.RestorauntPage}</a>
+              </div>
+            </div>
+          </div>
         </div>
         <div className='bossDiv'>
           <div className='reserveInfo'>
-            <DatePicker
-              restoraunt={resto}
-              handleDayPickerChange={this.handleDayPickerChange}
-              handleDayPickerChange1={this.handleDayPickerChange1}
-              datum={this.state.startDate}
-              vrime={this.state.startDate1}
-            />
+            <div className='db'>
+              <DatePicker
+                restoraunt={resto}
+                handleDayPickerChange={this.handleDayPickerChange}
+                handleDayPickerChange1={this.handleDayPickerChange1}
+                datum={this.state.startDate}
+                vrime={this.state.startDate1}
+              />
+            </div>
+
             <label>
-              <input
+              <textarea
+                value={this.state.Comment1}
+                onChange={this.handleChange}
+                name='Comment1'
+                className='commentInput'
+                rows='9'
+                cols='50'
+                placeholder='Enter your comment'
+                style={{
+                  height: '70px',
+                  resize: 'none',
+                  paddingRight: '15px',
+                  paddingTop: '10px',
+                }}
+              ></textarea>
+              {/* <input
                 className='commentInput'
                 type='text'
                 placeholder='Enter your comment'
                 name='Comment1'
                 value={this.state.Comment1}
                 onChange={this.handleChange}
-              />
+              /> */}
             </label>
+            {infoSelectedTable}
           </div>
           <div className='floorPlanContainerEx'>
             <FloorPlanExample
@@ -629,6 +837,8 @@ class Restoraunt extends Component {
               datum1={this.state.startDate1}
               handleCount={this.handleCount}
               count={this.state.count}
+              d={true}
+              handleDeleteTableID={this.handleDeleteTableID}
             ></FloorPlanExample>
           </div>
         </div>
@@ -637,6 +847,143 @@ class Restoraunt extends Component {
           onClick={() => this.handleReservation(resto)}
         >
           RESERVE
+        </div>
+        {this.state.msg1 ? (
+          <div
+            className='errBox'
+            style={{
+              width: '40%',
+              margin: '20px auto 0px auto',
+              padding: '5px 10px',
+            }}
+          >
+            <p style={{ color: 'red' }}>{this.state.msg1}</p>
+          </div>
+        ) : null}
+        <div className='recenzija'>
+          <div className='ocjenite'>
+            {this.state.didGrade ? (
+              <div className='r4'>
+                <div className='r5'>
+                  <h1>Vaša recenzija</h1>
+                </div>
+                <div className='r1'>
+                  <div className='r2'>
+                    <img
+                      src='http://localhost:3000/images/tim.jpg'
+                      alt=''
+                      className='rImage'
+                    />
+                  </div>
+
+                  {this.props.user && this.props.user.customer ? (
+                    <h3>{this.props.user.customer.Name}</h3>
+                  ) : null}
+                </div>
+                <div className='r3'>
+                  <div>{stars4}</div>
+                  <p>{gradesObj.gradeComment.Comment}</p>
+                </div>
+              </div>
+            ) : (
+              <React.Fragment>
+                <h2>Ocijenite restoran</h2>
+                <div className='starsOcjena'>{stars3}</div>
+              </React.Fragment>
+            )}
+          </div>
+          <div className='truntaOcjenaCon'>
+            <div className='truntaOcjena'>
+              <h1>{gradesObj.grade}</h1>
+              <div>{stars1}</div>
+              <h1>{gradesObj.sum}</h1>
+              <button className='btnSeeAll' onClick={this.openModal2}>
+                Pogledaj sve
+              </button>
+            </div>
+            <div className='numOfOcijena'>
+              <div className='postotak'>
+                <h3>5 </h3>
+                <div className='posBar'>
+                  <div
+                    style={{
+                      height: '100%',
+                      width:
+                        gradesObj.pet === 0
+                          ? '0px'
+                          : (gradesObj.pet / gradesObj.sum) * 100 + '%',
+                      backgroundColor: 'rgb(3, 168, 124)',
+                      borderRadius: '30px',
+                    }}
+                  ></div>
+                </div>
+              </div>
+              <div className='postotak'>
+                <h3>4 </h3>
+                <div className='posBar'>
+                  <div
+                    style={{
+                      height: '100%',
+                      width:
+                        gradesObj.cetiri === 0
+                          ? '0px'
+                          : (gradesObj.cetiri / gradesObj.sum) * 100 + '%',
+                      backgroundColor: 'rgb(3, 168, 124)',
+                      borderRadius: '30px',
+                    }}
+                  ></div>
+                </div>
+              </div>
+              <div className='postotak'>
+                <h3>3 </h3>
+                <div className='posBar'>
+                  <div
+                    style={{
+                      height: '100%',
+                      width:
+                        gradesObj.tri === 0
+                          ? '0px'
+                          : (gradesObj.tri / gradesObj.sum) * 100 + '%',
+                      backgroundColor: 'rgb(3, 168, 124)',
+                      borderRadius: '30px',
+                    }}
+                  ></div>
+                </div>
+              </div>
+              <div className='postotak'>
+                <h3>2 </h3>
+                <div className='posBar'>
+                  <div
+                    style={{
+                      height: '100%',
+                      width:
+                        gradesObj.dva === 0
+                          ? '0px'
+                          : (gradesObj.dva / gradesObj.sum) * 100 + '%',
+                      backgroundColor: 'rgb(3, 168, 124)',
+                      borderRadius: '30px',
+                    }}
+                  ></div>
+                </div>
+              </div>
+              <div className='postotak'>
+                <h3>1 </h3>
+                <div className='posBar'>
+                  <div
+                    style={{
+                      height: '100%',
+                      width:
+                        gradesObj.jedan === 0
+                          ? '0px'
+                          : (gradesObj.jedan / gradesObj.sum) * 100 + '%',
+                      backgroundColor: 'rgb(3, 168, 124)',
+                      borderRadius: '30px',
+                    }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <Popup
           open={this.state.isOpen}
@@ -657,15 +1004,27 @@ class Restoraunt extends Component {
           closeOnDocumentClick
           onClose={this.closeModal2}
         >
-          <div className='modal'>
-            <div className='closeRestoraunt' onClick={this.closeModal2}>
-              +
+          <div
+            className='modal'
+            style={{
+              height: '500px',
+              overflow: 'scroll',
+              overflowX: 'hidden',
+              overflowY: 'auto',
+              padding: '10px 10px',
+            }}
+          >
+            <div className='r5' style={{ marginBottom: '20px' }}>
+              <h1>Sve recenzije</h1>
             </div>
             {gcList}
-            <button onClick={this.closeModal2}>OK</button>
+            <button className='btnModul' onClick={this.closeModal2}>
+              OK
+            </button>
           </div>
         </Popup>
         <Popup
+          style={{ width: '500px' }}
           open={this.state.isOpen3}
           closeOnDocumentClick
           onClose={this.closeModal3}
@@ -678,11 +1037,12 @@ class Restoraunt extends Component {
           onClose={this.closeModal4}
         >
           <div className='modal'>
-            <div className='closeRestoraunt' onClick={this.closeModal4}>
-              +
-            </div>
-            <p>Sorry if u want reserve more than 2 tables call restoraunt</p>
-            <button onClick={this.closeModal4}>OK</button>
+            <p className='modalP'>
+              Ako želite rezervirati više od 2 stola morate nazvati restoran.
+            </p>
+            <button className='btnModul' onClick={this.closeModal4}>
+              OK
+            </button>
           </div>
         </Popup>
       </div>
@@ -693,6 +1053,7 @@ class Restoraunt extends Component {
 const mapStateToProps = (state) => ({
   restoraunts: state.floorPlan.restoraunts,
   grades: state.floorPlan.grades,
+  customers: state.floorPlan.customers,
   user: state.auth.user,
 });
 
@@ -702,4 +1063,6 @@ export default connect(mapStateToProps, {
   updateFavorite,
   addReservation,
   getReservation,
+  getCustomers,
+  turnValidatedBy,
 })(withRouter(Restoraunt));

@@ -21,6 +21,9 @@ class FloorPlanCreating extends Component {
     super(props);
     this.boss = React.createRef();
     this.state = {
+      msg: '',
+      msg1: null,
+      msg2: null,
       floorPlanList: [],
       deleteThisTables: 'not selected',
       sizeWidth: 0,
@@ -30,20 +33,20 @@ class FloorPlanCreating extends Component {
       isOpen2: false,
       xCoord: 0,
       yCoord: 0,
-      csSize: 0,
-      reSizeX: 0,
-      chReSizeY: '0',
-      chReSizeX: '0',
+      csSize: 'Veličina stola',
+      reSizeX: 'Dužina stola',
+      chReSizeY: '',
+      chReSizeX: '',
       floorPlanImageName: '',
       floorPlanImage: '',
-      NOP: 0,
-      chNOP: '0',
-      reSizeY: 0,
+      NOP: 'Maksimalan broj ljudi',
+      chNOP: '',
+      reSizeY: 'Širina stola',
       tempId: '0',
       tempType: '',
       reOri: '',
       chReOri: '',
-      chReSize: '0',
+      chReSize: '',
       isGridOn: false,
       scale: 0,
       tableExampleSize: 50,
@@ -58,6 +61,9 @@ class FloorPlanCreating extends Component {
     };
   }
 
+  componentDidMount() {
+    window.scrollTo(0, 0);
+  }
   componentWillUnmount() {
     URL.revokeObjectURL(this.state.file);
   }
@@ -68,6 +74,9 @@ class FloorPlanCreating extends Component {
       prevState.scale !== this.state.scale
     ) {
       let size = this.state.sizeHeight * this.state.scale;
+      console.log(size);
+      console.log(this.state.sizeHeight);
+      console.log(this.state.scale);
       this.setState({
         currentFloorPlanHeight: `${size}px`,
         heightForChange: size,
@@ -147,6 +156,7 @@ class FloorPlanCreating extends Component {
           return table;
         }),
       });
+      this.closeModal();
     } else if (
       this.state.tempType === 'rectangle' ||
       this.state.tempType === 'elipse'
@@ -194,62 +204,162 @@ class FloorPlanCreating extends Component {
         }),
       });
     }
+    this.closeModal1();
   };
   // Close pop up modal
   closeModal = () => {
-    this.setState({ isOpen: false });
-    this.convertToMainScale();
+    this.setState({
+      isOpen: false,
+      NOP: 'Maksimalan broj ljudi',
+      csSize: 'Veličina stola',
+      msg1: null,
+    });
+  };
+  closeModaland = () => {
+    if (
+      this.state.NOP === 'Maksimalan broj ljudi' ||
+      this.state.csSize === 'Veličina stola' ||
+      this.state.csSize.match(/^[0-9]*$/) == null ||
+      this.state.NOP.match(/^[0-9]*$/) == null
+    ) {
+      this.setState({
+        msg1: 'Niste unijeli sva polja ispravno',
+      });
+    } else {
+      this.setState({ isOpen: false });
+      this.convertToMainScale();
+    }
   };
   closeModal1 = () => {
-    this.setState({ isOpen1: false });
-    this.convertToMainScale();
+    this.setState({
+      isOpen1: false,
+      NOP: 'Maksimalan broj ljudi',
+      reSizeY: 'Širina stola',
+      reSizeX: 'Dužina stola',
+      reOri: '',
+      msg1: null,
+    });
+  };
+  closeModal1and = () => {
+    if (
+      this.state.NOP === 'Maksimalan broj ljudi' ||
+      this.state.reSizeY === 'Širina stola' ||
+      this.state.reSizeY.match(/^[0-9]*$/) == null ||
+      this.state.NOP.match(/^[0-9]*$/) == null ||
+      this.state.reSizeX === 'Dužina stola' ||
+      this.state.reSizeX.match(/^[0-9]*$/) == null
+    ) {
+      this.setState({
+        msg1: 'Niste unijeli sva polja ispravno',
+      });
+    } else if (this.state.reOri === '') {
+      this.setState({
+        msg1: 'Niste označili orijentaciju stola',
+      });
+    } else {
+      this.setState({ isOpen1: false });
+      this.convertToMainScale();
+    }
   };
   closeModal2 = () => {
     this.setState({
       isOpen2: false,
-      floorPlanList: this.state.floorPlanList.map((table) => {
-        if (
-          this.state.infoTable._id === table._id &&
-          (table.TableType === 'circle' || table.TableType === 'square')
-        ) {
-          if (this.state.chReSize !== '0' && this.state.chReSize !== '') {
-            table.SizeX = this.state.chReSize * this.state.scale;
-            table.realSize = this.state.chReSize;
-          }
-          if (this.state.chNOP !== '0' && this.state.chReSize !== '') {
-            table.NumberOfPeople = this.state.chNOP;
-          }
-        } else if (
-          this.state.infoTable._id === table._id &&
-          (table.TableType === 'rectangle' || table.TableType === 'elipse')
-        ) {
-          if (this.state.chNOP !== '0' && this.state.chReSize !== '') {
-            table.NumberOfPeople = this.state.chNOP;
-          }
-          if (this.state.chReSizeX !== '0' && this.state.chReSizeX !== '') {
-            table.SizeX = this.state.chReSizeX * this.state.scale;
-            table.realSizeX = this.state.chReSizeX;
-          }
-          if (this.state.chReSizeY !== '0' && this.state.chReSizeY !== '') {
-            table.SizeY = this.state.chReSizeY * this.state.scale;
-            table.realSizeY = this.state.chReSizeY;
-          }
-        }
-
-        return table;
-      }),
+      chReSize: '',
+      chNOP: '',
+      chReSizeX: '',
+      chReSizeY: '',
+      chReOri: '',
+      msg2: null,
     });
+  };
 
-    this.restart();
+  closeModal2and1 = () => {
+    if (
+      this.state.chNOP === '' ||
+      this.state.chReSize === '' ||
+      this.state.chReSize.match(/^[0-9]*$/) == null ||
+      this.state.chNOP.match(/^[0-9]*$/) == null
+    ) {
+      this.setState({
+        msg2: 'Niste unijeli sva polja ispravno',
+      });
+    } else {
+      this.setState({
+        isOpen2: false,
+        floorPlanList: this.state.floorPlanList.map((table) => {
+          if (
+            this.state.infoTable._id === table._id &&
+            (table.TableType === 'circle' || table.TableType === 'square')
+          ) {
+            if (this.state.chReSize !== '0' && this.state.chReSize !== '') {
+              table.SizeX = this.state.chReSize * this.state.scale;
+              table.realSize = this.state.chReSize;
+            }
+            if (this.state.chNOP !== '0' && this.state.chReSize !== '') {
+              table.NumberOfPeople = this.state.chNOP;
+            }
+          }
+          return table;
+        }),
+      });
+      this.restart();
+    }
+  };
+  closeModal2and2 = () => {
+    if (
+      this.state.chNOP === '' ||
+      this.state.chReSizeY === '' ||
+      this.state.chReSizeY.match(/^[0-9]*$/) == null ||
+      this.state.chReSizeX === '' ||
+      this.state.chReSizeX.match(/^[0-9]*$/) == null ||
+      this.state.chNOP.match(/^[0-9]*$/) == null
+    ) {
+      this.setState({
+        msg2: 'Niste unijeli sva polja ispravno',
+      });
+    } else if (this.state.chReOri === '') {
+      this.setState({
+        msg2: 'Niste označili orijentaciju stola',
+      });
+    } else {
+      this.setState({
+        isOpen2: false,
+        floorPlanList: this.state.floorPlanList.map((table) => {
+          if (
+            this.state.infoTable._id === table._id &&
+            (table.TableType === 'rectangle' || table.TableType === 'elipse')
+          ) {
+            if (this.state.chNOP !== '0' && this.state.chReSize !== '') {
+              table.NumberOfPeople = this.state.chNOP;
+            }
+            if (this.state.chReSizeX !== '0' && this.state.chReSizeX !== '') {
+              table.SizeX = this.state.chReSizeX * this.state.scale;
+              table.realSizeX = this.state.chReSizeX;
+            }
+            if (this.state.chReSizeY !== '0' && this.state.chReSizeY !== '') {
+              table.SizeY = this.state.chReSizeY * this.state.scale;
+              table.realSizeY = this.state.chReSizeY;
+            }
+            if (this.state.chReOri !== '') {
+              table.Orientation = this.state.chReOri;
+            }
+          }
+
+          return table;
+        }),
+      });
+      this.restart();
+    }
   };
 
   restart = () => {
     this.setState({
-      chReSizeY: '0',
-      chReSizeX: '0',
-      chNOP: '0',
-      chReSize: '0',
+      chReSizeY: '',
+      chReSizeX: '',
+      chNOP: '',
+      chReSize: '',
       chReOri: '',
+      msg2: null,
     });
   };
   //Handle input of table size
@@ -258,17 +368,17 @@ class FloorPlanCreating extends Component {
   };
 
   handleChangeSize = (e) => {
-    let num = parseInt(e.target.value);
-    this.setState({ [e.target.name]: num });
+    // let num = parseInt(e.target.value);
+    this.setState({ [e.target.name]: e.target.value });
   };
   // Handle pop up modal submit and activate closeModal()
   handleSubmit = (e) => {
     e.preventDefault();
-    this.closeModal();
+    this.closeModaland();
   };
   handleSubmit1 = (e) => {
     e.preventDefault();
-    this.closeModal1();
+    this.closeModal1and();
   };
   //Calucalte coordinates of the places where we drop table
   calculateYX = (finalPosition, initialPosition) => {
@@ -304,6 +414,7 @@ class FloorPlanCreating extends Component {
           tempId: table._id,
           tempType: table.TableType,
           csSize: table.realSize,
+          NOP: table.NumberOfPeople,
           xCoord: centerX,
           yCoord: centerY,
         });
@@ -355,6 +466,8 @@ class FloorPlanCreating extends Component {
           tempType: table.TableType,
           reSizeX: table.realSizeX,
           reSizeY: table.realSizeY,
+          NOP: table.NumberOfPeople,
+          reOri: table.Orientation,
           xCoord: centerX,
           yCoord: centerY,
         });
@@ -400,7 +513,6 @@ class FloorPlanCreating extends Component {
     });
   };
   handleFloorPlanResize = (width, height) => {
-    console.log(width, height);
     this.setState({
       scale: width / this.state.sizeWidth,
       widthForChange: width,
@@ -557,9 +669,25 @@ class FloorPlanCreating extends Component {
   };
 
   nextStep = () => {
-    this.setState({
-      step: 1,
-    });
+    if (
+      this.state.sizeHeight === 0 ||
+      this.state.sizeWidth === 0 ||
+      this.state.sizeWidth.match(/^[0-9]*$/) == null ||
+      this.state.sizeHeight.match(/^[0-9]*$/) == null
+    ) {
+      this.setState({
+        msg: 'Niste unijeli obe dimenzije restorana pravilno',
+      });
+    } else if (this.state.file === '') {
+      this.setState({
+        msg: 'Niste unijeli tlocrt restorana',
+      });
+    } else {
+      this.setState({
+        step: 1,
+        msg: '',
+      });
+    }
   };
 
   handleOriation = (x) => {
@@ -595,7 +723,11 @@ class FloorPlanCreating extends Component {
     if (this.state.deleteThisTables === 'not selected') {
       infoSelectedTable = (
         <React.Fragment>
-          <p>Select one table to see his info</p>
+          <img
+            className='imgInfoM'
+            src='http://localhost:3000/images/logo.png'
+            alt='logo'
+          ></img>
         </React.Fragment>
       );
     } else {
@@ -605,11 +737,15 @@ class FloorPlanCreating extends Component {
       ) {
         infoSelectedTable = (
           <div>
-            <p>ID: {this.state.infoTable._id}</p>
-            <p>Type: {this.state.infoTable.TableType}</p>
-            <p>Size: {this.state.infoTable.realSize}</p>
+            <p>TIP: {this.state.infoTable.TableType}</p>
+            <p>VELIČINA: {this.state.infoTable.realSize}</p>
             <p>NOP: {this.state.infoTable.NumberOfPeople}</p>
-            <button onClick={() => this.handleBtnChangeTable()}>Change</button>
+            <button
+              className='changeBtn'
+              onClick={() => this.handleBtnChangeTable()}
+            >
+              PROMIJENI
+            </button>
           </div>
         );
 
@@ -618,20 +754,35 @@ class FloorPlanCreating extends Component {
             <div className='close' onClick={this.closeModal2}>
               +
             </div>
-            <p>ID: {this.state.infoTable._id}</p>
             <input
+              style={{ marginTop: '45px' }}
               name='chReSize'
               type='text'
+              className='userInput'
               placeholder={this.state.infoTable.realSize}
               onChange={this.handleSizeChange}
             />
             <input
               name='chNOP'
               type='text'
+              className='userInput'
               placeholder={this.state.infoTable.NumberOfPeople}
               onChange={this.handleSizeChange}
             />
-            <button onClick={this.closeModal2}>OK</button>
+            <button
+              style={{ width: '30%', margin: '0 35%', padding: '5px' }}
+              onClick={this.closeModal2and1}
+            >
+              OK
+            </button>
+            {this.state.msg2 ? (
+              <div
+                className='errBox'
+                style={{ marginBottom: '20px', marginTop: '20px' }}
+              >
+                <p style={{ color: 'red' }}>{this.state.msg2}</p>
+              </div>
+            ) : null}
           </div>
         );
       } else if (
@@ -640,12 +791,16 @@ class FloorPlanCreating extends Component {
       ) {
         infoSelectedTable = (
           <div>
-            <p>ID: {this.state.infoTable._id}</p>
-            <p>Type: {this.state.infoTable.TableType}</p>
-            <p>Width: {this.state.infoTable.realSizeX}</p>
-            <p>Height: {this.state.infoTable.realSizeY}</p>
+            <p>TIP: {this.state.infoTable.TableType}</p>
+            <p>ŠIRINA: {this.state.infoTable.realSizeX}</p>
+            <p>VISINA: {this.state.infoTable.realSizeY}</p>
             <p>NOP: {this.state.infoTable.NumberOfPeople}</p>
-            <button onClick={() => this.handleBtnChangeTable()}>Change</button>
+            <button
+              className='changeBtn'
+              onClick={() => this.handleBtnChangeTable()}
+            >
+              PROMIJENI
+            </button>
           </div>
         );
 
@@ -655,7 +810,9 @@ class FloorPlanCreating extends Component {
               +
             </div>
             <input
+              style={{ marginTop: '45px' }}
               name='chReSizeX'
+              className='userInput'
               type='text'
               placeholder={this.state.infoTable.realSizeX}
               onChange={this.handleSizeChange}
@@ -663,20 +820,51 @@ class FloorPlanCreating extends Component {
             <input
               name='chReSizeY'
               type='text'
+              className='userInput'
               placeholder={this.state.infoTable.realSizeY}
               onChange={this.handleSizeChange}
             />
             <input
               name='chNOP'
               type='text'
+              className='userInput'
               placeholder={this.state.infoTable.NumberOfPeople}
               onChange={this.handleSizeChange}
             />
-            <button onClick={() => this.chHandleOriation('v')}>
+            <button
+              style={{
+                width: '30%',
+                margin: '0px 5px 0px 3px',
+                padding: '5px',
+              }}
+              onClick={() => this.chHandleOriation('v')}
+            >
               VODORAVNO
             </button>
-            <button onClick={() => this.chHandleOriation('o')}>OKOMITO</button>
-            <button onClick={this.closeModal2}>OK</button>
+            <button
+              style={{ width: '30%', margin: '0 5px', padding: '5px' }}
+              onClick={() => this.chHandleOriation('o')}
+            >
+              OKOMITO
+            </button>
+            <button
+              style={{
+                width: '30%',
+                margin: '10px 35% 0px 35%',
+                padding: '5px',
+              }}
+              onClick={this.closeModal2and2}
+            >
+              OK
+            </button>
+            {this.state.msg2 ? (
+              <div
+                className='errBox'
+                style={{ marginBottom: '20px', marginTop: '20px' }}
+              >
+                <p style={{ color: 'red' }}>{this.state.msg2}</p>
+              </div>
+            ) : null}
           </div>
         );
       } else {
@@ -706,23 +894,17 @@ class FloorPlanCreating extends Component {
         <div
           style={{
             width: '100%',
-            height: '600px',
+            height: '400px',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            flexDirection: 'column',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              padding: '10px',
-              width: '40%',
-            }}
-          >
+          <div className='contStep0'>
             <label>
               <div className='upload-btn-wrapper'>
-                <button className='btn'>Upload a floor plan</button>
+                <button className='btn'>TLOCRT RESTORANA</button>
 
                 <input
                   type='file'
@@ -741,28 +923,35 @@ class FloorPlanCreating extends Component {
                 justifyContent: 'space-evenly',
               }}
             >
-              <label>
+              <label style={{ width: '80%' }}>
                 <input
                   name='sizeWidth'
                   type='text'
-                  placeholder='width of restourant..'
+                  placeholder='Dužina restorana'
                   className='userInputSize'
                   onChange={this.handleChangeSize}
                 />
               </label>
-              <p>X</p>
-              <label>
+              <p style={{ margin: '5px 5px 0px 5px' }}>X</p>
+              <label style={{ width: '80%' }}>
                 <input
                   name='sizeHeight'
                   type='text'
-                  placeholder='height of restourant..'
+                  placeholder='Širina restorana'
                   className='userInputSize'
                   onChange={this.handleChangeSize}
                 />
               </label>
             </div>
           </div>
-          <button onClick={() => this.nextStep()}>NEXT</button>
+          <button className='regBtn' onClick={() => this.nextStep()}>
+            SLJEDEĆI KORAK
+          </button>
+          {this.state.msg ? (
+            <div className='errBox1'>
+              <p style={{ color: 'red' }}>{this.state.msg}</p>
+            </div>
+          ) : null}
         </div>
       );
     } else if (this.state.step === 1) {
@@ -777,9 +966,8 @@ class FloorPlanCreating extends Component {
                 backgroundImage: `url(${this.state.file})`,
                 backgroundRepeat: ' no-repeat',
                 backgroundPosition: 'center',
-                backgroundSize: '100% auto',
+                backgroundSize: 'contain',
                 height: this.state.currentFloorPlanHeight,
-                width: '90%',
               }}
             >
               <FloorPlan
@@ -798,14 +986,14 @@ class FloorPlanCreating extends Component {
           </div>
           <div className='containerM'>
             <button className='regBtn' onClick={this.handleGrid}>
-              Grid on/off
+              GRID on/off
             </button>
             <Link to='/'>
               <button
                 className='regBtn'
                 onClick={() => this.handleSaveFloorPLan()}
               >
-                Save floor plan
+                SPREMI
               </button>
             </Link>
             <button
@@ -813,7 +1001,7 @@ class FloorPlanCreating extends Component {
               disabled={this.state.btnDisabled}
               onClick={() => this.handleDeleteTables()}
             >
-              Delete tables
+              IZBRIŠI STOL
             </button>
           </div>
         </React.Fragment>
@@ -825,7 +1013,13 @@ class FloorPlanCreating extends Component {
           <FontAwesomeIcon
             onClick={this.props.history.goBack}
             icon={faArrowLeft}
-            style={{ marginRight: '5px', marginTop: '2px', cursor: 'pointer' }}
+            style={{
+              marginRight: '5px',
+              marginTop: '2px',
+              cursor: 'pointer',
+              color: 'rgb(3, 168, 124)',
+            }}
+            size='lg'
           />
         </div>
         {fpc}
@@ -839,18 +1033,40 @@ class FloorPlanCreating extends Component {
               +
             </div>
             <input
+              style={{ marginTop: '45px' }}
               name='csSize'
               type='text'
-              placeholder='Size x..'
+              placeholder={this.state.csSize}
+              className='userInput'
+              value={
+                this.state.csSize === 'Veličina stola' ? '' : this.state.csSize
+              }
               onChange={this.handleSizeChange}
             />
             <input
               name='NOP'
               type='text'
-              placeholder='Number of people'
+              className='userInput'
+              placeholder='Maksimalan broj ljudi'
               onChange={this.handleSizeChange}
+              value={
+                this.state.NOP === 'Maksimalan broj ljudi' ? '' : this.state.NOP
+              }
             />
-            <button onClick={this.handleSubmit}>OK</button>
+            <button
+              style={{ width: '30%', margin: '0 35%', padding: '5px' }}
+              onClick={this.handleSubmit}
+            >
+              OK
+            </button>
+            {this.state.msg1 ? (
+              <div
+                className='errBox'
+                style={{ marginBottom: '20px', marginTop: '20px' }}
+              >
+                <p style={{ color: 'red' }}>{this.state.msg1}</p>
+              </div>
+            ) : null}
           </div>
         </Popup>
         <Popup
@@ -863,26 +1079,70 @@ class FloorPlanCreating extends Component {
               +
             </div>
             <input
+              style={{ marginTop: '45px' }}
               name='reSizeX'
               type='text'
-              placeholder='Size x..'
+              placeholder={this.state.reSizeX}
+              className='userInput'
+              value={
+                this.state.reSizeX === 'Dužina stola' ? '' : this.state.reSizeX
+              }
               onChange={this.handleSizeChange}
             />
             <input
               name='reSizeY'
               type='text'
-              placeholder='Size y..'
+              placeholder={this.state.reSizeY}
+              className='userInput'
+              value={
+                this.state.reSizeY === 'Širina stola' ? '' : this.state.reSizeY
+              }
               onChange={this.handleSizeChange}
             />
             <input
               name='NOP'
               type='text'
-              placeholder='Number of people'
+              placeholder='Maksimalan broj ljudi'
+              className='userInput'
+              value={
+                this.state.NOP === 'Maksimalan broj ljudi' ? '' : this.state.NOP
+              }
               onChange={this.handleSizeChange}
             />
-            <button onClick={() => this.handleOriation('v')}>VODORAVNO</button>
-            <button onClick={() => this.handleOriation('o')}>OKOMITO</button>
-            <button onClick={this.handleSubmit1}>OK</button>
+            <button
+              style={{
+                width: '30%',
+                margin: '0px 5px 0px 3px',
+                padding: '5px',
+              }}
+              onClick={() => this.handleOriation('v')}
+            >
+              VODORAVNO
+            </button>
+            <button
+              style={{ width: '30%', margin: '0 5px', padding: '5px' }}
+              onClick={() => this.handleOriation('o')}
+            >
+              OKOMITO
+            </button>
+            <button
+              style={{
+                width: '30%',
+                margin: '10px 35% 0px 35%',
+                padding: '5px',
+              }}
+              onClick={this.handleSubmit1}
+            >
+              OK
+            </button>
+            {this.state.msg1 ? (
+              <div
+                className='errBox'
+                style={{ marginBottom: '20px', marginTop: '20px' }}
+              >
+                <p style={{ color: 'red' }}>{this.state.msg1}</p>
+              </div>
+            ) : null}
           </div>
         </Popup>
         <Popup

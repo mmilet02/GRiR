@@ -6,7 +6,7 @@
   justify-content: space-evenly;
 }
 
-.userProfileCustomerInfoCon {
+.userProfileCustomerInfoConC {
   width: 55%;
   display: flex;
   flex-direction: column;
@@ -14,14 +14,14 @@
   align-items: center;
 }
 
-.userProfileCustomerInfo {
+.userProfileCustomerInfoC {
   width: 50%;
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
 
-.userProfileCustomerImgCon {
+.userProfileCustomerImgConc {
   width: 40%;
   height: auto;
 }

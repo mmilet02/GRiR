@@ -85,9 +85,9 @@ function DraggTableTypesFirst(props) {
           width:
             props.table.TableType === 'circle' ||
             props.table.TableType === 'square'
-              ? '50px'
-              : '100px',
-          height: '50px',
+              ? '6%'
+              : '11%',
+          height: '50%',
 
           opacity: isDraggable ? '0.5' : '1',
         }}

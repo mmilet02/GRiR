@@ -3,8 +3,6 @@ import './RestorauntList.css';
 import { connect } from 'react-redux';
 import {
   faMapMarkerAlt,
-  faChevronDown,
-  faChevronUp,
   faClock,
   faUtensils,
   faSearch,
@@ -112,7 +110,6 @@ class RestorauntList extends Component {
       { tip: 'Type', value: this.state.Type },
     ];
 
-    console.log(niz);
     niz = niz.filter((n) => n.value !== '');
 
     let restaurantFiltered = this.props.restoraunts.filter((rest) => {
@@ -136,61 +133,72 @@ class RestorauntList extends Component {
     let loading = false;
     let restoraunt = '';
     let restaurantFiltered = this.state.filteredList;
-
-    restaurantFiltered = restaurantFiltered.map((rest) => {
-      return (
-        <Link to={'/restoraunt/' + rest._id} className='conLink'>
-          <div className='resLisCon' key={rest._id}>
-            <div className='resLisImgCon'>
-              <img
-                src={'http://localhost:3000/uploads/' + rest.ImgName}
-                alt=''
-                className='resLisImg'
-              />
-            </div>
-            <div className='resLisInfo'>
-              <div className='restLisInfoHead'>
-                <h3>{rest.Name}</h3>
+    restaurantFiltered = restaurantFiltered
+      .filter((rest) => {
+        if (rest.ValidatedBy === 'none' || rest.ValidatedBy === 'off') {
+          return false;
+        } else {
+          return true;
+        }
+      })
+      .map((rest) => {
+        return (
+          <Link
+            key={rest._id}
+            to={'/restoraunt/' + rest._id}
+            className='conLink'
+          >
+            <div className='resLisCon' key={rest._id}>
+              <div className='resLisImgCon'>
+                <img
+                  src={'http://localhost:3000/uploads/' + rest.ImgName}
+                  alt=''
+                  className='resLisImg'
+                />
               </div>
-              <div className='restLisInfoBot1'>
-                <div className='info'>
-                  {' '}
-                  <FontAwesomeIcon
-                    icon={faMapMarkerAlt}
-                    style={{ marginRight: '5px', marginTop: '2px' }}
-                  />
-                  <p>{rest.Location}</p>
+              <div className='resLisInfo'>
+                <div className='restLisInfoHead'>
+                  <h3>{rest.Name}</h3>
                 </div>
-                <div className='info'>
-                  <FontAwesomeIcon
-                    icon={faUtensils}
-                    style={{ marginRight: '5px', marginTop: '2px' }}
-                  />
-                  <p>{rest.Type}</p>
-                </div>
-                <div className='info'>
-                  <FontAwesomeIcon
-                    icon={faClock}
-                    style={{ marginRight: '5px', marginTop: '2px' }}
-                  />
-                  <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    <p>{rest.StartingHour}</p>
-                    <p>-</p>
-                    <p>{rest.EndingHour}</p>
+                <div className='restLisInfoBot1'>
+                  <div className='info'>
+                    {' '}
+                    <FontAwesomeIcon
+                      icon={faMapMarkerAlt}
+                      style={{ marginRight: '5px', marginTop: '2px' }}
+                    />
+                    <p>{rest.Location}</p>
+                  </div>
+                  <div className='info'>
+                    <FontAwesomeIcon
+                      icon={faUtensils}
+                      style={{ marginRight: '5px', marginTop: '2px' }}
+                    />
+                    <p>{rest.Type}</p>
+                  </div>
+                  <div className='info'>
+                    <FontAwesomeIcon
+                      icon={faClock}
+                      style={{ marginRight: '5px', marginTop: '2px' }}
+                    />
+                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                      <p>{rest.StartingHour}</p>
+                      <p>-</p>
+                      <p>{rest.EndingHour}</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </Link>
-      );
-    });
+          </Link>
+        );
+      });
 
     if (this.props.restoraunts.length > 0) {
       loading = false;
       restoraunt = this.props.restoraunts
         .filter((rest) => {
-          if (rest.ValidatedBy === 'none') {
+          if (rest.ValidatedBy === 'none' || rest.ValidatedBy === 'off') {
             return false;
           } else if (
             rest.Name.toUpperCase().includes(
@@ -203,9 +211,12 @@ class RestorauntList extends Component {
           }
         })
         .map((rest) => {
-          console.log(rest.ValidatedBy === 'none');
           return (
-            <Link to={'/restoraunt/' + rest._id} className='conLink'>
+            <Link
+              to={'/restoraunt/' + rest._id}
+              className='conLink'
+              key={rest._id}
+            >
               <div className='resLisCon' key={rest._id}>
                 <div className='resLisImgCon'>
                   <img

@@ -56,6 +56,19 @@ const RestorauntSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
+      NOP: {
+        type: String,
+        required: true,
+      },
+      TableSizeH: {
+        type: String,
+      },
+      TableSizeW: {
+        type: String,
+      },
+      TableSize: {
+        type: String,
+      },
     },
   ],
   FloorPlanImgName: {

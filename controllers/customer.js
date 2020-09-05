@@ -57,7 +57,7 @@ exports.postCustomer = async (req, res, next) => {
   }
 };
 
-//@desc Update all customers
+//@desc Update  customer
 //@route POST /api/customer/fav
 //access private
 exports.updateFavorite = async (req, res, next) => {

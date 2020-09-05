@@ -7,6 +7,7 @@ import {
   GET_GRADES,
   ADD_GRADE,
   UPDATE_VALIDATEDBY,
+  TURN_VALIDATEDBY,
 } from '../actions/types.js';
 
 const initialState = {
@@ -48,6 +49,17 @@ export default function (state = initialState, action) {
       return {
         ...state,
         restoraunts: resto,
+      };
+    case TURN_VALIDATEDBY:
+      const resto1 = state.restoraunts.map((r) => {
+        if (r._id === action.payload._id) {
+          r = action.payload;
+        }
+        return r;
+      });
+      return {
+        ...state,
+        restoraunts: resto1,
       };
     case SAVE_FLOOR_PLAN:
       return {

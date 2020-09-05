@@ -12,14 +12,14 @@
   padding: 5px 0px;
   color: #5f5f5f;
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
 }
 
 .userText {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  width: 40%;
+  width: 45%;
   height: auto;
 }
 
@@ -37,27 +37,38 @@
   width: 100%;
 }
 
-.userInfo1 {
+.userInfo2 {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  width: 50%;
+}
+.userInfo1 {
+  display: flex;
+  flex-direction: row;
   align-items: center;
   color: #5f5f5f;
-  border-radius: 5%;
-  border: 1px #5f5f5f solid;
-  width: 20%;
-  padding: 15px 0px;
-  background-color: #d8d8d8;
+  width: 70%;
+  padding: 7px 0px;
+  font-size: 18px;
 }
 
 .userDesc {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: justify;
   color: #5f5f5f;
 }
 
+.userDesc1 {
+  margin-top: 20px;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  color: #5f5f5f;
+}
 .userImages {
   width: 50%;
   height: auto;
@@ -110,72 +121,182 @@
   display: flex;
   flex-direction: column;
 }
-
-.nesto {
-  width: 50%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-}
-
-.adminRestoList {
+.userProfileCustomerConn1 {
   width: 90%;
   margin: 0 auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-}
-
-.adminRestoListColumn {
-  width: 40%;
   display: flex;
   flex-direction: column;
 }
 
-.userProfilaCustomerFavList {
+.nesto {
+  width: 60%;
+  margin-left: 50px;
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  color: #5f5f5f;
+}
+.nesto1 {
+  width: 60%;
+  margin-left: 50px;
+  display: flex;
+  flex-direction: row;
+  color: #5f5f5f;
+}
+
+.logout_button {
+  color: #5f5f5f;
+  border: 1px #5f5f5f solid;
+  background-color: #d8d8d8;
+  width: 100px;
+  height: 50px;
+  margin: 0 auto 10px auto;
+}
+
+.logout_button:hover {
+  background-color: #525252;
+  color: white;
+  cursor: pointer;
+}
+.adminRestoList {
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.listaCon {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  color: rgb(3, 168, 124);
+}
+.adminRestoListColumn {
+  border: 2px solid rgb(3, 168, 124);
+  padding: 10px 5px 5px 5px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  overflow: scroll;
+  margin: 20px 0px 50px 0px;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+.kopija {
+  display: flex;
+  flex-direction: column;
   width: 90%;
   margin: 0 auto;
 }
+.userProfilaCustomerFavList {
+  padding: 10px 5px 5px 5px;
+  border: 2px solid rgb(3, 168, 124);
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  overflow: scroll;
+  overflow-y: hidden;
+  overflow-x: auto;
+  margin: 20px auto;
+}
 
 .favRestoCon {
-  width: 200px;
+  width: 150px;
+  height: auto;
+  position: relative;
+  margin: 0px 10px;
+}
+.favRestoCon1 {
+  width: 150px;
   height: auto;
   position: relative;
   margin: 0px 10px;
 }
 
+.absDiv {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  margin-bottom: 9px;
+  text-align: right;
+  padding-right: 10px;
+  padding-top: 10px;
+  color: white;
+  background: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(255, 0, 0, 0));
+}
+.absDiv1 {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  margin-bottom: 9px;
+  text-align: right;
+  padding-right: 10px;
+  padding-top: 10px;
+  color: white;
+  background: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(255, 0, 0, 0));
+}
 .favRestoImg {
   width: 100%;
   height: auto;
 }
+.favRestoImg1 {
+  width: 100%;
+  height: auto;
+}
 .userProfileCustomerInfoCon {
-  width: 55%;
+  width: 50%;
   display: flex;
+  margin-left: 20px;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+}
+.userProfileCustomerInfoCon1 {
+  width: 70%;
+  display: flex;
+  margin-left: 20px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .userProfileCustomerInfo {
-  width: 50%;
+  width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+}
+
+.userProfileCustomerInfo1 {
+  width: 20%;
+  display: flex;
+  flex-direction: row;
 }
 
 .userProfileCustomerImgCon {
-  width: 40%;
+  width: 25%;
+  height: auto;
+}
+
+.userProfileCustomerImgCon1 {
+  width: 20%;
   height: auto;
 }
 
 .userProfileCustomerImg {
+  border: 2px solid rgb(3, 168, 124);
   border-radius: 50%;
   width: 90%;
-  margin: 0 autos;
+  margin: 0 auto;
+  height: auto;
+}
+
+.userProfileCustomerImg1 {
+  border: 2px solid rgb(3, 168, 124);
+  border-radius: 50%;
+  width: 90%;
+  margin: 0 auto;
   height: auto;
 }
 
@@ -195,16 +316,189 @@
 .rInfo {
   width: 100%;
   display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+  flex-direction: column;
 }
 
 .rInfoC1 {
-  width: 60%;
+  width: 90%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
 }
 
 .rInfoC2 {
-  width: 40%;
+  width: 90%;
+  margin: 0px auto 0px auto;
+}
+
+.green {
+  color: rgb(3, 168, 124);
+}
+
+.btnDow {
+  color: #5f5f5f;
+  border: 1px #5f5f5f solid;
+  background-color: #d8d8d8;
+  width: 70px;
+  height: 30px;
+  margin: 0px 0px 0px 20px;
+}
+
+.btnDow:hover {
+  background-color: #525252;
+  color: white;
+  cursor: pointer;
+}
+.modalUserProfile {
+  height: 450px;
+  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.btnmodul {
+  color: #5f5f5f;
+  border: 1px #5f5f5f solid;
+  background-color: #d8d8d8;
+  width: 15%;
+  padding: 5px 0px;
+  margin: 0px 45% 10px 45%;
+}
+
+.btnmodul:hover {
+  background-color: #525252;
+  color: white;
+  cursor: pointer;
+}
+
+.marin1 {
+  width: 90%;
+}
+.marin2 {
+  width: 80%;
+}
+
+.resDiv {
+  padding: 5px 10px;
+  color: #5f5f5f;
+  border: 1px #5f5f5f solid;
+  background-color: #d8d8d8;
+  margin: 0 10px;
+}
+.resDiv:hover {
+  background-color: #525252;
+  color: white;
+  cursor: pointer;
+}
+@media only screen and (max-width: 900px) {
+  .userProfileCustomerImgCon {
+    width: 30%;
+  }
+
+  .userProfileCustomerImgCon1 {
+    width: 20%;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .userProfileCustomerImgCon {
+    width: 35%;
+  }
+
+  .userProfileCustomerImgCon1 {
+    width: 30%;
+  }
+
+  .absDiv1 {
+    font-size: 14px;
+  }
+  .favRestoCon1 {
+    width: 110px;
+  }
+  .favRestoCon {
+    width: 110px;
+  }
+  .marin1 {
+    width: 100%;
+  }
+  .marin2 {
+    width: 90%;
+  }
+  .rInfoC2 {
+    width: 90%;
+  }
+}
+@media only screen and (max-width: 700px) {
+  .userProfileCustomerImgCon {
+    width: 40%;
+  }
+
+  .userProfileCustomerImgCon1 {
+    width: 30%;
+  }
+
+  .nesto {
+    width: 60%;
+  }
+  .nesto1 {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .userProfileCustomerImgCon {
+    width: 45%;
+  }
+
+  .nesto {
+    width: 80%;
+  }
+  .userProfileCustomerImgCon1 {
+    width: 30%;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .userProfileCustomerImgCon {
+    width: 50%;
+  }
+
+  .userProfileCustomerImgCon1 {
+    width: 60%;
+  }
+  .nesto {
+    width: 90%;
+    margin-left: 10px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .nesto1 {
+    width: 90%;
+    margin-left: 30px;
+  }
+  .userProfileCustomerInfoCon {
+    width: 80%;
+    margin-left: 80px;
+  }
+  .userProfileCustomerInfoCon1 {
+    width: 90%;
+    margin-left: 10px;
+  }
+}
+
+@media only screen and (max-width: 420px) {
+  .favRestoCon1 {
+    width: 90px;
+  }
+  .favRestoCon {
+    width: 90px;
+  }
+
+  .hh2 h2 {
+    font-size: 19px;
+  }
+
+  .userProfileCustomerImgCon {
+    width: 60%;
+  }
 }

@@ -59,7 +59,7 @@ class App extends Component {
                 <Route path='/customer/:id'>
                   <Customer />
                 </Route>
-                <Route path='/profile'>
+                <Route path='/profile/:id'>
                   <Profile />
                 </Route>
               </Switch>

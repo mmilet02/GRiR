@@ -8,6 +8,7 @@ import {
   ADD_GRADE,
   UPDATE_FAVORITE,
   UPDATE_VALIDATEDBY,
+  TURN_VALIDATEDBY,
 } from './types.js';
 import { returnErrors } from './errorActions';
 import axios from 'axios';
@@ -176,6 +177,29 @@ export const updateValidatedBy = (_id, ValidatedBy) => (dispatch) => {
     });
 };
 
+export const turnValidatedBy = (_id, OnOff) => (dispatch) => {
+  let temp = {
+    _id,
+    OnOff,
+  };
+  const config = {
+    headers: {
+      'Content-type': 'application/json',
+    },
+  };
+  axios
+    .post('/api/restoraunts/OnOff', temp, config)
+    .then((res) =>
+      dispatch({
+        type: TURN_VALIDATEDBY,
+        payload: res.data,
+      })
+    )
+    .catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
+};
+
 export const uploadImage = (formData) => (dispatch) => {
   const config = {
     headers: {
@@ -187,7 +211,7 @@ export const uploadImage = (formData) => (dispatch) => {
     .post('/api/restoraunts/image', formData, config)
     .then((res) => console.log(res.data))
     .catch((err) => {
-      dispatch(returnErrors(err.response.data, err.response.status));
+      // dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
 

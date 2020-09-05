@@ -7,8 +7,6 @@ import { getFloorPlans } from '../../../actions/floorPlanAction.js';
 import ResizeObserver from 'react-resize-observer';
 import equal from 'fast-deep-equal';
 import { withRouter } from 'react-router';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class FloorPlanExample extends Component {
   constructor(props) {
@@ -68,8 +66,6 @@ class FloorPlanExample extends Component {
     }
 
     if (this.state.datum) {
-      console.log(this.state.datum1.getHours());
-      console.log(this.state.datum1.getMinutes());
     }
 
     let floorPlan = [];
@@ -92,22 +88,20 @@ class FloorPlanExample extends Component {
     }
     let scale = this.state.widthForChange / width;
     let currentFloorPlanHeight = `${scale * height}px`;
-    console.log(scale);
     if (resto.ValidatedBy === 'none') {
       floorPlan = (
         <div
           style={{
             width: '100%',
             height: '100%',
+            padding: '0px 30px',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            position: 'absolute',
-            top: '0',
-            left: '0',
+            marginTop: '30px',
           }}
         >
-          <p>Sorry not accepted yet</p>
+          <p>:)</p>
         </div>
       );
     } else {
@@ -137,6 +131,7 @@ class FloorPlanExample extends Component {
                     firstRH >= startWorking &&
                     firstRH < 12
                   ) {
+                    this.props.handleDeleteTableID(table);
                     return (
                       <SelectableTable
                         openModal={this.props.openModal}
@@ -148,6 +143,7 @@ class FloorPlanExample extends Component {
                         scale={scale}
                         handleFloorPlan={this.props.handleFloorPlan}
                         floorPlanID={id}
+                        d={this.props.d}
                       />
                     );
                   } else if (
@@ -156,8 +152,10 @@ class FloorPlanExample extends Component {
                     firstRH >= 12 &&
                     firstRH < 18
                   ) {
+                    this.props.handleDeleteTableID(table);
                     return (
                       <SelectableTable
+                        d={this.props.d}
                         openModal={this.props.openModal}
                         count={this.props.count}
                         handleCount={this.props.handleCount}
@@ -175,8 +173,10 @@ class FloorPlanExample extends Component {
                     firstRH >= 18 &&
                     firstRH < endWorking
                   ) {
+                    this.props.handleDeleteTableID(table);
                     return (
                       <SelectableTable
+                        d={this.props.d}
                         openModal={this.props.openModal}
                         count={this.props.count}
                         handleCount={this.props.handleCount}
@@ -196,6 +196,7 @@ class FloorPlanExample extends Component {
         }
         return (
           <SelectableTable
+            d={this.props.d}
             openModal={this.props.openModal}
             count={this.props.count}
             handleCount={this.props.handleCount}
@@ -212,13 +213,6 @@ class FloorPlanExample extends Component {
 
     return (
       <div className='floorPlanContBig'>
-        {/* <div className='backGo'>
-          <FontAwesomeIcon
-            onClick={this.props.history.goBack}
-            icon={faArrowLeft}
-            style={{ marginRight: '5px', marginTop: '2px', cursor: 'pointer' }}
-          />
-        </div> */}
         <div className='floorPlanContSmall'>
           <div
             className='floorPlanCont'
@@ -226,12 +220,11 @@ class FloorPlanExample extends Component {
               backgroundImage: `url(/uploads/${imgName})`,
               backgroundRepeat: ' no-repeat',
               backgroundPosition: 'center',
-              backgroundSize: '100% auto',
+              backgroundSize: 'contain',
               height: currentFloorPlanHeight,
-              width: '80%',
             }}
           >
-            <div className='floorPlan' ref={this.ref}>
+            <div className='floorPlan1' ref={this.ref}>
               <ResizeObserver
                 onResize={(rect) => {
                   this.handleFloorPlanResize(rect.width, rect.height);
@@ -241,7 +234,6 @@ class FloorPlanExample extends Component {
               {floorPlan}
             </div>
           </div>
-          <div className='choiceFields'></div>
         </div>
       </div>
     );

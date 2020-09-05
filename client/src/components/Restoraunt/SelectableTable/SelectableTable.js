@@ -5,7 +5,16 @@ class SelectableTable extends Component {
     super(props);
     this.state = {
       selected: false,
+      restart: true,
     };
+  }
+
+  componentWillUpdate() {
+    if (!this.props.free && this.state.selected) {
+      this.setState({
+        selected: false,
+      });
+    }
   }
 
   handleSelected = (x) => {
@@ -24,7 +33,7 @@ class SelectableTable extends Component {
         <div style={{ borderRadius: '50%' }}>
           <img
             onClick={() => {
-              if (this.props.free) {
+              if (this.props.free && this.props.d) {
                 let n = this.props.count;
                 let x = '';
 
@@ -33,9 +42,10 @@ class SelectableTable extends Component {
                   x = 'minus';
                   this.setState({
                     selected: !this.state.selected,
+                    restart: false,
                   });
                   this.handleSelected(x);
-                  this.props.handleCount(n);
+                  this.props.handleCount(n, this.props.table);
                 } else {
                   if (n + 1 > 2) {
                     this.props.openModal();
@@ -44,9 +54,10 @@ class SelectableTable extends Component {
                     x = 'plus';
                     this.setState({
                       selected: !this.state.selected,
+                      restart: false,
                     });
                     this.handleSelected(x);
-                    this.props.handleCount(n);
+                    this.props.handleCount(n, this.props.table);
                   }
                 }
               }
@@ -75,7 +86,7 @@ class SelectableTable extends Component {
         <div>
           <img
             onClick={() => {
-              if (this.props.free) {
+              if (this.props.free && this.props.d) {
                 let n = this.props.count;
                 let x = '';
 
@@ -86,7 +97,7 @@ class SelectableTable extends Component {
                     selected: !this.state.selected,
                   });
                   this.handleSelected(x);
-                  this.props.handleCount(n);
+                  this.props.handleCount(n, this.props.table);
                 } else {
                   if (n + 1 > 2) {
                     this.props.openModal();
@@ -97,7 +108,7 @@ class SelectableTable extends Component {
                       selected: !this.state.selected,
                     });
                     this.handleSelected(x);
-                    this.props.handleCount(n);
+                    this.props.handleCount(n, this.props.table);
                   }
                 }
               }
@@ -127,7 +138,7 @@ class SelectableTable extends Component {
         <div>
           <img
             onClick={() => {
-              if (this.props.free) {
+              if (this.props.free && this.props.d) {
                 let n = this.props.count;
                 let x = '';
 
@@ -138,7 +149,7 @@ class SelectableTable extends Component {
                     selected: !this.state.selected,
                   });
                   this.handleSelected(x);
-                  this.props.handleCount(n);
+                  this.props.handleCount(n, this.props.table);
                 } else {
                   if (n + 1 > 2) {
                     this.props.openModal();
@@ -149,7 +160,7 @@ class SelectableTable extends Component {
                       selected: !this.state.selected,
                     });
                     this.handleSelected(x);
-                    this.props.handleCount(n);
+                    this.props.handleCount(n, this.props.table);
                   }
                 }
               }
@@ -179,7 +190,7 @@ class SelectableTable extends Component {
         <div>
           <img
             onClick={() => {
-              if (this.props.free) {
+              if (this.props.free && this.props.d) {
                 let n = this.props.count;
                 let x = '';
 
@@ -190,7 +201,7 @@ class SelectableTable extends Component {
                     selected: !this.state.selected,
                   });
                   this.handleSelected(x);
-                  this.props.handleCount(n);
+                  this.props.handleCount(n, this.props.table);
                 } else {
                   if (n + 1 > 2) {
                     this.props.openModal();
@@ -201,7 +212,7 @@ class SelectableTable extends Component {
                       selected: !this.state.selected,
                     });
                     this.handleSelected(x);
-                    this.props.handleCount(n);
+                    this.props.handleCount(n, this.props.table);
                   }
                 }
               }

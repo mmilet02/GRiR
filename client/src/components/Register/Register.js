@@ -2,10 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { register, registerC } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { saveFloorPlan, uploadImage } from '../../actions/floorPlanAction.js';
 import { getTableTypes } from '../../actions/tableTypesActions.js';
 import NumericInput from 'react-numeric-input';
+import {
+  faCheckCircle,
+  faTimesCircle,
+  faQuestionCircle,
+  faArrowLeft,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Popup from 'reactjs-popup';
 import './Register.css';
 
@@ -14,13 +21,14 @@ class Register extends Component {
     super(props);
     this.state = {
       tableDescriptionList: [],
-      TableID: '',
+      TableID: 'Identifikacijski broj stola',
       TableType: '',
-      TableSize: '',
-      NOP: '',
+      TableSize: 'Veličina stola',
+      NOP: 'Maksimalan broj osoba',
       isOpen: false,
       isOpen1: false,
-      FloorPlanImg: 'You didnt choose Floor plan',
+      isOpen2: false,
+      FloorPlanImg: 'Niste izabrali tlocrt',
       startW: 0,
       endW: 0,
       msg: null,
@@ -35,12 +43,16 @@ class Register extends Component {
       Location: '',
       step: 0,
       user: '',
-      Image: 'You didnt choose image',
+      Image: 'Niste izabrali sliku',
       file1: '',
       file2: '',
-      TableSizeW: '',
-      TableSizeH: '',
+      TableSizeW: 'Širina stola',
+      TableSizeH: 'Dužina stola',
+      upLoaded: false,
+      upLoaded2: false,
       floorPlanList: [],
+      isMsg2: false,
+      msg2: 'Niste unijeli sva polja',
       typeDropDownList: [
         'Restoran',
         'Gostionica',
@@ -55,23 +67,82 @@ class Register extends Component {
         'Klet',
         'Krčma',
       ],
-      locationDropDownList: [
-        'Split',
-        'Zagreb',
-        'Osijek',
-        'Zadar',
-        'Dubrovnik',
-        'Rijeka',
-        'Dugopolje',
-        'Stobreć',
-        'Hvar',
-      ],
+      locationDropDownList: [],
+      ht: 0,
+      desType: 0,
     };
   }
 
   componentDidMount() {
     this.props.clearErrors();
     this.props.getTableTypes();
+    window.scrollTo(0, 0);
+
+    let newArray = [
+      'Baška voda',
+      'Bol',
+      'Brela',
+      'Cres',
+      'Daruvar',
+      'Murter',
+      'Ogulin',
+      'Supetar',
+      'Trogir',
+      'Vinkovci',
+      'Virovitica',
+      'Umag',
+      'Split',
+      'Zagreb',
+      'Osijek',
+      'Zadar',
+      'Dubrovnik',
+      'Rijeka',
+      'Dugopolje',
+      'Stobreć',
+      'Hvar',
+    ];
+    newArray.sort((a, b) => {
+      if (a.toLowerCase() < b.toLowerCase()) return -1;
+      if (a.toLowerCase() > b.toLowerCase()) return 1;
+      return 0;
+    });
+
+    this.setState({
+      tableDescriptionList: [],
+      TableID: 'Identifikacijski broj stola',
+      TableType: '',
+      TableSize: 'Veličina stola',
+      NOP: 'Maksimalan broj osoba',
+      isOpen: false,
+      isOpen1: false,
+      isOpen2: false,
+      FloorPlanImg: 'Niste izabrali tlocrt',
+      startW: 0,
+      endW: 0,
+      msg: null,
+      Name: '',
+      Email: '',
+      Description: '',
+      WorkingHours: '',
+      RestorauntPage: '',
+      Phone: '',
+      Password: '',
+      Type: '',
+      Location: '',
+      step: 0,
+      user: '',
+      Image: 'Niste izabrali sliku',
+      file1: '',
+      file2: '',
+      TableSizeW: 'Širina stola',
+      TableSizeH: 'Dužina stola',
+      upLoaded: false,
+      upLoaded2: false,
+      floorPlanList: [],
+      isMsg2: false,
+      msg2: 'Niste unijeli sva polja',
+      locationDropDownList: newArray,
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -81,9 +152,13 @@ class Register extends Component {
       //Check for reg error
       if (error.id === 'REGISTER_FAIL') {
         this.setState({ msg: error.msg.msg });
-      } else {
-        this.setState({ msg: null });
       }
+      // else {
+      //   this.setState({ msg: null });
+      // }
+    }
+    if (this.props.user) {
+      this.props.history.push('/');
     }
   }
 
@@ -108,12 +183,14 @@ class Register extends Component {
         ...this.state,
         file2: e.target.files[0],
         FloorPlanImg: e.target.files[0].name,
+        upLoaded2: true,
       });
     } else if (e.target.name === 'Image') {
       this.setState({
         ...this.state,
         file1: e.target.files[0],
         Image: e.target.files[0].name,
+        upLoaded: true,
       });
     }
   };
@@ -123,9 +200,6 @@ class Register extends Component {
 
     this.props.clearErrors();
     if (this.state.user === 'restaurant') {
-      let formData = new FormData();
-      formData.append('file1', this.state.file1);
-      formData.append('file2', this.state.file2);
       const {
         Name,
         Email,
@@ -142,35 +216,66 @@ class Register extends Component {
         tableDescriptionList,
       } = this.state;
 
-      const newRestoraunt = {
-        Name,
-        Email,
-        Description,
-        Type,
-        Location,
-        StartingHour: startW,
-        EndingHour: endW,
-        RestorauntPage,
-        Phone,
-        Viewes: 0,
-        ImgName: Image,
-        TableList: tableDescriptionList,
-        FloorPlanImgName: FloorPlanImg,
-        ValidatedBy: 'none',
-        Password,
-      };
-      this.props.register(newRestoraunt);
-      this.props.uploadImage(formData);
+      if (!Email.includes('@')) {
+        this.setState({
+          msg: 'Email mora sadržavati @ znamenku',
+        });
+      } else if (Phone === '' || Phone.match(/^[0-9]*$/) == null) {
+        this.setState({
+          msg: 'Mobitel mora sadržavati samo brojeve',
+        });
+      } else if (Password.length < 4) {
+        this.setState({
+          msg: 'Password mora imati minimalno 4 znamenke',
+        });
+      } else {
+        let formData = new FormData();
+        formData.append('file1', this.state.file1);
+        formData.append('file2', this.state.file2);
+
+        const newRestoraunt = {
+          Name,
+          Email,
+          Description,
+          Type,
+          Location,
+          StartingHour: startW,
+          EndingHour: endW,
+          RestorauntPage,
+          Phone,
+          Viewes: 0,
+          ImgName: Image,
+          TableList: tableDescriptionList,
+          FloorPlanImgName: FloorPlanImg,
+          ValidatedBy: 'none',
+          Password,
+        };
+        this.props.register(newRestoraunt);
+        this.props.uploadImage(formData);
+      }
     } else {
       const { Name, Email, Phone, Password } = this.state;
-
-      const newCustomer = {
-        Name,
-        Email,
-        Phone,
-        Password,
-      };
-      this.props.registerC(newCustomer);
+      if (!Email.includes('@')) {
+        this.setState({
+          msg: 'Email mora sadržavati @ znamenku',
+        });
+      } else if (Phone === '' || Phone.match(/^[0-9]*$/) == null) {
+        this.setState({
+          msg: 'Mobitel mora sadržavati samo brojeve',
+        });
+      } else if (Password.length < 4) {
+        this.setState({
+          msg: 'Password mora imati minimalno 4 znamenke',
+        });
+      } else {
+        const newCustomer = {
+          Name,
+          Email,
+          Phone,
+          Password,
+        };
+        this.props.registerC(newCustomer);
+      }
     }
   };
   handleUser = (user) => {
@@ -187,7 +292,6 @@ class Register extends Component {
     }
   };
   handleDeleteRow = (n) => {
-    console.log(n);
     let id = this.state.tableDescriptionList[n].TableID;
     this.setState({
       tableDescriptionList: this.state.tableDescriptionList.filter(
@@ -196,44 +300,108 @@ class Register extends Component {
     });
   };
   closeModal = () => {
-    this.setState({ isOpen: false });
+    this.setState({
+      isOpen: false,
+      TableID: 'Identifikacijski broj stola',
+      TableSize: 'Veličina stola',
+      NOP: 'Maksimalan broj osoba',
+      isMsg2: false,
+    });
   };
   closeModal1 = () => {
-    this.setState({ isOpen1: false });
+    this.setState({
+      isOpen1: false,
+      isMsg2: false,
+      TableID: 'Identifikacijski broj stola',
+      TableSizeW: 'Širina stola',
+      TableSizeH: 'Dužina stola',
+      NOP: 'Maksimalan broj osoba',
+    });
+  };
+  closeModal2 = () => {
+    this.setState({ isOpen2: false });
   };
   closeModalAndAdd = () => {
-    let temp = {
-      TableID: this.state.TableID,
-      TableType: this.state.TableType,
-      TableSize: this.state.TableSize,
-      NOP: this.state.NOP,
-    };
-    this.setState({
-      tableDescriptionList: [...this.state.tableDescriptionList, temp],
-      isOpen: false,
-      TableID: '',
-      TableType: '',
-      NOP: '',
-      TableSize: '',
-    });
+    if (
+      this.state.TableID === 'Identifikacijski broj stola' ||
+      this.state.TableSize === 'Veličina stola' ||
+      this.state.NOP === 'Maksimalan broj osoba' ||
+      this.state.TableID === '' ||
+      this.state.TableSize === '' ||
+      this.state.NOP === ''
+    ) {
+      this.setState({
+        isMsg2: true,
+        msg2: 'Niste unijeli sva polja',
+      });
+    } else if (
+      this.state.tableDescriptionList.find(
+        (tab) => tab.TableID === this.state.TableID
+      )
+    ) {
+      this.setState({
+        isMsg2: true,
+        msg2: 'Stol sa tim ID-em već postoji',
+      });
+    } else {
+      let temp = {
+        TableID: this.state.TableID,
+        TableType: this.state.TableType,
+        TableSize: this.state.TableSize,
+        NOP: this.state.NOP,
+      };
+      this.setState({
+        tableDescriptionList: [...this.state.tableDescriptionList, temp],
+        isOpen: false,
+        TableID: '',
+        TableType: '',
+        NOP: '',
+        TableSize: '',
+      });
+    }
   };
   closeModalAndAdd1 = () => {
-    let temp = {
-      TableID: this.state.TableID,
-      TableType: this.state.TableType,
-      TableSizeW: this.state.TableSizeW,
-      TableSizeH: this.state.TableSizeH,
-      NOP: this.state.NOP,
-    };
-    this.setState({
-      tableDescriptionList: [...this.state.tableDescriptionList, temp],
-      isOpen1: false,
-      TableID: '',
-      TableType: '',
-      NOP: '',
-      TableSizeW: '',
-      TableSizeH: '',
-    });
+    if (
+      this.state.TableID === 'Identifikacijski broj stola' ||
+      this.state.TableSizeW === 'Širina stola' ||
+      this.state.TableSizeH === 'Dužina stola' ||
+      this.state.NOP === 'Maksimalan broj osoba' ||
+      this.state.TableID === '' ||
+      this.state.TableSizeW === '' ||
+      this.state.TableSizeH === '' ||
+      this.state.NOP === ''
+    ) {
+      this.setState({
+        isMsg2: true,
+        msg2: 'Niste unijeli sva polja',
+      });
+    } else if (
+      this.state.tableDescriptionList.find(
+        (tab) => tab.TableID === this.state.TableID
+      )
+    ) {
+      this.setState({
+        isMsg2: true,
+        msg2: 'Stol sa tim ID-em već postoji',
+      });
+    } else {
+      let temp = {
+        TableID: this.state.TableID,
+        TableType: this.state.TableType,
+        TableSizeW: this.state.TableSizeW,
+        TableSizeH: this.state.TableSizeH,
+        NOP: this.state.NOP,
+      };
+      this.setState({
+        tableDescriptionList: [...this.state.tableDescriptionList, temp],
+        isOpen1: false,
+        TableID: '',
+        TableType: '',
+        NOP: '',
+        TableSizeW: '',
+        TableSizeH: '',
+      });
+    }
   };
   handleAddRowPopUp = () => {
     this.setState({
@@ -241,22 +409,86 @@ class Register extends Component {
     });
   };
   hadnleTypeClick = (t) => {
-    if (t === 'circle' || t === 'square') {
+    if (t === 'circle') {
       this.setState({
         TableType: t,
         isOpen: true,
+        desType: 1,
       });
-    } else if (t === 'rectangle' || t === 'elipse') {
+    } else if (t === 'square') {
+      this.setState({
+        TableType: t,
+        isOpen: true,
+        desType: 2,
+      });
+    } else if (t === 'rectangle') {
       this.setState({
         TableType: t,
         isOpen1: true,
+        desType: 3,
+      });
+    } else if (t === 'elipse') {
+      this.setState({
+        TableType: t,
+        isOpen1: true,
+        desType: 4,
       });
     }
   };
-
+  handleDescriptionMessage1 = () => {
+    this.setState({
+      isOpen2: true,
+      ht: 1,
+    });
+  };
+  handleDescriptionMessage2 = () => {
+    this.setState({
+      isOpen2: true,
+      ht: 2,
+    });
+  };
+  reset = () => {
+    this.setState({
+      tableDescriptionList: [],
+      TableID: 'Identifikacijski broj stola',
+      TableType: '',
+      TableSize: 'Veličina stola',
+      NOP: 'Maksimalan broj osoba',
+      isOpen: false,
+      isOpen1: false,
+      isOpen2: false,
+      FloorPlanImg: 'Niste izabrali tlocrt',
+      startW: 0,
+      endW: 0,
+      msg: null,
+      Name: '',
+      Email: '',
+      Description: '',
+      WorkingHours: '',
+      RestorauntPage: '',
+      Phone: '',
+      Password: '',
+      Type: '',
+      Location: '',
+      step: 0,
+      user: '',
+      Image: 'Niste izabrali sliku',
+      file1: '',
+      file2: '',
+      TableSizeW: 'Širina stola',
+      TableSizeH: 'Dužina stola',
+      upLoaded: false,
+      upLoaded2: false,
+      floorPlanList: [],
+      isMsg2: false,
+      msg2: 'Niste unijeli sva polja',
+    });
+  };
   render() {
     let a = 0,
       b = 0;
+    let howTo;
+    let desType;
     let tddList = this.state.typeDropDownList.map((ele) => {
       a++;
       return (
@@ -277,27 +509,34 @@ class Register extends Component {
 
     let n = -1;
     let tableDescription = this.state.tableDescriptionList.map((td) => {
+      let x = {};
       n++;
       if (td.TableType === 'circle' || td.TableType === 'square') {
-        return (
+        x = (
           <div
             style={{
               width: '100%',
               display: 'flex',
-              justifyContent: 'space-evenly',
+              justifyContent: 'space-around',
+              alignItems: 'center',
               margin: '5px 0px',
             }}
             key={td.TableID}
           >
             <p>{td.TableID}</p>
             <p>{td.TableType}</p>
-            <p>{td.TableSize}</p>
+            <p>
+              {td.TableSize}X{td.TableSize}
+            </p>
             <p>{td.NOP}</p>
             <div
               style={{
                 cursor: 'pointer',
-                border: '1px solid #333',
                 padding: '5px',
+                border: '1px solid #5f5f5f',
+                color: ' #5f5f5f',
+                borderRadius: '8px',
+                backgroundColor: 'white',
               }}
               onClick={() => this.handleDeleteRow(n)}
             >
@@ -306,26 +545,31 @@ class Register extends Component {
           </div>
         );
       } else if (td.TableType === 'rectangle' || td.TableType === 'elipse') {
-        return (
+        x = (
           <div
             style={{
               width: '100%',
               display: 'flex',
-              justifyContent: 'space-evenly',
+              justifyContent: 'space-around',
+              alignItems: 'center',
               margin: '5px 0px',
             }}
             key={td.TableID}
           >
             <p>{td.TableID}</p>
             <p>{td.TableType}</p>
-            <p>{td.TableSizeW}</p>
-            <p>{td.TableSizeH}</p>
+            <p>
+              {td.TableSizeW}X{td.TableSizeH}
+            </p>
             <p>{td.NOP}</p>
             <div
               style={{
                 cursor: 'pointer',
-                border: '1px solid #333',
                 padding: '5px',
+                border: '1px solid #5f5f5f',
+                color: ' #5f5f5f',
+                borderRadius: '8px',
+                backgroundColor: 'white',
               }}
               onClick={() => this.handleDeleteRow(n)}
             >
@@ -334,6 +578,7 @@ class Register extends Component {
           </div>
         );
       }
+      return x;
     });
 
     let tableTypes = this.props.types.map((table) => {
@@ -350,6 +595,7 @@ class Register extends Component {
                 ? '10%'
                 : '20%',
             height: 'auto',
+            cursor: 'pointer',
           }}
         />
       );
@@ -372,8 +618,37 @@ class Register extends Component {
         </div>
       );
     } else if (this.state.step === 1 && this.state.user === 'restaurant') {
+      if (this.state.ht === 1) {
+        howTo = (
+          <p style={{ paddingTop: '40px' }}>
+            Slika Restorana - izaberite JEDNU sliku koja će najbolje predstaviti
+            vaš restoran, ta slika će se moći vidjeti na vašem profilu.
+          </p>
+        );
+      } else if (this.state.ht === 2) {
+        howTo = (
+          <p style={{ paddingTop: '40px' }}>
+            Tlocrt restorana - podrazumijeva sliku koju šaljete adminu, slika
+            mora biti tlocrt vašeg restorana i mora imati jasno označen svaki
+            stol sa jedinstvenim ID broje koji mora odgovarati ID broju i
+            njegovom odgovarajučem opisu u tablici ispod. Ako admin nebude mogao
+            razumjeti jasno sliku zahtjev će se poništiti.
+          </p>
+        );
+      }
+
+      if (this.state.desType === 1) {
+        desType = <p style={{ paddingTop: '25px' }}>Niski okrugli stol</p>;
+      } else if (this.state.desType === 2) {
+        desType = <p style={{ paddingTop: '25px' }}> Niski kockasti stol</p>;
+      } else if (this.state.desType === 3) {
+        desType = <p style={{ paddingTop: '25px' }}>Niski pravokutasti stol</p>;
+      } else if (this.state.desType === 4) {
+        desType = <p style={{ paddingTop: '25px' }}>Niski eliptični stol</p>;
+      }
+
       step = (
-        <div className='reg_form'>
+        <div className='reg_form1'>
           <h1>REGISTRACIJA</h1>
           <div className='form_wrapper_reg'>
             <form className='form' onSubmit={this.formSubmit}>
@@ -400,74 +675,67 @@ class Register extends Component {
               <label>
                 <select
                   className='userInput'
-                  placeholder='What is the type of food that you make'
+                  placeholder='Tip'
                   value={this.state.Type}
                   onChange={this.handleChange}
                   name='Type'
+                  style={{
+                    color: '#5f5f5f',
+                  }}
                 >
                   <option value='' disabled defaultValue hidden>
-                    What is the type of food that you make
+                    Koji je tip vašeg restorana
                   </option>
-                  <option value=''>-</option>
                   {tddList}
                 </select>
               </label>
               <label>
                 <select
                   className='userInput'
-                  placeholder='Enter your location'
+                  placeholder='Lokacija'
                   value={this.state.Location}
                   onChange={this.handleChange}
                   name='Location'
+                  style={{
+                    color: '#5f5f5f',
+                  }}
                 >
                   <option value='' disabled defaultValue hidden>
-                    What is your location
+                    Koja je lokacija vašeg restorana
                   </option>
-                  <option value=''>-</option>
                   {lddList}
                 </select>
               </label>
               <label>
-                <input
+                <textarea
+                  value={this.state.Description}
+                  onChange={this.handleChange}
+                  name='Description'
+                  className='userInput'
+                  rows='9'
+                  cols='50'
+                  placeholder='Opis'
+                  style={{
+                    height: '70px',
+                    resize: 'none',
+                    paddingRight: '15px',
+                    paddingTop: '10px',
+                  }}
+                ></textarea>
+                {/* <input
                   className='userInput'
                   type='text'
-                  placeholder='Enter your description'
+                  placeholder='Opis'
                   name='Description'
                   value={this.state.Description}
                   onChange={this.handleChange}
-                />
+                /> */}
               </label>
-              <div
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  justifyContent: 'space-evenly',
-                }}
-              >
-                <NumericInput
-                  onChange={(valueAsNumber) =>
-                    this.updateNumberPicker1(valueAsNumber)
-                  }
-                  min={0}
-                  max={23}
-                  value={this.state.startW}
-                  mobile
-                />
-                <NumericInput
-                  onChange={(valueAsNumber) =>
-                    this.updateNumberPicker2(valueAsNumber)
-                  }
-                  min={0}
-                  max={23}
-                  value={this.state.endW}
-                  mobile
-                />
-              </div>
               <label>
                 <input
                   className='userInput'
                   type='text'
-                  placeholder='Enter your link to restoraunt page'
+                  placeholder='Link vaše stranice'
                   name='RestorauntPage'
                   value={this.state.RestorauntPage}
                   onChange={this.handleChange}
@@ -477,50 +745,151 @@ class Register extends Component {
                 <input
                   className='userInput'
                   type='text'
-                  placeholder='Enter your phone'
+                  placeholder='Broj mobitela'
                   name='Phone'
                   value={this.state.Phone}
                   onChange={this.handleChange}
                 />
               </label>
-              <label>
-                <div className='upload-btn-wrapper'>
-                  <button className='btn'>Upload a image</button>
+              <div className='radnoVrime'>
+                <p>Početak rada restorana:</p>
+                <NumericInput
+                  onChange={(valueAsNumber) =>
+                    this.updateNumberPicker1(valueAsNumber)
+                  }
+                  min={0}
+                  max={23}
+                  value={this.state.startW}
+                  mobile
+                  className='numberPicker'
+                />
+              </div>
+              <div className='radnoVrime'>
+                <p>Kraj rada restorana:</p>
+                <NumericInput
+                  className='numberPicker'
+                  onChange={(valueAsNumber) =>
+                    this.updateNumberPicker2(valueAsNumber)
+                  }
+                  min={0}
+                  max={23}
+                  value={this.state.endW}
+                  mobile
+                />
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  marginTop: '30px',
+                }}
+              >
+                <label className='labelReg'>
+                  <div className='upload-btn-wrapper'>
+                    <button className='btnReg' style={{ marginRight: '11px' }}>
+                      Slika restorana
+                    </button>
 
-                  <input
-                    type='file'
-                    name='Image'
-                    className='userInput'
-                    onChange={this.handleChangeFile}
-                    accept='image/png, image/jpeg, image/jpg'
-                  />
-                </div>
-                {this.state.Image}
-              </label>
-              <label>
-                <div className='upload-btn-wrapper'>
-                  <button className='btn'>Upload a floor plan</button>
+                    <input
+                      type='file'
+                      name='Image'
+                      className='userInput'
+                      onChange={this.handleChangeFile}
+                      accept='image/png, image/jpeg, image/jpg'
+                    />
+                  </div>
+                  {this.state.upLoaded ? (
+                    <FontAwesomeIcon
+                      icon={faCheckCircle}
+                      style={{ color: 'rgb(3, 168, 124)', marginRight: '30px' }}
+                      size='lg'
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faTimesCircle}
+                      style={{ color: 'rgb(255, 32, 32)', marginRight: '30px' }}
+                      size='lg'
+                    />
+                  )}
+                </label>
+                <FontAwesomeIcon
+                  icon={faQuestionCircle}
+                  style={{ color: 'rgb(0, 0, 0)', marginTop: '9px' }}
+                  size='lg'
+                  onClick={() => this.handleDescriptionMessage1()}
+                />
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  marginTop: '30px',
+                }}
+              >
+                <label className='labelReg'>
+                  <div className='upload-btn-wrapper'>
+                    <button className='btnReg' style={{ marginRight: '5px' }}>
+                      Tlocrt restorana
+                    </button>
 
-                  <input
-                    type='file'
-                    name='FloorPlanImg'
-                    className='userInput'
-                    onChange={this.handleChangeFile}
-                    accept='image/png, image/jpeg, image/jpg'
-                  />
-                </div>
-                {this.state.FloorPlanImg}
-              </label>
+                    <input
+                      type='file'
+                      name='FloorPlanImg'
+                      className='userInput'
+                      onChange={this.handleChangeFile}
+                      accept='image/png, image/jpeg, image/jpg'
+                    />
+                  </div>
+                  {this.state.upLoaded2 ? (
+                    <FontAwesomeIcon
+                      icon={faCheckCircle}
+                      style={{ color: 'rgb(3, 168, 124)', marginRight: '30px' }}
+                      size='lg'
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faTimesCircle}
+                      style={{ color: 'rgb(255, 32, 32)', marginRight: '30px' }}
+                      size='lg'
+                    />
+                  )}
+                </label>
+
+                <FontAwesomeIcon
+                  icon={faQuestionCircle}
+                  style={{ color: 'rgb(0, 0, 0)', marginTop: '9px' }}
+                  size='lg'
+                  onClick={() => this.handleDescriptionMessage2()}
+                />
+              </div>
               <div
                 style={{
                   width: '100%',
                   display: 'flex',
                   justifyContent: 'center',
+                  color: 'rgb(3, 168, 124)',
+                  marginTop: '20px',
                 }}
               >
-                <h3>ADD TABLE</h3>
+                <h3>DODAJTE STOLOVE</h3>
               </div>
               <div className='popUpTableList'>{tableTypes}</div>
+              <div
+                style={{
+                  width: '80%',
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                  color: 'rgb(3, 168, 124)',
+                  marginTop: '10px',
+                  marginBottom: tableDescription.length > 0 ? '10px' : '50px',
+                  fontWeight: '600',
+                }}
+              >
+                <p>ID</p>
+                <p>TYPE</p>
+                <p>SIZE</p>
+                <p>NOP</p>
+              </div>
               <div
                 style={{
                   width: '100%',
@@ -528,7 +897,11 @@ class Register extends Component {
               >
                 {tableDescription}
               </div>
-              <label>
+              <label
+                style={{
+                  marginTop: tableDescription.length > 0 ? '30px' : '10px',
+                }}
+              >
                 <input
                   className='userInput'
                   type='password'
@@ -547,10 +920,10 @@ class Register extends Component {
                 className='reg_button'
                 onClick={this.formSubmit}
                 style={{
-                  marginTop: this.state.msg !== null ? '30px' : '60px',
+                  marginTop: this.state.msg !== null ? '60px' : '30px',
                 }}
               >
-                REGISTER
+                SIGN UP
               </button>
               <div className='signup'>
                 <Link to='/login' className='signup'>
@@ -633,6 +1006,21 @@ class Register extends Component {
     }
     return (
       <div className='reg_page'>
+        {this.state.step === 1 ? (
+          <div className='goBack'>
+            <FontAwesomeIcon
+              onClick={() => this.reset()}
+              icon={faArrowLeft}
+              style={{
+                marginTop: '2px',
+                marginLeft: '20px',
+                cursor: 'pointer',
+                color: 'rgb(3, 168, 124)',
+              }}
+              size='lg'
+            />
+          </div>
+        ) : null}
         {step}
         <Popup
           open={this.state.isOpen}
@@ -643,13 +1031,19 @@ class Register extends Component {
             <div className='closeRestoraunt' onClick={this.closeModal}>
               +
             </div>
+            {desType}
             <label>
               <input
+                style={{ marginTop: '25px' }}
                 className='userInput'
                 type='text'
-                placeholder='Enter your table id'
+                placeholder={this.state.TableID}
                 name='TableID'
-                value={this.state.TableID}
+                value={
+                  this.state.TableID === 'Identifikacijski broj stola'
+                    ? ''
+                    : this.state.TableID
+                }
                 onChange={this.handleChange}
               />
             </label>
@@ -657,9 +1051,13 @@ class Register extends Component {
               <input
                 className='userInput'
                 type='text'
-                placeholder='Enter your table number of people'
+                placeholder={this.state.NOP}
                 name='NOP'
-                value={this.state.NOP}
+                value={
+                  this.state.NOP === 'Maksimalan broj osoba'
+                    ? ''
+                    : this.state.NOP
+                }
                 onChange={this.handleChange}
               />
             </label>
@@ -667,14 +1065,27 @@ class Register extends Component {
               <input
                 className='userInput'
                 type='text'
-                placeholder='Enter your table size'
+                placeholder={this.state.TableSize}
                 name='TableSize'
-                value={this.state.TableSize}
+                value={
+                  this.state.TableSize === 'Veličina stola'
+                    ? ''
+                    : this.state.TableSize
+                }
                 onChange={this.handleChange}
               />
             </label>
-
-            <button onClick={this.closeModalAndAdd}>OK</button>
+            {this.state.isMsg2 ? (
+              <div className='errBox'>
+                <p style={{ color: 'red' }}>{this.state.msg2}</p>
+              </div>
+            ) : null}
+            <button
+              style={{ width: '30%', margin: '0 35%', padding: '5px' }}
+              onClick={this.closeModalAndAdd}
+            >
+              OK
+            </button>
           </div>
         </Popup>
         <Popup
@@ -686,13 +1097,19 @@ class Register extends Component {
             <div className='closeRestoraunt' onClick={this.closeModal1}>
               +
             </div>
+            {desType}
             <label>
               <input
+                style={{ marginTop: '25px' }}
                 className='userInput'
                 type='text'
-                placeholder='Enter your table id'
+                placeholder={this.state.TableID}
                 name='TableID'
-                value={this.state.TableID}
+                value={
+                  this.state.TableID === 'Identifikacijski broj stola'
+                    ? ''
+                    : this.state.TableID
+                }
                 onChange={this.handleChange}
               />
             </label>
@@ -700,9 +1117,13 @@ class Register extends Component {
               <input
                 className='userInput'
                 type='text'
-                placeholder='Enter your table number of people'
+                placeholder={this.state.NOP}
                 name='NOP'
-                value={this.state.NOP}
+                value={
+                  this.state.NOP === 'Maksimalan broj osoba'
+                    ? ''
+                    : this.state.NOP
+                }
                 onChange={this.handleChange}
               />
             </label>
@@ -710,9 +1131,13 @@ class Register extends Component {
               <input
                 className='userInput'
                 type='text'
-                placeholder='Enter your table width size'
+                placeholder={this.state.TableSizeW}
                 name='TableSizeW'
-                value={this.state.TableSizeW}
+                value={
+                  this.state.TableSizeW === 'Širina stola'
+                    ? ''
+                    : this.state.TableSizeW
+                }
                 onChange={this.handleChange}
               />
             </label>
@@ -720,13 +1145,45 @@ class Register extends Component {
               <input
                 className='userInput'
                 type='text'
-                placeholder='Enter your table heigh size'
+                placeholder={this.state.TableSizeH}
                 name='TableSizeH'
-                value={this.state.TableSizeH}
+                value={
+                  this.state.TableSizeH === 'Dužina stola'
+                    ? ''
+                    : this.state.TableSizeH
+                }
                 onChange={this.handleChange}
               />
             </label>
-            <button onClick={this.closeModalAndAdd1}>OK</button>
+            {this.state.isMsg2 ? (
+              <div className='errBox' style={{ marginBottom: '20px' }}>
+                <p style={{ color: 'red' }}>{this.state.msg2}</p>
+              </div>
+            ) : null}
+            <button
+              style={{ width: '30%', margin: '0 35%', padding: '5px' }}
+              onClick={this.closeModalAndAdd1}
+            >
+              OK
+            </button>
+          </div>
+        </Popup>
+        <Popup
+          open={this.state.isOpen2}
+          closeOnDocumentClick
+          onClose={this.closeModal2}
+        >
+          <div className='modal'>
+            <div className='closeRestoraunt' onClick={this.closeModal2}>
+              +
+            </div>
+            {howTo}
+            <button
+              style={{ width: '30%', margin: '0 35%', padding: '5px' }}
+              onClick={this.closeModal2}
+            >
+              OK
+            </button>
           </div>
         </Popup>
       </div>
@@ -737,6 +1194,7 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   types: state.tableTypes.tableTypes,
   error: state.error,
+  user: state.auth.user,
 });
 export default connect(mapStateToProps, {
   register,
@@ -745,4 +1203,4 @@ export default connect(mapStateToProps, {
   saveFloorPlan,
   uploadImage,
   getTableTypes,
-})(Register);
+})(withRouter(Register));

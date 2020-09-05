@@ -33,15 +33,15 @@ class Customer extends Component {
     }
     return (
       <div className='userProfileCustomerCon'>
-        <div className='userProfileCustomerImgCon'>
+        <div className='userProfileCustomerImgConC'>
           <img
             src='http://localhost:3000/images/tim.jpg'
             alt=''
             className='userProfileCustomerImg'
           />
         </div>
-        <div className='userProfileCustomerInfoCon'>
-          <div className='userProfileCustomerInfo'>
+        <div className='userProfileCustomerInfoConC'>
+          <div className='userProfileCustomerInfoC'>
             <FontAwesomeIcon
               icon={faUserTie}
               style={{ marginRight: '5px', marginTop: '2px' }}

@@ -23,7 +23,7 @@ exports.login = async (req, res, next) => {
       if (!admin) throw Error('Korisnik sa tim e-mailom nepostoji');
 
       const isMatch = await bcrypt.compare(Password, admin.Password);
-      if (!isMatch) throw Error('Lozinka je nevažeća');
+      if (!isMatch) throw Error('Password is not correct');
 
       const token = jwt.sign({ _id: admin._id }, process.env.JWT_SECRET);
 
@@ -54,6 +54,8 @@ exports.login = async (req, res, next) => {
             Name: restoraunt.Name,
             Email: restoraunt.Email,
             Description: restoraunt.Description,
+            Location: restoraunt.Location,
+            Type: restoraunt.Type,
             StartingHour: restoraunt.StartingHour,
             EndingHour: restoraunt.EndingHour,
             RestorauntPage: restoraunt.RestorauntPage,

@@ -66,9 +66,17 @@ class Header extends Component {
               : ''}
           </strong>
         }
-        <Link to='/profile'>
-          <div className='navLink'>Moj profil</div>
-        </Link>
+        {this.props.auth &&
+        this.props.auth.user &&
+        this.props.auth.user.restoraunt ? (
+          <Link to={'/profile/' + this.props.auth.user.restoraunt._id}>
+            <div className='navLink'>Moj profil</div>
+          </Link>
+        ) : (
+          <Link to='/profile/1'>
+            <div className='navLink'>Moj profil</div>
+          </Link>
+        )}
       </Fragment>
     );
 
