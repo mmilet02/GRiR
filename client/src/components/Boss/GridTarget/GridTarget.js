@@ -22,7 +22,11 @@ function GridTarget(props) {
   return (
     <div
       ref={drop}
-      style={{ backgroundColor: isOver ? 'green' : 'white' }}
+      style={{
+        backgroundColor: isOver ? 'green' : 'white',
+        width: `${props.gridCellsWidth}px`,
+        height: `${props.gridCellsHeight}px`,
+      }}
       className='gridCells'
     ></div>
   );

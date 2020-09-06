@@ -498,38 +498,41 @@ class Restoraunt extends Component {
     } else {
     }
     let stars2 = (
-      <div className='zvijezde'>
+      <div className='zvijezde1'>
         <h3 style={{ marginRight: '20px' }}>Ocjena: {this.state.grade}</h3>
+        <div className='zvijezde'>
         <FontAwesomeIcon
-          className='s'
-          icon={faStar}
-          style={{ margin: '0px 5px', color: 'black' }}
-          onClick={() => this.onStarClick1(1)}
-        />
+            className='s'
+            icon={faStar}
+            style={{ margin: '0px 5px' }}
+            onClick={() => this.onStarClick1(5)}
+          />
+             <FontAwesomeIcon
+            className='s'
+            icon={faStar}
+            style={{ margin: '0px 5px' }}
+            onClick={() => this.onStarClick1(4)}
+          />
+          <FontAwesomeIcon
+            className='s'
+            icon={faStar}
+            style={{ margin: '0px 5px' }}
+            onClick={() => this.onStarClick1(3)}
+          />
+      
         <FontAwesomeIcon
-          className='s'
-          icon={faStar}
-          style={{ margin: '0px 5px', color: 'black' }}
-          onClick={() => this.onStarClick1(2)}
-        />
-        <FontAwesomeIcon
-          className='s'
-          icon={faStar}
-          style={{ margin: '0px 5px', color: 'black' }}
-          onClick={() => this.onStarClick1(3)}
-        />
-        <FontAwesomeIcon
-          className='s'
-          icon={faStar}
-          style={{ margin: '0px 5px', color: 'black' }}
-          onClick={() => this.onStarClick1(4)}
-        />
-        <FontAwesomeIcon
-          className='s'
-          icon={faStar}
-          style={{ margin: '0px 5px', color: 'black' }}
-          onClick={() => this.onStarClick1(5)}
-        />
+            className='s'
+            icon={faStar}
+            style={{ margin: '0px 5px' }}
+            onClick={() => this.onStarClick1(2)}
+          />
+             <FontAwesomeIcon
+            className='s'
+            icon={faStar}
+            style={{ margin: '0px 5px' }}
+            onClick={() => this.onStarClick1(1)}
+          />
+        </div>
       </div>
     );
     let modalContent = {};

@@ -74,9 +74,6 @@ class FloorPlanCreating extends Component {
       prevState.scale !== this.state.scale
     ) {
       let size = this.state.sizeHeight * this.state.scale;
-      console.log(size);
-      console.log(this.state.sizeHeight);
-      console.log(this.state.scale);
       this.setState({
         currentFloorPlanHeight: `${size}px`,
         heightForChange: size,
@@ -219,7 +216,7 @@ class FloorPlanCreating extends Component {
     if (
       this.state.NOP === 'Maksimalan broj ljudi' ||
       this.state.csSize === 'Veličina stola' ||
-      this.state.csSize.match(/^[0-9]*$/) == null ||
+      this.state.csSize.match(/^\d+(\.\d{1,2})?$/) === null ||
       this.state.NOP.match(/^[0-9]*$/) == null
     ) {
       this.setState({
@@ -244,10 +241,10 @@ class FloorPlanCreating extends Component {
     if (
       this.state.NOP === 'Maksimalan broj ljudi' ||
       this.state.reSizeY === 'Širina stola' ||
-      this.state.reSizeY.match(/^[0-9]*$/) == null ||
+      this.state.reSizeY.match(/^\d+(\.\d{1,2})?$/) == null ||
       this.state.NOP.match(/^[0-9]*$/) == null ||
       this.state.reSizeX === 'Dužina stola' ||
-      this.state.reSizeX.match(/^[0-9]*$/) == null
+      this.state.reSizeX.match(/^\d+(\.\d{1,2})?$/) == null
     ) {
       this.setState({
         msg1: 'Niste unijeli sva polja ispravno',
@@ -277,7 +274,7 @@ class FloorPlanCreating extends Component {
     if (
       this.state.chNOP === '' ||
       this.state.chReSize === '' ||
-      this.state.chReSize.match(/^[0-9]*$/) == null ||
+      this.state.chReSize.match(/^\d+(\.\d{1,2})?$/) == null ||
       this.state.chNOP.match(/^[0-9]*$/) == null
     ) {
       this.setState({
@@ -309,9 +306,9 @@ class FloorPlanCreating extends Component {
     if (
       this.state.chNOP === '' ||
       this.state.chReSizeY === '' ||
-      this.state.chReSizeY.match(/^[0-9]*$/) == null ||
+      this.state.chReSizeY.match(/^\d+(\.\d{1,2})?$/) == null ||
       this.state.chReSizeX === '' ||
-      this.state.chReSizeX.match(/^[0-9]*$/) == null ||
+      this.state.chReSizeX.match(/^\d+(\.\d{1,2})?$/) == null ||
       this.state.chNOP.match(/^[0-9]*$/) == null
     ) {
       this.setState({
@@ -715,8 +712,12 @@ class FloorPlanCreating extends Component {
       }
     }
     let gridCells = [];
-    let gridCellsHeight = this.state.currentFloorPlanHeight / 800;
-    let gridCellsWidth = this.state.currentFloorPlanWidth / 800;
+    let gridCellsHeight = this.state.heightForChange / 20;
+    let gridCellsWidth = this.state.widthForChange / 35;
+    console.log(gridCellsHeight);
+    console.log(this.state.currentFloorPlanHeight);
+    console.log(gridCellsWidth);
+    console.log(this.state.widthForChange);
 
     let infoSelectedTable = '';
     let changeInfoTable = '';
@@ -875,14 +876,14 @@ class FloorPlanCreating extends Component {
         );
       }
     }
-    for (let i = 0; i < 800; i++) {
+    for (let i = 0; i < 700; i++) {
       gridCells.push(
         <GridTarget
           key={i}
+          gridCellsWidth={gridCellsWidth}
+          gridCellsHeight={gridCellsHeight}
           onDropImg={this.onDropImg}
           style={{
-            width: gridCellsWidth,
-            height: gridCellsHeight,
             zIndex: '2',
           }}
         ></GridTarget>

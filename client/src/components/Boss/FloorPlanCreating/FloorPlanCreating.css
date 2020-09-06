@@ -59,10 +59,8 @@
 }
 
 .gridCells {
-  height: 25px;
-  width: 25px;
   border: 1px solid #333;
-  opacity: 0.6;
+  opacity: 0.35;
 }
 
 .goBack {
