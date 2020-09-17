@@ -209,6 +209,7 @@ class FloorPlanExample extends Component {
           />
         );
       });
+      console.log(floorPlan);
     }
 
     return (

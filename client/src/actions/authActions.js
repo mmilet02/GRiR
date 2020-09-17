@@ -9,7 +9,6 @@ import {
   REGISTER_FAIL,
 } from './types.js';
 import { returnErrors } from './errorActions';
-// import { saveFloorPlan } from './floorPlanAction.js';
 import axios from 'axios';
 
 export const loadRestoraunt = () => (dispatch, getState) => {
@@ -84,7 +83,6 @@ export const register = ({
         payload: res.data,
       });
       console.log(res.data.restoraunt._id);
-      //dispatch(saveFloorPlan(floorPlanList, res.data.restoraunt._id));
     })
     .catch((err) => {
       dispatch(

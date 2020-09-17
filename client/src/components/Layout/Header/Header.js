@@ -57,15 +57,6 @@ class Header extends Component {
   render() {
     const authLinks = (
       <Fragment>
-        {
-          <strong style={{ color: 'white' }}>
-            {this.props.auth &&
-            this.props.auth.user &&
-            this.props.auth.user.customer
-              ? `Welcome ${this.props.auth.user.customer.Name}`
-              : ''}
-          </strong>
-        }
         {this.props.auth &&
         this.props.auth.user &&
         this.props.auth.user.restoraunt ? (
@@ -83,10 +74,10 @@ class Header extends Component {
     const guestLinks = (
       <Fragment>
         <Link to='/login'>
-          <div className='navLink'>Sign in</div>
+          <div className='navLink'>Prijava</div>
         </Link>
         <Link to='/reg'>
-          <div className='navLink reg'>Get started</div>
+          <div className='navLink reg'>Registracija</div>
         </Link>
       </Fragment>
     );
@@ -102,13 +93,13 @@ class Header extends Component {
         </div>
         <div className='h2'>
           <Link to='/'>
-            <div className='navLink'>Home</div>
+            <div className='navLink'>Početna</div>
           </Link>
           <Link to='/aboutus'>
             <div className='navLink'>O nama</div>
           </Link>
           <Link to='/main/none'>
-            <div className='navLink'>Rezerviraj!</div>
+            <div className='navLink'>EasyEat</div>
           </Link>
           {this.props.auth && this.props.auth.isAuthenticated
             ? authLinks
@@ -147,13 +138,13 @@ class Header extends Component {
           onClick={this.handleClick.bind(this)}
         >
           <Link to='/'>
-            <div className='navLink'>Home</div>
+            <div className='navLink'>Početna</div>
           </Link>
           <Link to='/aboutus'>
-            <div className='navLink'>About us</div>
+            <div className='navLink'>O nama</div>
           </Link>
-          <Link to='/main'>
-            <div className='navLink'>Reserve now!</div>
+          <Link to='/main/none'>
+            <div className='navLink'>EasyEat</div>
           </Link>
           {this.props.auth && this.props.auth.isAuthenticated
             ? authLinks

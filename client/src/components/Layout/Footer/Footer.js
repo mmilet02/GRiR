@@ -22,11 +22,6 @@ class Footer extends Component {
     return out;
   };
   render() {
-    // var elem = document.querySelector('footer');
-    // var isOut = this.isOutOfViewport(elem);
-
-    // console.log(isOut.bottom);
-
     return (
       <footer className={2 > 1 ? 'footer' : 'footer  overFlown'}>
         <div className='korisničkaPodrska'>

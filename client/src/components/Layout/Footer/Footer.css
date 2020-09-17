@@ -71,7 +71,6 @@
 }
 
 @media only screen and (max-width: 600px) {
-  /* For tablets: */
   .kp3 {
     display: none;
   }
@@ -90,8 +89,6 @@
 }
 
 @media only screen and (max-width: 768px) {
-  /* For desktop: */
-
   .kp1 {
     width: 100%;
   }

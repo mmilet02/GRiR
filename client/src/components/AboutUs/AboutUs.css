@@ -10,7 +10,7 @@
   justify-content: flex-start;
   align-items: center;
   border-bottom: 1px solid #d8d8d8;
-  color: rgba(0, 0, 0, 0.84);
+  color: #5f5f5f;
 }
 
 .asContent {
@@ -128,10 +128,6 @@
   width: 45%;
   height: auto;
 }
-/* 
-.aboutUsFa {
-  color: rgba(0, 0, 0, 0.84);
-} */
 
 @media only screen and (max-width: 1100px) {
   .content1text {

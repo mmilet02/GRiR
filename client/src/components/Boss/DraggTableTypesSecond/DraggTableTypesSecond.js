@@ -26,8 +26,8 @@ function DraggTableTypesSecond(props) {
           height: props.visina + 'px',
           width: props.širina + 'px',
           transform:
-            props.table.TableType === 'circle' ||
-            props.table.TableType === 'square'
+            props.table.TableType === 'Niski okrugli' ||
+            props.table.TableType === 'Niski kockasti'
               ? 'rotate(0deg)'
               : props.table.Orientation === 'o'
               ? 'rotate(90deg)'

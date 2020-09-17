@@ -300,15 +300,6 @@ class RestorauntList extends Component {
             </button>
           </div>
 
-          {/* <label className='searchV'>
-            <input
-              name='searchTerm'
-              placeholder='Search restaurant by name'
-              value={this.state.searchTerm}
-              onChange={this.handleChangeS}
-            />
-          </label> */}
-
           <div className='filter'>
             <label className='labelCon'>
               Tip

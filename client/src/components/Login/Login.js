@@ -80,7 +80,7 @@ class Login extends Component {
                 <input
                   className='userInput'
                   type='password'
-                  placeholder='Password'
+                  placeholder='Šifra'
                   name='Password'
                   value={this.state.Password}
                   onChange={this.handleChange}
@@ -98,11 +98,11 @@ class Login extends Component {
                   marginTop: this.state.msg !== null ? '30px' : '60px',
                 }}
               >
-                SIGN IN
+                PRIJAVA
               </button>
               <div className='signup'>
                 <Link to='/reg' className='signup'>
-                  Nemate račun? Registriraj te se !
+                  Nemate račun? Registriraj te se!
                 </Link>
               </div>
             </form>

@@ -8,7 +8,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* position: relative; */
 }
 .textImage {
   position: absolute;
@@ -90,38 +89,30 @@
 }
 
 .c1 {
-  /* background-color: rgb(253, 146, 53); */
   background-color: rgb(88, 88, 88);
 }
 .c1:hover {
-  /* background-color: #e46c03; */
   background-color: rgb(3, 168, 124);
 }
 
 .c2 {
-  /* background-color: rgb(101, 202, 113); */
   background-color: rgb(88, 88, 88);
 }
 .c2:hover {
-  /* background-color: #17cc2c; */
   background-color: rgb(3, 168, 124);
 }
 
 .c3 {
-  /* background-color: #ff50f0; */
   background-color: rgb(88, 88, 88);
 }
 .c3:hover {
-  /* background-color: #fd00e8; */
   background-color: rgb(3, 168, 124);
 }
 
 .c4 {
-  /* background-color: #427db8; */
   background-color: rgb(88, 88, 88);
 }
 .c4:hover {
-  /* background-color: #024a92; */
   background-color: rgb(3, 168, 124);
 }
 

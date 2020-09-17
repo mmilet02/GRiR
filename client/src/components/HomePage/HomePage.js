@@ -56,7 +56,7 @@ class HomePage extends Component {
     });
     let aktualnoRestoraunt = this.props.restoraunts
       .sort((a, b) => (a.Viewes > b.Viewes ? -1 : b.Viewes > a.Viewes ? 1 : 0))
-      .slice(0, 5)
+      .slice(0, 3)
       .filter((res) => res.ValidatedBy !== 'none')
       .map((rest) => {
         return (
@@ -106,14 +106,14 @@ class HomePage extends Component {
         </div>
         <div className='provjera'>
           <Link to='/reg'>
-            <div className='provjera1'>Get started</div>
+            <div className='provjera1'>Registracija</div>
           </Link>
         </div>
 
         <div className='provjera2'>
           <p>Već imate račun? </p>
           <Link to='/login'>
-            <p className='pGreen'>Sign in.</p>
+            <p className='pGreen'>Prijava.</p>
           </Link>
         </div>
 
@@ -128,7 +128,7 @@ class HomePage extends Component {
               className='fImg'
             />
             <div className='textF'>
-              <p>SECURITY</p>
+              <p>SIGURNOST</p>
             </div>
           </div>
           <div
@@ -142,7 +142,7 @@ class HomePage extends Component {
             />
             <div className='textF'>
               {' '}
-              <p>24/7 SUPPORT</p>
+              <p>PODRŠKA 0-24</p>
             </div>
           </div>
           <div
@@ -169,7 +169,7 @@ class HomePage extends Component {
               className='fImg'
             />
             <div className='textF'>
-              <p>ALL ON PLACE</p>
+              <p>SVE NA JENDOM MJESTU</p>
             </div>
 
             <ResizeObserver
@@ -193,7 +193,7 @@ class HomePage extends Component {
           </div>
           <div className='hpDescriptionButton'>
             <div className='hpDescriptionButtonB'>
-              <Link to='/reg'>Get started </Link>
+              <Link to='/reg'>Registracija</Link>
             </div>
           </div>
         </div>
@@ -206,7 +206,7 @@ class HomePage extends Component {
               marginBottom: '40px',
             }}
           >
-            <h1>Najboljih 5 u 2019/20</h1>
+            <h1>Najboljih 3 u 2019/20</h1>
           </div>
           {aktualnoRestoraunt}
         </div>

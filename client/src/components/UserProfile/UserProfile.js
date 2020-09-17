@@ -158,17 +158,7 @@ class UserProfile extends Component {
             style={{ margin: '0px 5 px', color: 'yellow', cursor: 'pointer' }}
           />
         );
-      }
-      // else if (grade < 1 && grade > 0) {
-      //   grade--;
-      //   stars.push(
-      //     <FontAwesomeIcon key={i} icon={faStarHalf} className='halfStarL' />
-      //   );
-      //   stars.push(
-      //     <FontAwesomeIcon key={i} icon={faStarHalf} className='halfStarR' />
-      //   );
-      // }
-      else {
+      } else {
         stars.push(
           <FontAwesomeIcon
             key={i}
@@ -240,7 +230,10 @@ class UserProfile extends Component {
     ) {
       tablica = this.state.resto.TableList.map((td) => {
         let x = {};
-        if (td.TableType === 'circle' || td.TableType === 'square') {
+        if (
+          td.TableType === 'Niski okrugli' ||
+          td.TableType === 'Niski kockasti'
+        ) {
           x = (
             <div
               style={{
@@ -260,7 +253,10 @@ class UserProfile extends Component {
               <p>{td.NOP}</p>
             </div>
           );
-        } else if (td.TableType === 'rectangle' || td.TableType === 'elipse') {
+        } else if (
+          td.TableType === 'Niski stol' ||
+          td.TableType === 'Niski eliptični'
+        ) {
           x = (
             <div
               style={{
@@ -462,36 +458,7 @@ class UserProfile extends Component {
         <React.Fragment>
           <div className='userName'>
             <h1>{user.restoraunt.Name}</h1>
-
-            {/* <div
-              style={{
-                textAlign: 'center',
-                cursor: 'pointer',
-                width: '10px',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              onClick={
-                user.restoraunt.ValidatedBy === 'none'
-                  ? () => {}
-                  : user.restoraunt.ValidatedBy !== 'off'
-                  ? () => this.handleTurnOnOff('off', user.restoraunt._id)
-                  : () =>
-                      this.handleTurnOnOff(
-                        '5ea192f99bcd2d258a54e911',
-                        user.restoraunt._id
-                      )
-              }
-            >
-              {user.restoraunt.ValidatedBy === 'none' ? null : user.restoraunt
-                  .ValidatedBy !== 'off' ? (
-                <p style={{ color: 'rgb(3, 168, 124)' }}>OPEN</p>
-              ) : (
-                <p style={{ color: 'rgb(3, 168, 124)' }}>CLOSED</p>
-              )}
-            </div> */}
           </div>
-
           <div className='restourantInf'>
             <div className='restourantImages'>
               <img
@@ -877,10 +844,6 @@ class UserProfile extends Component {
             </div>
             <div className='userProfileCustomerInfoCon1'>
               <div className='userProfileCustomerInfo1'>
-                {/* <FontAwesomeIcon
-                  icon={faEnvelope}
-                  style={{ marginRight: '5px', marginTop: '2px' }}
-                /> */}
                 <h2>{user.admin.Email}</h2>
               </div>
             </div>
@@ -906,7 +869,7 @@ class UserProfile extends Component {
       <div className='userCon'>
         {korisnik}
         <button className='logout_button' onClick={this.props.logout}>
-          LOGOUT
+          ODJAVA
         </button>
         <Popup
           open={this.state.isOpen}
@@ -917,34 +880,29 @@ class UserProfile extends Component {
             <div className='rInfo'>
               <div className='rInfoC1'>
                 <p>
-                  <b className='green'>Name:</b> {this.state.resto.Name}
+                  <b className='green'>Ime:</b> {this.state.resto.Name}
                 </p>
                 <p>
                   <b className='green'>Email:</b> {this.state.resto.Email}
                 </p>
                 <p>
-                  <b className='green'>Food type:</b> {this.state.resto.Type}
+                  <b className='green'>Tip:</b> {this.state.resto.Type}
                 </p>
                 <p>
-                  <b className='green'>Location:</b> {this.state.resto.Location}
+                  <b className='green'>Lokacija:</b> {this.state.resto.Location}
                 </p>
                 <p>
-                  <b className='green'>Working:</b>{' '}
-                  {this.state.resto.StartingHour}-{this.state.resto.EndingHour}
+                  <b className='green'>Radno vrijeme:</b>{' '}
+                  {this.state.resto.StartingHour}:00-
+                  {this.state.resto.EndingHour}:00
                 </p>
                 <p>
-                  <b className='green'>Web page:</b>{' '}
+                  <b className='green'>Web stranica:</b>{' '}
                   {this.state.resto.RestorauntPage}
                 </p>
                 <p>
-                  <b className='green'>Phone:</b> {this.state.resto.Phone}
+                  <b className='green'>Mobitel:</b> {this.state.resto.Phone}
                 </p>
-                <p>
-                  <b className='green'>Views:</b> {this.state.resto.Viewes}
-                </p>
-                {/* <p>
-                  <b className='green'>Image:</b> {this.state.resto.ImgName}
-                </p> */}
                 <div
                   style={{
                     display: 'flex',
@@ -952,8 +910,7 @@ class UserProfile extends Component {
                   }}
                 >
                   <p>
-                    <b className='green'>Floor plan:</b>{' '}
-                    {/* {this.state.resto.FloorPlanImgName} */}
+                    <b className='green'>Tlocrt:</b>{' '}
                   </p>
                   <a
                     href={
@@ -987,8 +944,8 @@ class UserProfile extends Component {
                   }}
                 >
                   <p>ID</p>
-                  <p>TYPE</p>
-                  <p>SIZE</p>
+                  <p>TIP</p>
+                  <p>VELIČINA</p>
                   <p>NOP</p>
                 </div>
                 <div className='rInfoC2'>{tablica}</div>

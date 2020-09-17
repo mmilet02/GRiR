@@ -153,9 +153,6 @@ class Register extends Component {
       if (error.id === 'REGISTER_FAIL') {
         this.setState({ msg: error.msg.msg });
       }
-      // else {
-      //   this.setState({ msg: null });
-      // }
     }
     if (this.props.user) {
       this.props.history.push('/');
@@ -325,14 +322,17 @@ class Register extends Component {
     if (
       this.state.TableID === 'Identifikacijski broj stola' ||
       this.state.TableSize === 'Veličina stola' ||
+      this.state.TableSize.match(/^\d+(\.\d{1,2})?$/) == null ||
       this.state.NOP === 'Maksimalan broj osoba' ||
       this.state.TableID === '' ||
       this.state.TableSize === '' ||
-      this.state.NOP === ''
+      this.state.NOP === '' ||
+      this.state.NOP.match(/^[0-9]*$/) == null ||
+      this.state.TableID.match(/^[0-9]*$/) == null
     ) {
       this.setState({
         isMsg2: true,
-        msg2: 'Niste unijeli sva polja',
+        msg2: 'Niste ispravno unijeli sva polja',
       });
     } else if (
       this.state.tableDescriptionList.find(
@@ -366,14 +366,18 @@ class Register extends Component {
       this.state.TableSizeW === 'Širina stola' ||
       this.state.TableSizeH === 'Dužina stola' ||
       this.state.NOP === 'Maksimalan broj osoba' ||
+      this.state.TableSizeW.match(/^\d+(\.\d{1,2})?$/) === null ||
+      this.state.TableSizeH.match(/^\d+(\.\d{1,2})?$/) === null ||
       this.state.TableID === '' ||
       this.state.TableSizeW === '' ||
       this.state.TableSizeH === '' ||
-      this.state.NOP === ''
+      this.state.NOP === '' ||
+      this.state.NOP.match(/^[0-9]*$/) === null ||
+      this.state.TableID.match(/^[0-9]*$/) === null
     ) {
       this.setState({
         isMsg2: true,
-        msg2: 'Niste unijeli sva polja',
+        msg2: 'Niste ispravno unijeli sva polja',
       });
     } else if (
       this.state.tableDescriptionList.find(
@@ -409,25 +413,25 @@ class Register extends Component {
     });
   };
   hadnleTypeClick = (t) => {
-    if (t === 'circle') {
+    if (t === 'Niski okrugli') {
       this.setState({
         TableType: t,
         isOpen: true,
         desType: 1,
       });
-    } else if (t === 'square') {
+    } else if (t === 'Niski kockasti') {
       this.setState({
         TableType: t,
         isOpen: true,
         desType: 2,
       });
-    } else if (t === 'rectangle') {
+    } else if (t === 'Niski stol') {
       this.setState({
         TableType: t,
         isOpen1: true,
         desType: 3,
       });
-    } else if (t === 'elipse') {
+    } else if (t === 'Niski eliptični') {
       this.setState({
         TableType: t,
         isOpen1: true,
@@ -511,7 +515,10 @@ class Register extends Component {
     let tableDescription = this.state.tableDescriptionList.map((td) => {
       let x = {};
       n++;
-      if (td.TableType === 'circle' || td.TableType === 'square') {
+      if (
+        td.TableType === 'Niski okrugli' ||
+        td.TableType === 'Niski kockasti'
+      ) {
         x = (
           <div
             style={{
@@ -544,7 +551,10 @@ class Register extends Component {
             </div>
           </div>
         );
-      } else if (td.TableType === 'rectangle' || td.TableType === 'elipse') {
+      } else if (
+        td.TableType === 'Niski stol' ||
+        td.TableType === 'Niski eliptični'
+      ) {
         x = (
           <div
             style={{
@@ -591,7 +601,8 @@ class Register extends Component {
           style={{
             marginLeft: '5px',
             width:
-              table.TableType === 'circle' || table.TableType === 'square'
+              table.TableType === 'Niski okrugli' ||
+              table.TableType === 'Niski kockasti'
                 ? '10%'
                 : '20%',
             height: 'auto',
@@ -630,7 +641,7 @@ class Register extends Component {
           <p style={{ paddingTop: '40px' }}>
             Tlocrt restorana - podrazumijeva sliku koju šaljete adminu, slika
             mora biti tlocrt vašeg restorana i mora imati jasno označen svaki
-            stol sa jedinstvenim ID broje koji mora odgovarati ID broju i
+            stol sa jedinstvenim ID brojem koji mora odgovarati ID broju i
             njegovom odgovarajučem opisu u tablici ispod. Ako admin nebude mogao
             razumjeti jasno sliku zahtjev će se poništiti.
           </p>
@@ -722,14 +733,6 @@ class Register extends Component {
                     paddingTop: '10px',
                   }}
                 ></textarea>
-                {/* <input
-                  className='userInput'
-                  type='text'
-                  placeholder='Opis'
-                  name='Description'
-                  value={this.state.Description}
-                  onChange={this.handleChange}
-                /> */}
               </label>
               <label>
                 <input
@@ -886,8 +889,8 @@ class Register extends Component {
                 }}
               >
                 <p>ID</p>
-                <p>TYPE</p>
-                <p>SIZE</p>
+                <p>TIP</p>
+                <p>DIMENZIJA</p>
                 <p>NOP</p>
               </div>
               <div
@@ -905,7 +908,7 @@ class Register extends Component {
                 <input
                   className='userInput'
                   type='password'
-                  placeholder='Password'
+                  placeholder='Šifra'
                   name='Password'
                   value={this.state.Password}
                   onChange={this.handleChange}
@@ -923,11 +926,11 @@ class Register extends Component {
                   marginTop: this.state.msg !== null ? '60px' : '30px',
                 }}
               >
-                SIGN UP
+                REGISTRACIJA
               </button>
               <div className='signup'>
                 <Link to='/login' className='signup'>
-                  Already a member? Login !
+                  Već imate račun! Prijavite se.
                 </Link>
               </div>
             </form>
@@ -974,7 +977,7 @@ class Register extends Component {
                 <input
                   className='userInput'
                   type='password'
-                  placeholder='Password'
+                  placeholder='Šifra'
                   name='Password'
                   value={this.state.Password}
                   onChange={this.handleChange}
@@ -992,11 +995,11 @@ class Register extends Component {
                   marginTop: this.state.msg !== null ? '30px' : '60px',
                 }}
               >
-                SIGN UP
+                REGISTRACIJA
               </button>
               <div className='signup'>
                 <Link to='/login' className='signup'>
-                  Već imate račun? Prijavi te se !
+                  Već imate račun? Prijavi te se!
                 </Link>
               </div>
             </form>

@@ -57,9 +57,10 @@ exports.postCustomer = async (req, res, next) => {
   }
 };
 
-//@desc Update  customer
-//@route POST /api/customer/fav
-//access private
+/** @desc Update  customer
+ *   @route POST /api/customer/fav
+ *   @access private
+ */
 exports.updateFavorite = async (req, res, next) => {
   try {
     const { _id, Favorite, token } = req.body;

@@ -27,7 +27,7 @@ class SelectableTable extends Component {
   };
   checkType = () => {
     console.log(this.props.scale);
-    if (this.props.table.TableType === 'circle') {
+    if (this.props.table.TableType === 'Niski okrugli') {
       let s = this.props.table.realSize * this.props.scale;
       return (
         <div style={{ borderRadius: '50%' }}>
@@ -74,13 +74,20 @@ class SelectableTable extends Component {
               height: s + 'px',
               width: s + 'px',
               position: 'absolute',
+              transform:
+                this.props.table.TableType === 'Niski okrugli' ||
+                this.props.table.TableType === 'Niski kockasti'
+                  ? 'rotate(0deg)'
+                  : this.props.table.Orientation === 'o'
+                  ? 'rotate(90deg)'
+                  : 'rotate(0deg)',
               top: this.props.table.CoordY + '%',
               left: this.props.table.CoordX + '%',
             }}
           />
         </div>
       );
-    } else if (this.props.table.TableType === 'square') {
+    } else if (this.props.table.TableType === 'Niski kockasti') {
       let s = this.props.table.realSize * this.props.scale;
       return (
         <div>
@@ -125,13 +132,20 @@ class SelectableTable extends Component {
               height: s + 'px',
               width: s + 'px',
               position: 'absolute',
+              transform:
+                this.props.table.TableType === 'Niski okrugli' ||
+                this.props.table.TableType === 'Niski kockasti'
+                  ? 'rotate(0deg)'
+                  : this.props.table.Orientation === 'o'
+                  ? 'rotate(90deg)'
+                  : 'rotate(0deg)',
               top: this.props.table.CoordY + '%',
               left: this.props.table.CoordX + '%',
             }}
           />
         </div>
       );
-    } else if (this.props.table.TableType === 'rectangle') {
+    } else if (this.props.table.TableType === 'Niski stol') {
       let h = this.props.table.realSizeY * this.props.scale;
       let w = this.props.table.realSizeX * this.props.scale;
       return (
@@ -177,13 +191,20 @@ class SelectableTable extends Component {
               height: h + 'px',
               width: w + 'px',
               position: 'absolute',
+              transform:
+                this.props.table.TableType === 'Niski okrugli' ||
+                this.props.table.TableType === 'Niski kockasti'
+                  ? 'rotate(0deg)'
+                  : this.props.table.Orientation === 'o'
+                  ? 'rotate(90deg)'
+                  : 'rotate(0deg)',
               top: this.props.table.CoordY + '%',
               left: this.props.table.CoordX + '%',
             }}
           />
         </div>
       );
-    } else if (this.props.table.TableType === 'elipse') {
+    } else if (this.props.table.TableType === 'Niski eliptični') {
       let h = this.props.table.realSizeY * this.props.scale;
       let w = this.props.table.realSizeX * this.props.scale;
       return (
@@ -229,6 +250,13 @@ class SelectableTable extends Component {
               height: h + 'px',
               width: w + 'px',
               position: 'absolute',
+              transform:
+                this.props.table.TableType === 'Niski okrugli' ||
+                this.props.table.TableType === 'Niski kockasti'
+                  ? 'rotate(0deg)'
+                  : this.props.table.Orientation === 'o'
+                  ? 'rotate(90deg)'
+                  : 'rotate(0deg)',
               top: this.props.table.CoordY + '%',
               left: this.props.table.CoordX + '%',
             }}

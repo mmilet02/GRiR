@@ -27,7 +27,7 @@ export const getFloorPlans = () => (dispatch) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
-
+//Add new grade
 export const addGrade = (Grade, Comment, RestaurantID, CustomerID, token) => (
   dispatch
 ) => {
@@ -50,7 +50,7 @@ export const addGrade = (Grade, Comment, RestaurantID, CustomerID, token) => (
       dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
-
+//Gets all grades
 export const getGrades = () => (dispatch) => {
   dispatch(setLoading());
   axios
@@ -65,7 +65,7 @@ export const getGrades = () => (dispatch) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
-
+//Uploads floor plan in db
 export const saveFloorPlan = (floorPlan, id, width, height, imageName) => (
   dispatch
 ) => {
@@ -98,13 +98,13 @@ export const saveFloorPlan = (floorPlan, id, width, height, imageName) => (
       dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
-
+//Sets loading to true
 export const setLoading = () => (dispatch) => {
   dispatch({
     type: LOADING,
   });
 };
-
+//Gets all restaurants
 export const getRestoraunts = () => (dispatch) => {
   dispatch(setLoading());
   axios
@@ -119,7 +119,7 @@ export const getRestoraunts = () => (dispatch) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
-
+//Gets all guests
 export const getCustomers = () => (dispatch) => {
   dispatch(setLoading());
   axios
@@ -134,7 +134,7 @@ export const getCustomers = () => (dispatch) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
-
+//Updates favorite list for guest
 export const updateFavorite = (_id, Favorite, token) => (dispatch) => {
   let temp = {
     _id,
@@ -153,7 +153,7 @@ export const updateFavorite = (_id, Favorite, token) => (dispatch) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
-
+//Update ValidatedBy attribute
 export const updateValidatedBy = (_id, ValidatedBy) => (dispatch) => {
   let temp = {
     _id,
@@ -177,6 +177,7 @@ export const updateValidatedBy = (_id, ValidatedBy) => (dispatch) => {
     });
 };
 
+//Turn On/Off restaurant, only admin has permition
 export const turnValidatedBy = (_id, OnOff) => (dispatch) => {
   let temp = {
     _id,
@@ -199,7 +200,7 @@ export const turnValidatedBy = (_id, OnOff) => (dispatch) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
-
+//Uploading image from restaurant registration
 export const uploadImage = (formData) => (dispatch) => {
   const config = {
     headers: {
@@ -214,7 +215,7 @@ export const uploadImage = (formData) => (dispatch) => {
       // dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
-
+//Uploading floor plan image for restaurant
 export const uploadFpImage = (formData) => (dispatch) => {
   const config = {
     headers: {

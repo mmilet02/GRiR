@@ -217,17 +217,7 @@ class Restoraunt extends Component {
             style={{ margin: '0px 5 px', color: 'yellow', cursor: 'pointer' }}
           />
         );
-      }
-      // else if (grade < 1 && grade > 0) {
-      //   grade--;
-      //   stars.push(
-      //     <FontAwesomeIcon key={i} icon={faStarHalf} className='halfStarL' />
-      //   );
-      //   stars.push(
-      //     <FontAwesomeIcon key={i} icon={faStarHalf} className='halfStarR' />
-      //   );
-      // }
-      else {
+      } else {
         stars.push(
           <FontAwesomeIcon
             key={i}
@@ -501,13 +491,13 @@ class Restoraunt extends Component {
       <div className='zvijezde1'>
         <h3 style={{ marginRight: '20px' }}>Ocjena: {this.state.grade}</h3>
         <div className='zvijezde'>
-        <FontAwesomeIcon
+          <FontAwesomeIcon
             className='s'
             icon={faStar}
             style={{ margin: '0px 5px' }}
             onClick={() => this.onStarClick1(5)}
           />
-             <FontAwesomeIcon
+          <FontAwesomeIcon
             className='s'
             icon={faStar}
             style={{ margin: '0px 5px' }}
@@ -519,14 +509,14 @@ class Restoraunt extends Component {
             style={{ margin: '0px 5px' }}
             onClick={() => this.onStarClick1(3)}
           />
-      
-        <FontAwesomeIcon
+
+          <FontAwesomeIcon
             className='s'
             icon={faStar}
             style={{ margin: '0px 5px' }}
             onClick={() => this.onStarClick1(2)}
           />
-             <FontAwesomeIcon
+          <FontAwesomeIcon
             className='s'
             icon={faStar}
             style={{ margin: '0px 5px' }}
@@ -542,7 +532,9 @@ class Restoraunt extends Component {
     if (user && user.restoraunt) {
       resModal = (
         <div className='modal'>
-          <p className='modalP'>Kao restoran nemožete napraviti rezervaciju.</p>
+          <p className='modalP'>
+            Kao restoran ne možete napraviti rezervaciju.
+          </p>
           <button className='btnModul' onClick={this.closeModal3}>
             OK
           </button>
@@ -551,7 +543,7 @@ class Restoraunt extends Component {
       modalContent = (
         <div className='modal'>
           <p className='modalP'>
-            Kao restoran nemožete ocijeniti drugi restoran.
+            Kao restoran ne možete ocijeniti drugi restoran.
           </p>
           <button className='btnModul' onClick={this.closeModal}>
             OK
@@ -561,7 +553,7 @@ class Restoraunt extends Component {
       favModal = (
         <div className='modal'>
           <p className='modalP'>
-            Kao restoran nemožete dodati restoran u favorite.
+            Kao restoran ne možete dodati restoran u favorite.
           </p>
           <button className='btnModul' onClick={this.closeModal1}>
             OK
@@ -572,7 +564,7 @@ class Restoraunt extends Component {
       favModal = (
         <div className='modal'>
           <p className='modalP'>
-            Kao admin nemožete dodati restoran u favorite.
+            Kao admin ne možete dodati restoran u Favorite listu.
           </p>
           <button className='btnModul' onClick={this.closeModal1}>
             OK
@@ -581,7 +573,7 @@ class Restoraunt extends Component {
       );
       resModal = (
         <div className='modal'>
-          <p className='modalP'>Kao admin nemožete napraviti rezervaciju.</p>
+          <p className='modalP'>Kao admin ne možete napraviti rezervaciju.</p>
           <button className='btnModul' onClick={this.closeModal3}>
             OK
           </button>
@@ -589,7 +581,7 @@ class Restoraunt extends Component {
       );
       modalContent = (
         <div className='modal'>
-          <p className='modalP'>Kao admin nemožete ocijeniti restoran</p>
+          <p className='modalP'>Kao admin ne možete ocijeniti restoran</p>
           <button className='btnModul' onClick={this.closeModal}>
             OK
           </button>
@@ -629,7 +621,7 @@ class Restoraunt extends Component {
     } else {
       favModal = (
         <div className='modal'>
-          <p className='modalP'>HELLLLOOOOOO</p>
+          <p className='modalP'>...</p>
           <button className='btnModul' onClick={this.closeModal1}>
             OK
           </button>
@@ -658,7 +650,7 @@ class Restoraunt extends Component {
                 className='userInput'
                 rows='9'
                 cols='50'
-                placeholder='Enter your comment'
+                placeholder='Komentar'
                 style={{
                   height: '70px',
                   resize: 'none',
@@ -666,14 +658,6 @@ class Restoraunt extends Component {
                   paddingTop: '10px',
                 }}
               ></textarea>
-              {/* <input
-                className='userInput'
-                type='text'
-                placeholder='Enter your comment'
-                name='Comment'
-                value={this.state.Comment}
-                onChange={this.handleChange}
-              /> */}
             </label>
             {this.state.msg ? (
               <div className='errBox' style={{ marginTop: '20px' }}>
@@ -688,7 +672,7 @@ class Restoraunt extends Component {
       );
       resModal = (
         <div className='modal'>
-          <p className='modalP'>heloooooooooooo</p>
+          <p className='modalP'>...</p>
           <button className='btnModul' onClick={this.closeModal3}>
             OK
           </button>
@@ -809,10 +793,10 @@ class Restoraunt extends Component {
                 value={this.state.Comment1}
                 onChange={this.handleChange}
                 name='Comment1'
-                className='commentInput'
+                className='commentInput m'
                 rows='9'
                 cols='50'
-                placeholder='Enter your comment'
+                placeholder='Komentar'
                 style={{
                   height: '70px',
                   resize: 'none',
@@ -820,14 +804,6 @@ class Restoraunt extends Component {
                   paddingTop: '10px',
                 }}
               ></textarea>
-              {/* <input
-                className='commentInput'
-                type='text'
-                placeholder='Enter your comment'
-                name='Comment1'
-                value={this.state.Comment1}
-                onChange={this.handleChange}
-              /> */}
             </label>
             {infoSelectedTable}
           </div>
@@ -849,7 +825,7 @@ class Restoraunt extends Component {
           className='reserveBtn'
           onClick={() => this.handleReservation(resto)}
         >
-          RESERVE
+          REZERVIRAJ
         </div>
         {this.state.msg1 ? (
           <div

@@ -24,7 +24,7 @@ function FloorPlan(props) {
 
   const floorPlanList = props.floorPlanList.map((table) => {
     let tt = <h1>noob</h1>;
-    if (table.TableType === 'circle') {
+    if (table.TableType === 'Niski okrugli') {
       tt = (
         <DraggTableTypesSecond
           handleSelectTable={props.handleSelectTable}
@@ -36,7 +36,7 @@ function FloorPlan(props) {
           table={table}
         ></DraggTableTypesSecond>
       );
-    } else if (table.TableType === 'square') {
+    } else if (table.TableType === 'Niski kockasti') {
       tt = (
         <DraggTableTypesSecond
           handleSelectTable={props.handleSelectTable}
@@ -49,8 +49,8 @@ function FloorPlan(props) {
         ></DraggTableTypesSecond>
       );
     } else if (
-      table.TableType === 'rectangle' ||
-      table.TableType === 'elipse'
+      table.TableType === 'Niski stol' ||
+      table.TableType === 'Niski eliptični'
     ) {
       tt = (
         <DraggTableTypesSecond

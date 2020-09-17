@@ -3,6 +3,7 @@ import { returnErrors } from './errorActions';
 import { tokenConfig } from './floorPlanAction.js';
 import axios from 'axios';
 
+//Gets a reservation by _id
 export const getReservation = () => (dispatch) => {
   dispatch(setLoading());
   axios
@@ -17,7 +18,7 @@ export const getReservation = () => (dispatch) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
-
+//Add a reservation, tokein is required
 export const addReservation = (reservation, token) => (dispatch) => {
   axios
     .post('/api/reservation', reservation, tokenConfig(token))
@@ -31,7 +32,7 @@ export const addReservation = (reservation, token) => (dispatch) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
-
+//Set loading on true
 export const setLoading = () => (dispatch) => {
   dispatch({
     type: LOADING,

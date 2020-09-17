@@ -16,65 +16,6 @@ function DraggTableTypesFirst(props) {
     }),
   });
 
-  // const checkType = () => {
-  //   if (props.table.TableType === 'circle') {
-  //     return (
-  //       <div
-  //         ref={drag}
-  //         style={{
-  //           margin: '0',
-  //           borderRadius: '50%',
-  //           overflow: 'hidden',
-  //           height: '50px',
-  //           width: '50px',
-  //         }}
-  //       >
-  //         <svg
-  //           height='50'
-  //           width='50'
-  //           style={{
-  //             borderRadius: '50%',
-  //           }}
-  //         >
-  //           <circle
-  //             cx='25'
-  //             cy='25'
-  //             r='25'
-  //             fill='black'
-  //             style={{
-  //               margin: '0',
-  //             }}
-  //           />
-  //         </svg>
-  //       </div>
-  //     );
-  //   } else if (props.table.TableType === 'square') {
-  //     return (
-  //       <div
-  //         ref={drag}
-  //         style={{
-  //           margin: '0',
-  //           height: '50px',
-  //           width: '50px',
-  //           backgroundColor: 'rgba(255,255,255,0)',
-  //         }}
-  //       >
-  //         <svg
-  //           width='50'
-  //           height='50'
-  //           style={{ margin: '0', backgroundColor: 'rgba(255,255,255,0)' }}
-  //         >
-  //           <rect
-  //             width='50'
-  //             height='50'
-  //             fill='black'
-  //             style={{ margin: '0', backgroundColor: 'rgba(255,255,255,0)' }}
-  //           />
-  //         </svg>
-  //       </div>
-  //     );
-  //   }
-  // };
   return (
     <React.Fragment>
       <img
@@ -83,8 +24,8 @@ function DraggTableTypesFirst(props) {
         alt=''
         style={{
           width:
-            props.table.TableType === 'circle' ||
-            props.table.TableType === 'square'
+            props.table.TableType === 'Niski okrugli' ||
+            props.table.TableType === 'Niski kockasti'
               ? '6%'
               : '11%',
           height: '50%',
@@ -93,7 +34,6 @@ function DraggTableTypesFirst(props) {
         }}
       />
     </React.Fragment>
-    // <React.Fragment>{checkType()}</React.Fragment>
   );
 }
 

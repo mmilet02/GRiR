@@ -78,11 +78,14 @@ class FloorPlanCreating extends Component {
         currentFloorPlanHeight: `${size}px`,
         heightForChange: size,
         floorPlanList: this.state.floorPlanList.map((table) => {
-          if (table.TableType === 'circle' || table.TableType === 'square') {
+          if (
+            table.TableType === 'Niski okrugli' ||
+            table.TableType === 'Niski kockasti'
+          ) {
             table.SizeX = table.realSize * this.state.scale;
           } else if (
-            table.TableType === 'rectangle' ||
-            table.TableType === 'elipse'
+            table.TableType === 'Niski stol' ||
+            table.TableType === 'Niski eliptični'
           ) {
             table.SizeX = table.realSizeX * this.state.scale;
             table.SizeY = table.realSizeY * this.state.scale;
@@ -100,15 +103,19 @@ class FloorPlanCreating extends Component {
       tempId: '0',
     });
   };
+  // Open pop up modal1
   openModal1 = () => {
     this.setState({
       isOpen1: true,
       tempId: '0',
     });
   };
-  //Covert the actual size of table to scale 1:25
+  //Covert the actual size of table to scale
   convertToMainScale = () => {
-    if (this.state.tempType === 'circle' || this.state.tempType === 'square') {
+    if (
+      this.state.tempType === 'Niski okrugli' ||
+      this.state.tempType === 'Niski kockasti'
+    ) {
       let newSize = this.state.csSize * this.state.scale;
       const dropTargetPosition = this.boss.current.getBoundingClientRect();
       this.setState({
@@ -155,8 +162,8 @@ class FloorPlanCreating extends Component {
       });
       this.closeModal();
     } else if (
-      this.state.tempType === 'rectangle' ||
-      this.state.tempType === 'elipse'
+      this.state.tempType === 'Niski stol' ||
+      this.state.tempType === 'Niski eliptični'
     ) {
       let newSizeX = this.state.reSizeX * this.state.scale;
       let newSizeY = this.state.reSizeY * this.state.scale;
@@ -203,7 +210,7 @@ class FloorPlanCreating extends Component {
     }
     this.closeModal1();
   };
-  // Close pop up modal
+  // Close pop up modal without actions
   closeModal = () => {
     this.setState({
       isOpen: false,
@@ -212,6 +219,7 @@ class FloorPlanCreating extends Component {
       msg1: null,
     });
   };
+  // Close pop up modal with actions
   closeModaland = () => {
     if (
       this.state.NOP === 'Maksimalan broj ljudi' ||
@@ -227,6 +235,7 @@ class FloorPlanCreating extends Component {
       this.convertToMainScale();
     }
   };
+  // Close pop up modal1 without actions
   closeModal1 = () => {
     this.setState({
       isOpen1: false,
@@ -237,6 +246,7 @@ class FloorPlanCreating extends Component {
       msg1: null,
     });
   };
+  // Close pop up modal1 with actions
   closeModal1and = () => {
     if (
       this.state.NOP === 'Maksimalan broj ljudi' ||
@@ -258,6 +268,7 @@ class FloorPlanCreating extends Component {
       this.convertToMainScale();
     }
   };
+  // Close pop up modal2 without actions
   closeModal2 = () => {
     this.setState({
       isOpen2: false,
@@ -269,7 +280,7 @@ class FloorPlanCreating extends Component {
       msg2: null,
     });
   };
-
+  // Close pop up modal2 without actions for circle and square
   closeModal2and1 = () => {
     if (
       this.state.chNOP === '' ||
@@ -286,7 +297,8 @@ class FloorPlanCreating extends Component {
         floorPlanList: this.state.floorPlanList.map((table) => {
           if (
             this.state.infoTable._id === table._id &&
-            (table.TableType === 'circle' || table.TableType === 'square')
+            (table.TableType === 'Niski okrugli' ||
+              table.TableType === 'Niski kockasti')
           ) {
             if (this.state.chReSize !== '0' && this.state.chReSize !== '') {
               table.SizeX = this.state.chReSize * this.state.scale;
@@ -302,6 +314,7 @@ class FloorPlanCreating extends Component {
       this.restart();
     }
   };
+  // Close pop up modal2 with actions for elipse and ractangle
   closeModal2and2 = () => {
     if (
       this.state.chNOP === '' ||
@@ -324,7 +337,8 @@ class FloorPlanCreating extends Component {
         floorPlanList: this.state.floorPlanList.map((table) => {
           if (
             this.state.infoTable._id === table._id &&
-            (table.TableType === 'rectangle' || table.TableType === 'elipse')
+            (table.TableType === 'Niski stol' ||
+              table.TableType === 'Niski eliptični')
           ) {
             if (this.state.chNOP !== '0' && this.state.chReSize !== '') {
               table.NumberOfPeople = this.state.chNOP;
@@ -348,7 +362,7 @@ class FloorPlanCreating extends Component {
       this.restart();
     }
   };
-
+  //Sets some state atributes on default value
   restart = () => {
     this.setState({
       chReSizeY: '',
@@ -359,13 +373,12 @@ class FloorPlanCreating extends Component {
       msg2: null,
     });
   };
-  //Handle input of table size
+  //Handle inputs
   handleSizeChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
-
+  //Handle inputs
   handleChangeSize = (e) => {
-    // let num = parseInt(e.target.value);
     this.setState({ [e.target.name]: e.target.value });
   };
   // Handle pop up modal submit and activate closeModal()
@@ -373,6 +386,7 @@ class FloorPlanCreating extends Component {
     e.preventDefault();
     this.closeModaland();
   };
+  // Handle pop up modal submit and activate closeModal1()
   handleSubmit1 = (e) => {
     e.preventDefault();
     this.closeModal1and();
@@ -397,7 +411,10 @@ class FloorPlanCreating extends Component {
   };
   //Trigger on drop and crate the same table in floor plan
   onDropImg = (table, finalPosition, initialPosition) => {
-    if (table.TableType === 'circle' || table.TableType === 'square') {
+    if (
+      table.TableType === 'Niski okrugli' ||
+      table.TableType === 'Niski kockasti'
+    ) {
       if (this.state.floorPlanList.find((tab) => tab._id === table._id)) {
         const [newXposition, newYposition] = this.calculateYX(
           finalPosition,
@@ -446,8 +463,8 @@ class FloorPlanCreating extends Component {
         });
       }
     } else if (
-      table.TableType === 'rectangle' ||
-      table.TableType === 'elipse'
+      table.TableType === 'Niski stol' ||
+      table.TableType === 'Niski eliptični'
     ) {
       if (this.state.floorPlanList.find((tab) => tab._id === table._id)) {
         const [newXposition, newYposition] = this.calculateYX(
@@ -509,78 +526,15 @@ class FloorPlanCreating extends Component {
       isGridOn: !this.state.isGridOn,
     });
   };
+  //Resize observer
   handleFloorPlanResize = (width, height) => {
     this.setState({
       scale: width / this.state.sizeWidth,
       widthForChange: width,
       heightForChange: height,
     });
-    // console.log(
-    //   this.state.currentFloorPlanWidth + ' ' + this.state.currentFloorPlanHeight
-    // );
-    // let tempFloorPlanHeight = 0;
-    // let tempFloorPlanWidth = 0;
-    // let razlikaUPostocima = 0;
-    // if (this.state.currentFloorPlanHeight === height) {
-    //   if (this.state.currentFloorPlanWidth > width) {
-    //     tempFloorPlanWidth = width;
-    //     razlikaUPostocima =
-    //       (this.state.currentFloorPlanWidth - width) /
-    //       this.state.currentFloorPlanWidth;
-    //     tempFloorPlanHeight =
-    //       this.state.currentFloorPlanHeight -
-    //       this.state.currentFloorPlanHeight * razlikaUPostocima;
-    //   } else {
-    //     tempFloorPlanWidth = width;
-    //     razlikaUPostocima =
-    //       (width - this.state.currentFloorPlanWidth) /
-    //       this.state.currentFloorPlanWidth;
-    //     tempFloorPlanHeight =
-    //       this.state.currentFloorPlanHeight +
-    //       this.state.currentFloorPlanHeight * razlikaUPostocima;
-    //   }
-    // } else if (this.state.currentFloorPlanWidth === width) {
-    //   tempFloorPlanHeight = height;
-    //   razlikaUPostocima =
-    //     (this.state.currentFloorPlanHeight - height) /
-    //     this.state.currentFloorPlanHeight;
-    //   tempFloorPlanWidth =
-    //     this.state.currentFloorPlanWidth -
-    //     this.state.currentFloorPlanWidth * razlikaUPostocima;
-    // } else if (
-    //   this.state.currentFloorPlanHeight !== height &&
-    //   this.state.currentFloorPlanWidth !== width
-    // ) {
-    //   if (
-    //     this.state.currentFloorPlanHeight - height >
-    //     this.state.currentFloorPlanWidth - width
-    //   ) {
-    //     tempFloorPlanHeight = height;
-    //     razlikaUPostocima =
-    //       (this.state.currentFloorPlanHeight - height) /
-    //       this.state.currentFloorPlanHeight;
-    //     tempFloorPlanWidth =
-    //       this.state.currentFloorPlanWidth -
-    //       this.state.currentFloorPlanWidth * razlikaUPostocima;
-    //   } else {
-    //     tempFloorPlanWidth = width;
-    //     razlikaUPostocima =
-    //       (this.state.currentFloorPlanWidth - width) /
-    //       this.state.currentFloorPlanWidth;
-    //     tempFloorPlanHeight =
-    //       this.state.currentFloorPlanHeight -
-    //       this.state.currentFloorPlanHeight * razlikaUPostocima;
-    //   }
-    // }
-    // console.log(tempFloorPlanWidth + ' ' + tempFloorPlanHeight);
-    // this.state &&
-    //   this.state.currentFloorPlanHeight &&
-    //   this.state.currentFloorPlanWidth &&
-    //   this.setState({
-    //     currentFloorPlanHeight: tempFloorPlanHeight,
-    //     currentFloorPlanWidth: tempFloorPlanWidth
-    //   });
   };
+  //Activate functio for uploading floor plan
   handleSaveFloorPLan = () => {
     console.log(this.props.match.params.id);
     let formData = new FormData();
@@ -601,7 +555,7 @@ class FloorPlanCreating extends Component {
       );
     }
   };
-
+  //Handle image input
   handleChangeFile = (event) => {
     this.setState({
       file: URL.createObjectURL(event.target.files[0]),
@@ -610,13 +564,8 @@ class FloorPlanCreating extends Component {
       good: true,
     });
   };
+  //Delete selected table from table list
   handleDeleteTables = () => {
-    // let list = this.state.deleteThisTables;
-    // let list2 = this.state.floorPlanList;
-    // for (let i = 0; i < list.length; i++) {
-    //   list2 = list2.filter((l) => l._id !== list[i]);
-    // }
-
     let list2 = this.state.floorPlanList.filter(
       (l) => l._id !== this.state.deleteThisTables
     );
@@ -626,22 +575,8 @@ class FloorPlanCreating extends Component {
       deleteThisTables: 'not selected',
     });
   };
-
+  //Sets information for selected table
   handleSelectTable = (id) => {
-    // let isThere = this.state.deleteThisTables.find((n) => n === id);
-    // let list = this.state.deleteThisTables.filter((n) => n !== id);
-    // if (isThere) {
-    //   this.setState({
-    //     deleteThisTables: list,
-    //     btnDisabled: list.length > 0 ? false : true,
-    //   });
-    // } else {
-    //   this.setState({
-    //     deleteThisTables: [...this.state.deleteThisTables, id],
-    //     btnDisabled: false,
-    //   });
-    // }
-
     let isThere = this.state.deleteThisTables === id;
 
     if (isThere) {
@@ -664,7 +599,7 @@ class FloorPlanCreating extends Component {
       });
     }
   };
-
+  //Next step
   nextStep = () => {
     if (
       this.state.sizeHeight === 0 ||
@@ -686,22 +621,41 @@ class FloorPlanCreating extends Component {
       });
     }
   };
-
+  //Handle orantion input
   handleOriation = (x) => {
     this.setState({
       reOri: x,
     });
   };
+  //Handle orantion input
   chHandleOriation = (x) => {
     this.setState({
       chReOri: x,
     });
   };
-
+  //Open pop up for changing selected table
   handleBtnChangeTable = () => {
-    this.setState({
-      isOpen2: true,
-    });
+    if (
+      this.state.infoTable.TableType === 'Niski okrugli' ||
+      this.state.infoTable.TableType === 'Niski kockasti'
+    ) {
+      this.setState({
+        isOpen2: true,
+        chReSize: this.state.infoTable.realSize,
+        chNOP: this.state.infoTable.NumberOfPeople,
+      });
+    } else if (
+      this.state.infoTable.TableType === 'Niski stol' ||
+      this.state.infoTable.TableType === 'Niski eliptični'
+    ) {
+      this.setState({
+        isOpen2: true,
+        chNOP: this.state.infoTable.NumberOfPeople,
+        chReSizeX: this.state.infoTable.realSizeX,
+        chReSizeY: this.state.infoTable.realSizeY,
+        chReOri: this.state.infoTable.Orientation,
+      });
+    }
   };
 
   render() {
@@ -733,8 +687,8 @@ class FloorPlanCreating extends Component {
       );
     } else {
       if (
-        this.state.infoTable.TableType === 'circle' ||
-        this.state.infoTable.TableType === 'square'
+        this.state.infoTable.TableType === 'Niski okrugli' ||
+        this.state.infoTable.TableType === 'Niski kockasti'
       ) {
         infoSelectedTable = (
           <div>
@@ -760,6 +714,7 @@ class FloorPlanCreating extends Component {
               name='chReSize'
               type='text'
               className='userInput'
+              value={this.state.chReSize}
               placeholder={this.state.infoTable.realSize}
               onChange={this.handleSizeChange}
             />
@@ -767,6 +722,7 @@ class FloorPlanCreating extends Component {
               name='chNOP'
               type='text'
               className='userInput'
+              value={this.state.chNOP}
               placeholder={this.state.infoTable.NumberOfPeople}
               onChange={this.handleSizeChange}
             />
@@ -787,8 +743,8 @@ class FloorPlanCreating extends Component {
           </div>
         );
       } else if (
-        this.state.infoTable.TableType === 'rectangle' ||
-        this.state.infoTable.TableType === 'elipse'
+        this.state.infoTable.TableType === 'Niski stol' ||
+        this.state.infoTable.TableType === 'Niski eliptični'
       ) {
         infoSelectedTable = (
           <div>
@@ -815,6 +771,7 @@ class FloorPlanCreating extends Component {
               name='chReSizeX'
               className='userInput'
               type='text'
+              value={this.state.chReSizeX}
               placeholder={this.state.infoTable.realSizeX}
               onChange={this.handleSizeChange}
             />
@@ -822,6 +779,7 @@ class FloorPlanCreating extends Component {
               name='chReSizeY'
               type='text'
               className='userInput'
+              value={this.state.chReSizeY}
               placeholder={this.state.infoTable.realSizeY}
               onChange={this.handleSizeChange}
             />
@@ -829,6 +787,7 @@ class FloorPlanCreating extends Component {
               name='chNOP'
               type='text'
               className='userInput'
+              value={this.state.chNOP}
               placeholder={this.state.infoTable.NumberOfPeople}
               onChange={this.handleSizeChange}
             />
